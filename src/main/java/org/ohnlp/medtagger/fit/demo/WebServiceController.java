@@ -38,6 +38,12 @@ public class WebServiceController {
     private static TypeSystemDescription tsd;
     private AnalysisEngine aae;
 
+    /**
+     * Trigger UIMA pipeline from the given texts and return only the concept mentions
+     *
+     * @param docText
+     * @return
+     */
     Collection<ConceptMention> runPipeline(String docText) {
         Collection<ConceptMention> cms = null;
         try {
@@ -52,6 +58,11 @@ public class WebServiceController {
         return cms;
     }
 
+    /**
+     * Wrap list of concept mentions into json list to feed into the "entity" js field.
+     * @param cms List of ConceptMentions from UIMA
+     * @return list of JSON array for Brat to display in the html template
+     */
     public static JSONArray generateBratJson(Collection<ConceptMention> cms) {
         JSONArray cmList = new JSONArray();
 
@@ -63,6 +74,7 @@ public class WebServiceController {
             // note that range of the offsets are [${START},${END})
             // ref: https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm
 
+            // TODO: Add properties to show normalized concepts
             JSONArray entityProperties = new JSONArray();
             entityProperties.add(String.format("T%d", entityIdInt++));
             entityProperties.add("Cond");
@@ -78,7 +90,12 @@ public class WebServiceController {
         return cmList;
     }
 
+    /**
+     *  To initialize UIMA resources and type systesms
+     */
     public WebServiceController() {
+
+        // TODO: Change hard code path from the file system into resource reference
         Path ruleDirPath = Paths.get("src\\main\\resources\\medtaggerieresources\\covid19");
         System.out.println("IE Rules:\t" + ruleDirPath.toAbsolutePath().toString());
 
@@ -109,6 +126,10 @@ public class WebServiceController {
         }
     }
 
+    /**
+     * The index page. Display a default sentence to start.
+     * @return the initial view out of index-template
+     */
     @GetMapping("/")
     public ModelAndView index() {
         ModelAndView indexView = new ModelAndView();
@@ -117,14 +138,25 @@ public class WebServiceController {
         return indexView;
     }
 
+    /**
+     * How to display NLP results .
+     * @return the updated view out of index-template
+     */
 
     @PostMapping("/")
     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
+        // To get a list of concept mentions
+
         Collection<ConceptMention> cms = runPipeline(webInputText.getDocText());
+
+        // render template for the fields in index-template
         ModelAndView indexView = new ModelAndView();
         indexView.setViewName("index-template");
         indexView.addObject("input_text", webInputText.getDocText());
+
+        // get a list of concepts as JSON list to feed into the template
         JSONArray cmList = generateBratJson(cms);
+
         indexView.addObject("cmList", cmList);
         indexView.addObject("message", "The results may take several seconds to load.");
         return indexView;

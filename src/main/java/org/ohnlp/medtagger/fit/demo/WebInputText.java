@@ -1,5 +1,8 @@
 package org.ohnlp.medtagger.fit.demo;
 
+/**
+ * An almost dummy class for the view
+ */
 public class WebInputText {
     public String getDocText() {
         return docText;
