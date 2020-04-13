@@ -136,7 +136,6 @@ public class WebServiceController {
             experiencerProperties.add(cm.getExperiencer());
             attribList.add(experiencerProperties);
 
-
         }
 
         return new JSONAnnotation(cmList, attribList);
