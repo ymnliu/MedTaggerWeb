@@ -17,6 +17,8 @@ import org.apache.uima.util.InvalidXMLException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.type.ConceptMention;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,8 @@ import static org.apache.uima.fit.factory.JCasFactory.createJCas;
 
 @RestController
 public class WebServiceController {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static AnalysisEngineDescription descMedTaggerTAE;
     private static TypeSystemDescription tsd;
@@ -201,13 +205,14 @@ public class WebServiceController {
         ModelAndView indexView = new ModelAndView();
         indexView.setViewName("index-template");
         indexView.addObject("input_text", webInputText.getDocText());
-
+        logger.info(webInputText.getDocText());
         // get a list of concepts as JSON list to feed into the template
         JSONAnnotation jsAnnot = generateBratJson(cms);
 
         indexView.addObject("cmList", jsAnnot.getCmList());
         indexView.addObject("attribList", jsAnnot.getAttribList());
         indexView.addObject("message", "The results may take several seconds to load.");
+
         return indexView;
 
     }
