@@ -63,10 +63,12 @@ public class WebServiceController {
      * @param cms List of ConceptMentions from UIMA
      * @return list of JSON array for Brat to display in the html template
      */
-    public static JSONArray generateBratJson(Collection<ConceptMention> cms) {
+    static JSONAnnotation generateBratJson(Collection<ConceptMention> cms) {
         JSONArray cmList = new JSONArray();
+        JSONArray attribList = new JSONArray();
 
         int entityIdInt = 1;
+        int attribIdInt = 1;
         for (ConceptMention cm : cms) {
             JSONObject cmj = new JSONObject();
 
@@ -76,8 +78,9 @@ public class WebServiceController {
 
             // TODO: Add properties to show normalized concepts
             JSONArray entityProperties = new JSONArray();
-            entityProperties.add(String.format("T%d", entityIdInt++));
-            entityProperties.add("Cond");
+            String bratEntityId = String.format("T%d", entityIdInt++);
+            entityProperties.add(bratEntityId);
+            entityProperties.add("Condition");
             JSONArray spans = new JSONArray();
             JSONArray tokenBeginEnd = new JSONArray();
             tokenBeginEnd.add(cm.getBegin());
@@ -85,9 +88,54 @@ public class WebServiceController {
             spans.add(tokenBeginEnd);
             entityProperties.add(spans);
             cmList.add(entityProperties);
+
+
+            /**
+             * ConceptMention
+             *    begin: 9
+             *    end: 18
+             *    detectionMethod: "Matched"
+             *    normTarget: "DRY_COUGH"
+             *    Certainty: "Positive"
+             *    semGroup: <null>
+             *    status: "Present"
+             *    sentence: Sentence
+             *    experiencer: "Patient"
+             */
+
+            JSONArray attribProperties = new JSONArray();
+            attribProperties.add(String.format("A%d", attribIdInt++));
+            attribProperties.add("norm");
+            attribProperties.add(bratEntityId);
+            attribProperties.add(cm.getNormTarget());
+            attribList.add(attribProperties);
+
+            JSONArray certaintyProperties = new JSONArray();
+            certaintyProperties.add(String.format("A%d", attribIdInt++));
+            certaintyProperties.add("certainty");
+            certaintyProperties.add(bratEntityId);
+            certaintyProperties.add(cm.getCertainty());
+            attribList.add(certaintyProperties);
+
+
+            JSONArray statusProperties = new JSONArray();
+            statusProperties.add(String.format("A%d", attribIdInt++));
+            statusProperties.add("status");
+            statusProperties.add(bratEntityId);
+            statusProperties.add(cm.getStatus());
+            attribList.add(statusProperties);
+
+            JSONArray experiencerProperties = new JSONArray();
+            experiencerProperties.add(String.format("A%d", attribIdInt++));
+            experiencerProperties.add("experiencer");
+            experiencerProperties.add(bratEntityId);
+            experiencerProperties.add(cm.getExperiencer());
+            attribList.add(experiencerProperties);
+
+
         }
 
-        return cmList;
+        return new JSONAnnotation(cmList, attribList);
     }
 
     /**
@@ -155,9 +203,10 @@ public class WebServiceController {
         indexView.addObject("input_text", webInputText.getDocText());
 
         // get a list of concepts as JSON list to feed into the template
-        JSONArray cmList = generateBratJson(cms);
+        JSONAnnotation jsAnnot = generateBratJson(cms);
 
-        indexView.addObject("cmList", cmList);
+        indexView.addObject("cmList", jsAnnot.getCmList());
+        indexView.addObject("attribList", jsAnnot.getAttribList());
         indexView.addObject("message", "The results may take several seconds to load.");
         return indexView;
 
