@@ -147,7 +147,7 @@ public class WebServiceController {
     public WebServiceController() {
 
         // TODO: Change hard code path from the file system into resource reference
-        Path ruleDirPath = Paths.get("src\\main\\resources\\medtaggerieresources\\covid19");
+        Path ruleDirPath = Paths.get("/root/MedTaggerWeb/resources/medtaggerieresources/covid19");
         System.out.println("IE Rules:\t" + ruleDirPath.toAbsolutePath().toString());
 
         try {
@@ -210,7 +210,7 @@ public class WebServiceController {
 
         indexView.addObject("cmList", jsAnnot.getCmList());
         indexView.addObject("attribList", jsAnnot.getAttribList());
-        indexView.addObject("message", "The results may take several seconds to load.");
+        indexView.addObject("isResult", true);
 
         return indexView;
 
