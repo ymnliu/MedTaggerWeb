@@ -147,7 +147,7 @@ public class WebServiceController {
     public WebServiceController() {
 
         // TODO: Change hard code path from the file system into resource reference
-        Path ruleDirPath = Paths.get("/root/MedTaggerWeb/resources/medtaggerieresources/covid19");
+        Path ruleDirPath = Paths.get("covid19");
         System.out.println("IE Rules:\t" + ruleDirPath.toAbsolutePath().toString());
 
         try {
