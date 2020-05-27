@@ -6,47 +6,18 @@ MedTagger contains a suite of programs that the Mayo Clinic NLP program has deve
 It includes three major components: MedTagger for indexing based on dictionaries, MedTaggerIE for
 information extraction based on patterns, and MedTaggerML for machine learning-based named entity recognition.
 
+# Build and run
+
+```
+mvn clean spring-boot:run
+```
+
+Then, the web app can be accessed via web (localhost).
+
 # Custom Ruleset Use Case - COVID 19 
 MedTagger IE Pipelines use a custom ruleset format. An example ruleset of Coronavirus Diseases 19 (COVID 19) related symptoms (e.g. dry cough, fever, fatigue) 
 can be found under the `/src/main/resources/medtaggerieresources/covid19` directory. These resources are what tells MedTagger
 what to do/extract, and this directory is expected as input for the RULEDIR parameter 
-
-# Installation and Use
-#### Video demo: https://vimeo.com/392331446
-1. Download the latest release from https://github.com/OHNLP/MedTagger/releases
-2. Extract the zip file
-3. Modify the `INPUTDIR`, `OUTPUTDIR`, and `RULEDIR` variables in `run_medtagger_win.bat` or `run_medtagger_unix_mac.sh`, as appropriate
-    - `INPUT_DIR`: full directory path of input folder 
-    - `OUTPUT_DIR`: full directory path of output folder
-    - `RULES_DIR`: full directory path of 'Rule' folder
-    
-    Example for Mac:
-    ```
-    INPUTDIR="$YOUR_INPUT_DIRECTORY"
-    OUTPUTDIR="$YOUR_OUTPUT_DIRECTORY"
-    RULEDIR="$YOUR_MEDTAGGER_HOME/medtaggerieresources/covid19"
-    ```
-    
-    Example for Windows:
-    ```
-    INPUTDIR="C:\$YOUR_INPUT_DIRECTORY\input"
-    OUTPUTDIR="C:\$YOUR_OUTPUT_DIRECTORY\output"
-    RULEDIR="C:\YOUR_MEDTAGGER_HOME\medtaggerieresources\covid19"
-    ```
-    
-4. Run the batch file
-
-    Mac/linux: 
-    ```
-    run_medtagger_unix_mac.sh
-    ```
-    
-    Windows: 
-    
-    ```
-    run_medtagger_win.bat
-    ```
-    
 
 
 # For Developers
