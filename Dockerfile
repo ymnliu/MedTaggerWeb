@@ -1,8 +1,9 @@
-FROM alpine/git
+FROM centos:7
+COPY . /app 
 WORKDIR /app
-RUN git clone https://github.com/ymnliu/MedTaggerWeb.git
+# RUN git clone https://github.com/ymnliu/MedTaggerWeb.git
 WORKDIR /app/MedTaggerWeb
-RUN git checkout web-api
+# RUN git checkout web-api
 #
 #FROM maven:3.5-jdk-8-alpine
 #WORKDIR /app/MedTaggerWeb
