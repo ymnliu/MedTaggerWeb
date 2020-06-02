@@ -8,19 +8,21 @@ information extraction based on patterns, and MedTaggerML for machine learning-b
 
 # Build and run
 
-Start a docker container
+Build a docker image
 
 ```
-docker run -p 80:80 -it
-```
-```
-mvn clean spring-boot:run
+docker build -t medtagger_web:1.0 .S
 ```
 
-Then, the web app can be accessed via web (localhost).
+Run a container from the image
+```
+docker run -p 80:80 medtagger_web:1.0
+```
+
+Then, the web app can be accessed via web on localhost (i.e. 127.0.0.1).
 
 # Custom Ruleset Use Case - COVID 19 
-MedTagger IE Pipelines use a custom ruleset format. An example ruleset of Coronavirus Diseases 19 (COVID 19) related symptoms (e.g. dry cough, fever, fatigue) 
+MedTagger IE Pipelines use a custom ruleset format. An example ruleset of Coronavirus Diseases 19 (COVID 19) related symptoms (e.g. dry cough, fever, fatigue) S
 can be found under the `/src/main/resources/medtaggerieresources/covid19` directory. These resources are what tells MedTagger
 what to do/extract, and this directory is expected as input for the RULEDIR parameter 
 
