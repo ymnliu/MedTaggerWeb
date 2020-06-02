@@ -1,17 +1,15 @@
 [![Build Status](https://travis-ci.com/OHNLP/MedTagger.svg?branch=master)](https://travis-ci.com/OHNLP/MedTagger)
 
-# MedTagger
+# MedTagger Web
 
-MedTagger contains a suite of programs that the Mayo Clinic NLP program has developed in 2013.
-It includes three major components: MedTagger for indexing based on dictionaries, MedTaggerIE for
-information extraction based on patterns, and MedTaggerML for machine learning-based named entity recognition.
+Demo site of MedTagger 
 
 # Build and run
 
 Build a docker image
 
 ```
-docker build -t medtagger_web:1.0 .S
+docker build -t medtagger_web:1.0 .
 ```
 
 Run a container from the image
@@ -22,12 +20,12 @@ docker run -p 80:80 medtagger_web:1.0
 Then, the web app can be accessed via web on localhost (i.e. 127.0.0.1).
 
 # Custom Ruleset Use Case - COVID 19 
-MedTagger IE Pipelines use a custom ruleset format. An example ruleset of Coronavirus Diseases 19 (COVID 19) related symptoms (e.g. dry cough, fever, fatigue) S
+MedTagger IE Pipelines use a custom ruleset format. An example ruleset of Coronavirus Diseases 19 (COVID 19) related symptoms (e.g. dry cough, fever, fatigue) 
 can be found under the `/src/main/resources/medtaggerieresources/covid19` directory. These resources are what tells MedTagger
-what to do/extract, and this directory is expected as input for the RULEDIR parameter 
+what to do/extract, and this directory is expected as input for the RULEDIR parameter.  
 
 
-# For Developers
+# How to build locally
 1. Clone this repository
 2. You will need JDK8 or above, Apache Maven, and Apache Ant installed
 3. When your modifications are complete, from the project root directory:
