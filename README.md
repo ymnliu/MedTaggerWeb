@@ -8,6 +8,11 @@ information extraction based on patterns, and MedTaggerML for machine learning-b
 
 # Build and run
 
+Start a docker container
+
+```
+docker run -p 80:80 -it
+```
 ```
 mvn clean spring-boot:run
 ```
