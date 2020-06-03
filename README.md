@@ -2,7 +2,7 @@
 
 # MedTagger Web
 
-Demo site of MedTagger 
+A demo site for MedTagger. 
 
 # Build and run
 
@@ -17,7 +17,7 @@ Run a container from the image
 docker run -p 80:80 medtagger_web:1.0
 ```
 
-Then, the web app can be accessed via web on localhost (i.e. 127.0.0.1).
+Then, the web app can be accessed via web on localhost (i.e. `127.0.0.1`).
 
 # Custom Ruleset Use Case - COVID 19 
 MedTagger IE Pipelines use a custom ruleset format. An example ruleset of Coronavirus Diseases 19 (COVID 19) related symptoms (e.g. dry cough, fever, fatigue) 
