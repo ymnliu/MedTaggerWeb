@@ -59,7 +59,7 @@ pipeline {
                                               )
                            // Push the image to the registry
                                   image.push("${env.BUILD_VERSION}")
-                   //     }
+                        }
                     }
                 }
             }
