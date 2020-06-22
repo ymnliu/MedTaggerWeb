@@ -52,7 +52,7 @@ pipeline {
                               
                            // See: https://jenkins.io/doc/book/pipeline/docker/#building-containers
                       
-                             // docker.withRegistry("https://registry-1.docker.io/v2/", "e84699be-4f1d-409f-9bd9-9012dc426603") {
+                              docker.withRegistry("https://registry-1.docker.io/v2/", "e84699be-4f1d-409f-9bd9-9012dc426603") {
                                  def image = docker.build(
                                              "ymnliu/${env.IMAGE_NAME}:${env.BUILD_VERSION}",
                                              "--no-cache ."
