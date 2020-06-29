@@ -22,7 +22,6 @@ public class Main {
 
         Path inputDirPath = Paths.get(args[0]);
         Path outputFilePath = Paths.get(args[1]);
-        Path ruleDirPath = Paths.get(args[2]);
 
         CollectionReaderDescription reader =
                 CollectionReaderFactory.createReaderDescription(
@@ -35,18 +34,11 @@ public class Main {
         AnalysisEngineDescription descMedXNTAE = createEngineDescription(
                 "desc.medxndesc.aggregate_analysis_engine.MedXNAggregateTAE");
 
-        AnalysisEngineMetaData metadata = descMedXNTAE.getAnalysisEngineMetaData();
-
-        ConfigurationParameterSettings settings = metadata.getConfigurationParameterSettings();
-        settings.setParameterValue("Resource_dir", ruleDirPath.toString());
-        metadata.setConfigurationParameterSettings(settings);
-
         AnalysisEngineDescription writer =
                 AnalysisEngineFactory.createEngineDescription(
                         MedXNCC.class,
-                        MedXNCC.PARAM_OUTPUT_FILE, outputFilePath.toString());
+                        MedXNCC.PARAM_OUTPUT_FILE, outputFilePath.toString(), MedXNCC.PARAM_DELIMITER, "|");
 
         SimpleCliPipeline.runPipeline(reader, descMedXNTAE, writer);
-
     }
 }
