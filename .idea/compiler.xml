@@ -10,6 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="DictionaryBuilder" target="1.5" />
       <module name="MedTaggerWeb" target="1.8" />
     </bytecodeTargetLevel>
   </component>
