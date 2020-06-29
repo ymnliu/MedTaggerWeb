@@ -32,7 +32,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.ohnlp.medtagger.fit.Main</mainClass>
+                            <mainClass>org.ohnlp.medtagger.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
