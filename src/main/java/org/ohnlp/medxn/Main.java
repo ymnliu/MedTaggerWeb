@@ -30,7 +30,7 @@ public class Main {
                         FileSystemReader.PARAM_INPUTDIR, inputDirPath.toString());
 
         System.out.println("Input Dir:\t" + inputDirPath.toAbsolutePath().toString());
-        System.out.println("Output Dir:\t" + outputFilePath.toAbsolutePath().toString());
+        System.out.println("Output File:\t" + outputFilePath.toAbsolutePath().toString());
 
         AnalysisEngineDescription descMedXNTAE = createEngineDescription(
                 "desc.medxndesc.aggregate_analysis_engine.MedXNAggregateTAE");
