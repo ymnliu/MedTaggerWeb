@@ -185,7 +185,7 @@ public class WebServiceController {
     public ModelAndView index() {
         ModelAndView indexView = new ModelAndView();
         indexView.setViewName("index-template");
-        indexView.addObject("input_text", "The patient had dry cough and fever yesterday.");
+        indexView.addObject("input_text", "The patient had dry cough yesterday.");
         return indexView;
     }
 
