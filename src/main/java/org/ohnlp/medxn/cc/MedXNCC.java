@@ -31,16 +31,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.uima.UimaContext;
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.CAS;
+import org.apache.uima.cas.CASException;
 import org.apache.uima.cas.FSIterator;
-import org.apache.uima.collection.CasConsumer_ImplBase;
+import org.apache.uima.fit.component.CasConsumer_ImplBase;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.JFSIndexRepository;
 import org.apache.uima.jcas.cas.FSArray;
 import org.apache.uima.jcas.cas.TOP;
 import org.apache.uima.resource.ResourceInitializationException;
-import org.apache.uima.resource.ResourceProcessException;
-import org.apache.uima.util.ProcessTrace;
 import org.ohnlp.medxn.type.Drug;
 import org.ohnlp.medxn.type.MedAttr;
 import org.ohnlp.typesystem.type.structured.Document;
@@ -59,132 +60,30 @@ public class MedXNCC extends CasConsumer_ImplBase {
 	private BufferedWriter iv_bw = null;
 	private String iv_delim;
 
-	public void initialize() throws ResourceInitializationException {
+	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		File outFile;
 
-		try
-		{
-			String filename = (String) getConfigParameterValue(PARAM_OUTPUT_FILE);
+		try {
+			String filename = (String) aContext.getConfigParameterValue(PARAM_OUTPUT_FILE);
 			outFile = new File(filename);
 			if (!outFile.exists())
 				outFile.createNewFile();
 			iv_bw = new BufferedWriter(new FileWriter(outFile));
 
-			iv_delim = (String) getConfigParameterValue(PARAM_DELIMITER);
+			iv_delim = (String) aContext.getConfigParameterValue(PARAM_DELIMITER);
 
-		} catch (Exception ioe)
-		{
+		} catch (Exception ioe) {
 			throw new ResourceInitializationException(ioe);
 		}
 	}
 	
-	//docName|drug::b::e|drugRxcui|stren::b::e|dos::b::e|form::b::e|route::b::e|freq::b::e|dur::b::e|normRxname|normRxcui
-	//TODO need to update if want to handle the case like:
-	//"Humalog 3 times a day subcutaneously varies with blood sugars usually 3 units in am, 7 units at noon, and 9 units in the evening"
-	/**
-	 * If exists multiple same-type attributes, write a instance before another same-type
-	 * eg) Aspirin 81 mg once daily for a week and then increase 81 mg twice daily.
-	 */
-	/*
-	public void processCas(CAS cas) throws ResourceProcessException {
-		try {
-			JCas jcas = cas.getJCas(); ;
-			JFSIndexRepository indexes = jcas.getJFSIndexRepository();
-			FSIterator<TOP> docIterator = indexes.getAllIndexedFS(Document.type);
 
-			if (docIterator.hasNext()) {
-				Document docAnn = (Document) docIterator.next();
-				String[] parts = docAnn.getFileLoc().split("/");
-				String docName = parts[parts.length-1]; 
-
-				Iterator<?> drugIter = indexes.getAnnotationIndex(Drug.type).iterator();
-
-				while(drugIter.hasNext()) {
-					Drug drug = (Drug) drugIter.next();
-					//eg) Aspirin 81mg oral tablet
-					String drugName = drug.getName().getCoveredText(); //Aspirin
-					String drugNameRxcui = drug.getName().getSemGroup().replaceAll("::BN|::IN|::PIN|::MIN", ""); //1191 (SemG=RxCUI::IN(::RxCUI::BN))
-					String normRxname = drug.getNormRxName2(); //Aspirin 81 MG Oral Tablet
-					String normRxcui = drug.getNormRxCui2(); //243670	  
-
-					int drugSenBegin = drug.getName().getSentence().getBegin();
-					int drugSenEnd = drug.getName().getSentence().getEnd();
-
-					Map<String,String> attrInfo = new HashMap<String,String>();
-					FSArray attrs = drug.getAttrs();	     
-
-					for(int i=0; i<attrs.size(); i++) {
-						MedAttr ma = (MedAttr)attrs.get(i);
-						String info = ma.getCoveredText()+"::"+ma.getBegin()+"::"+ma.getEnd();
-						String attrType = ma.getTag();
-
-						if(!attrInfo.containsKey(attrType)) {
-							attrInfo.put(attrType, info);
-						}	
-						//To avoid duplicates due to the same "form" or "route"
-						//eg) Aspirin 81mg tablet 1-2 tablets by mouth
-						//added May-2013
-						else if(attrType.equals("form")
-								|| attrType.equals("route")) {
-							String prevStr = attrInfo.get(attrType).split("::")[0].toLowerCase();
-							String currStr = ma.getCoveredText().toLowerCase();
-
-							if( prevStr.startsWith(currStr)
-									|| currStr.startsWith(prevStr) ){
-								continue;
-							}	        			
-						}
-						else { //write if see another same type attribute
-							String output = docName + iv_delim 
-							+ drugName+"::"+drug.getName().getBegin()+"::"+drug.getName().getEnd() + iv_delim 
-							+ drugNameRxcui + iv_delim 
-							+ attrInfo.get("strength") + iv_delim
-							+ attrInfo.get("dosage") + iv_delim
-							+ attrInfo.get("form") + iv_delim
-							+ attrInfo.get("route") + iv_delim
-							+ attrInfo.get("frequency") + iv_delim
-							+ attrInfo.get("duration") + iv_delim		        				
-							+ normRxname + iv_delim 
-							+ normRxcui + iv_delim	
-							+ jcas.getDocumentText().substring(drugSenBegin,drugSenEnd).replaceAll("\n", " ");
-
-							output = output.replaceAll("null", "");	    	        	
-							iv_bw.write(output+"\n");
-
-							attrInfo.clear();
-							attrInfo.put(attrType, info);
-						}    	        	
-					}
-
-					//write the case that does not have multiple same attribute
-					String output = docName + iv_delim 
-					+ drugName+"::"+drug.getName().getBegin()+"::"+drug.getName().getEnd() + iv_delim 
-					+ drugNameRxcui + iv_delim 
-					+ attrInfo.get("strength") + iv_delim
-					+ attrInfo.get("dosage") + iv_delim
-					+ attrInfo.get("form") + iv_delim
-					+ attrInfo.get("route") + iv_delim
-					+ attrInfo.get("frequency") + iv_delim
-					+ attrInfo.get("duration") + iv_delim
-					+ normRxname + iv_delim 
-					+ normRxcui + iv_delim
-					+ jcas.getDocumentText().substring(drugSenBegin,drugSenEnd).replaceAll("\n", " ");
-
-					output = output.replaceAll("null", "");	    	        	
-					iv_bw.write(output+"\n");	        		        		        	
-				}
-			}
-		} catch (Exception e) {
-			throw new ResourceProcessException(e);
-		}
-	}
-	*/
-	
 	/**
 	 * write all attributes belonging to med in one line
 	 * if exists more than one same-type attribute, delimit by '`'
 	 */
-	public void processCas(CAS cas) throws ResourceProcessException {
+	@Override
+	public void process(CAS cas)  {
 		try {
 			JCas jcas = cas.getJCas(); ;
 			JFSIndexRepository indexes = jcas.getJFSIndexRepository();
@@ -263,21 +162,24 @@ public class MedXNCC extends CasConsumer_ImplBase {
 					iv_bw.write(output+"\n");
 				}
 			}
-		} catch (Exception e) {
-			throw new ResourceProcessException(e);
+		} catch (CASException | IOException e) {
+			// TODO: better exception handling
+			 e.printStackTrace();
 		}
 	}
 	
-	public void collectionProcessComplete(ProcessTrace arg0) throws ResourceProcessException, IOException
+	public void collectionProcessComplete() throws  AnalysisEngineProcessException
 	{
-		super.collectionProcessComplete(arg0);
+		super.collectionProcessComplete();
 
-		try
-		{
+		try {
 			iv_bw.flush();
 			iv_bw.close();
 		}
-		catch(Exception e)
-		{ throw new ResourceProcessException(e); }
+		catch ( IOException e) {
+			// TODO: better exception handling
+			e.printStackTrace();
+		}
 	}
+
 }
