@@ -1,0 +1,2 @@
+oneline.txt|Sulfasalazine [AZULFIDINE]::0::26|9524::202770|500-mg::27::33|2::34::35|tabs::36::40|mouth::44::49|two times a day::50::65||Sulfasalazine 500 MG Oral Tablet [Azulfidine]|208437|Sulfasalazine [AZULFIDINE] 500-mg 2 tabs by mouth two times a day
+sample.txt|Aspirin::648::655|1191|81mg::656::660||tab::661::664|mouth::668::673|twice a day::674::685|a week::690::696|Aspirin 81 MG Oral Tablet|243670|She takes an Aspirin 81mg tab by mouth twice a day for a week for knee pain

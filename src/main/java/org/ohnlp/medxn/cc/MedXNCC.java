@@ -52,6 +52,7 @@ import org.ohnlp.typesystem.type.structured.Document;
  * docName|drug::b::e|drugRxcui|stren::b::e|dos::b::e|form::b::e|route::b::e|freq::b::e|dur::b::e|normRxname|normRxcui
  * 
  * @author Sunghwan Sohn
+ * @author Sijia Liu
  *
  */
 public class MedXNCC extends CasConsumer_ImplBase {
@@ -96,70 +97,8 @@ public class MedXNCC extends CasConsumer_ImplBase {
 				Iterator<?> drugIter = indexes.getAnnotationIndex(Drug.type).iterator();
 				while(drugIter.hasNext()) {
 					Drug drug = (Drug) drugIter.next();
-					String drugName = drug.getName().getCoveredText();
-					String drugNameRxcui = drug.getName().getSemGroup();
-					String normRxname = drug.getNormRxName2()==null ? "" : drug.getNormRxName2();
-					String normRxcui = drug.getNormRxCui2()==null ? "" : drug.getNormRxCui2();	  
-					String drugNameInfo = drugName+"::"+drug.getName().getBegin()+"::"+drug.getName().getEnd();
-					String strengthInfo = "";
-					String dosageInfo = "";
-					String formInfo = "";
-					String routeInfo = "";
-					String frequencyInfo = "";
-					String durationInfo = "";
 
-					int drugSenBegin = drug.getName().getSentence().getBegin();
-					int drugSenEnd = drug.getName().getSentence().getEnd();
-
-					FSArray attrs = drug.getAttrs();
-
-					for(int i=0; i<attrs.size(); i++) {
-						MedAttr ma = (MedAttr)attrs.get(i);
-						String info = ma.getCoveredText()+"::"+ma.getBegin()+"::"+ma.getEnd();
-						if(ma.getTag().equals("strength")) {
-							if(strengthInfo.equals("")) strengthInfo = info;
-							else strengthInfo += "`" + info ;
-						}
-						else if(ma.getTag().equals("dosage")) {
-							if(dosageInfo.equals("")) dosageInfo = info;
-							else dosageInfo += "`" + info ;	        			
-						}
-						else if(ma.getTag().equals("form")) {
-							if(formInfo.equals("")) formInfo = info;
-							else formInfo += "`" + info ;	  
-						}
-						else if(ma.getTag().equals("route")) {
-							if(routeInfo.equals("")) routeInfo = info;
-							else routeInfo += "`" + info ;	  
-						}
-						else if(ma.getTag().equals("frequency")) {
-							if(frequencyInfo.equals("")) frequencyInfo = info;
-							else frequencyInfo += "`" + info ;	  
-						}
-						else if(ma.getTag().equals("duration")) {
-							if(durationInfo.equals("")) durationInfo = info;
-							else durationInfo += "`" + info ;	  
-						}
-					}
-
-					drugNameRxcui = drugNameRxcui.replaceAll("::BN|::IN|::PIN|::MIN", "");
-					normRxcui = normRxcui.replaceAll("::BN|::IN|::PIN|::MIN", "");
-
-					//docName|drug::b::e|drugRxcui|stren::b::e|dos::b::e|form::b::e|route::b::e|freq::b::e|dur::b::e|normRxname|normRxcui|text
-					String output = docName + iv_delim 
-					+ drugNameInfo + iv_delim 
-					+ drugNameRxcui + iv_delim 
-					+ strengthInfo + iv_delim
-					+ dosageInfo + iv_delim
-					+ formInfo + iv_delim
-					+ routeInfo + iv_delim
-					+ frequencyInfo + iv_delim
-					+ durationInfo + iv_delim
-					+ normRxname + iv_delim 
-					+ normRxcui + iv_delim
-					+ jcas.getDocumentText().substring(drugSenBegin,drugSenEnd).replaceAll("\n", " ");
-
-					iv_bw.write(output+"\n");
+					iv_bw.write(buildDrugOutputString(cas, docName, iv_delim, drug) + "\n");
 				}
 			}
 		} catch (CASException | IOException e) {
@@ -167,9 +106,87 @@ public class MedXNCC extends CasConsumer_ImplBase {
 			 e.printStackTrace();
 		}
 	}
-	
-	public void collectionProcessComplete() throws  AnalysisEngineProcessException
-	{
+
+	/**
+	 * Build output String based on Drug object and metadata
+	 * @param cas
+	 * @param docName
+	 * @param iv_delim
+	 * @param drug
+	 * @return
+	 */
+	static public String buildDrugOutputString(CAS cas , String docName, String iv_delim, Drug drug) throws CASException {
+		JCas jcas = cas.getJCas(); ;
+
+		String drugName = drug.getName().getCoveredText();
+		String drugNameRxcui = drug.getName().getSemGroup();
+		String normRxname = drug.getNormRxName2()==null ? "" : drug.getNormRxName2();
+		String normRxcui = drug.getNormRxCui2()==null ? "" : drug.getNormRxCui2();
+		String drugNameInfo = drugName+"::"+drug.getName().getBegin()+"::"+drug.getName().getEnd();
+		String strengthInfo = "";
+		String dosageInfo = "";
+		String formInfo = "";
+		String routeInfo = "";
+		String frequencyInfo = "";
+		String durationInfo = "";
+
+		int drugSenBegin = drug.getName().getSentence().getBegin();
+		int drugSenEnd = drug.getName().getSentence().getEnd();
+
+		FSArray attrs = drug.getAttrs();
+
+		for(int i=0; i<attrs.size(); i++) {
+			MedAttr ma = (MedAttr)attrs.get(i);
+			String info = ma.getCoveredText()+"::"+ma.getBegin()+"::"+ma.getEnd();
+			if(ma.getTag().equals("strength")) {
+				if(strengthInfo.equals("")) strengthInfo = info;
+				else strengthInfo += "`" + info ;
+			}
+			else if(ma.getTag().equals("dosage")) {
+				if(dosageInfo.equals("")) dosageInfo = info;
+				else dosageInfo += "`" + info ;
+			}
+			else if(ma.getTag().equals("form")) {
+				if(formInfo.equals("")) formInfo = info;
+				else formInfo += "`" + info ;
+			}
+			else if(ma.getTag().equals("route")) {
+				if(routeInfo.equals("")) routeInfo = info;
+				else routeInfo += "`" + info ;
+			}
+			else if(ma.getTag().equals("frequency")) {
+				if(frequencyInfo.equals("")) frequencyInfo = info;
+				else frequencyInfo += "`" + info ;
+			}
+			else if(ma.getTag().equals("duration")) {
+				if(durationInfo.equals("")) durationInfo = info;
+				else durationInfo += "`" + info ;
+			}
+		}
+
+		drugNameRxcui = drugNameRxcui.replaceAll("::BN|::IN|::PIN|::MIN", "");
+		normRxcui = normRxcui.replaceAll("::BN|::IN|::PIN|::MIN", "");
+
+		//docName|drug::b::e|drugRxcui|stren::b::e|dos::b::e|form::b::e|route::b::e|freq::b::e|dur::b::e|normRxname|normRxcui|text
+		String output = docName + iv_delim
+				+ drugNameInfo + iv_delim
+				+ drugNameRxcui + iv_delim
+				+ strengthInfo + iv_delim
+				+ dosageInfo + iv_delim
+				+ formInfo + iv_delim
+				+ routeInfo + iv_delim
+				+ frequencyInfo + iv_delim
+				+ durationInfo + iv_delim
+				+ normRxname + iv_delim
+				+ normRxcui + iv_delim
+				+ jcas.getDocumentText().substring(drugSenBegin,drugSenEnd).replaceAll("\n", " ");
+
+		return output;
+
+	}
+
+	@Override
+	public void collectionProcessComplete() throws  AnalysisEngineProcessException {
 		super.collectionProcessComplete();
 
 		try {
