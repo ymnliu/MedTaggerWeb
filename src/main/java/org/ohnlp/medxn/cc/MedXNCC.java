@@ -61,6 +61,7 @@ public class MedXNCC extends CasConsumer_ImplBase {
 	private BufferedWriter iv_bw = null;
 	private String iv_delim;
 
+	@Override
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		File outFile;
 

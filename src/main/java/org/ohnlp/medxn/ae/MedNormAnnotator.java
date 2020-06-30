@@ -40,7 +40,7 @@ import org.ohnlp.medxn.type.MedAttr;
  * @author Sunghwan Sohn
  */
 public class MedNormAnnotator extends JCasAnnotator_ImplBase {	
-	public void process(JCas jcas) throws AnalysisEngineProcessException {
+	public void process(JCas jcas) {
 		JFSIndexRepository indexes = jcas.getJFSIndexRepository();
 		Iterator<?> drugItr= indexes.getAnnotationIndex(Drug.type).iterator(); //all drugs		
 

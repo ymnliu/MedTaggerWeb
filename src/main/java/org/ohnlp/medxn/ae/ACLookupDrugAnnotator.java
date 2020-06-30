@@ -63,8 +63,6 @@ public class ACLookupDrugAnnotator extends JCasAnnotator_ImplBase {
 	throws ResourceInitializationException {
 		super.initialize(aContext);
 		logger.setLevel(Level.DEBUG);
-
-
 		try {
 
 			String dict = aContext.getResourceFilePath("RxNorm_BNIN");

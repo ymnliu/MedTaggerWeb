@@ -73,8 +73,7 @@ public class ACLookupRxCUIDrugNormAnnotator extends JCasAnnotator_ImplBase {
 	@Override
 	public void process(JCas jCas) throws AnalysisEngineProcessException {
 		JFSIndexRepository indexes = jCas.getJFSIndexRepository();
-		Iterator<?> drugItr = indexes.getAnnotationIndex(Drug.type)
-		.iterator();
+		Iterator<?> drugItr = indexes.getAnnotationIndex(Drug.type).iterator();
 		
 		while(drugItr.hasNext()) {
 			Drug med = (Drug) drugItr.next();
