@@ -122,17 +122,6 @@ public class TabDelimitedWriter extends CasConsumer_ImplBase {
 		while (cmIter.hasNext()) {
 			ConceptMention cm = (ConceptMention) cmIter.next();
 				toprint += inFile.getName()+"\t";
-				//toprint += "CM\ttext=\""+cm.getCoveredText()+"\""; // covered text;
-				//toprint += "\tstart=\"" + cm.getBegin() + "\"\t" + "end=\"" + cm.getEnd() + "\""; 
-				//toprint += "\tcertainty=\""+ cm.getCertainty() + "\""; 
-				//toprint += "\tstatus=\""+cm.getStatus()+"\"";
-				//toprint += "\texperiencer=\""+cm.getExperiencer()+"\"";
-				//toprint += "\tnorm=\"" + cm.getNormTarget() + "\"";
-				//toprint += "\tsemG=\"" + cm.getSemGroup()+ "\"";
-				//toprint += "\tsection=\"" + cm.getSentence().getSegment().getValue() + "\"";
-				//toprint += "\tsentid=\"" + cm.getSentence().getId()+"\"";
-				//toprint += "\tsentence=\"" +cm.getSentence().getCoveredText().replaceAll("\n"," ") +"\"\n";
-				
 				toprint += "\""+cm.getCoveredText()+"\""; // covered text;
 				toprint += "\t\"" + cm.getBegin() + "\"\t" + "end=\"" + cm.getEnd() + "\""; 
 				toprint += "\t\""+ cm.getCertainty() + "\""; 

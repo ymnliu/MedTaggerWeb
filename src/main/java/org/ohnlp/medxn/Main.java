@@ -1,12 +1,9 @@
 package org.ohnlp.medxn;
 
-import org.apache.uima.analysis_component.AnalysisComponent;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
-import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.fit.factory.CollectionReaderFactory;
-import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
 import org.ohnlp.medtagger.cr.FileSystemReader;
 import org.ohnlp.medxn.cc.MedXNCC;
 import org.ohnlp.util.SimpleCliPipeline;

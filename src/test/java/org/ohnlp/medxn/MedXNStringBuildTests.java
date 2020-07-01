@@ -9,18 +9,17 @@ import org.apache.uima.cas.CAS;
 import org.apache.uima.cas.CASException;
 import org.apache.uima.fit.factory.AnalysisEngineFactory;
 import org.apache.uima.fit.internal.ResourceManagerFactory;
-import org.apache.uima.fit.util.LifeCycleUtil;
-import org.apache.uima.resource.Resource;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.util.CasCreationUtils;
 import org.apache.uima.util.InvalidXMLException;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.ohnlp.medxn.cc.MedXNCC;
 import org.ohnlp.medxn.type.Drug;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -46,8 +45,8 @@ public class MedXNStringBuildTests {
                 "desc.medxndesc.aggregate_analysis_engine.MedXNAggregateTAE");
 
         resMgr = ResourceManagerFactory.newResourceManager();
-        AnalysisEngineDescription aaeDesc = AnalysisEngineFactory.createEngineDescription(descMedXNTAE);
-        aae = UIMAFramework.produceAnalysisEngine(aaeDesc, resMgr, null);
+        aae = UIMAFramework.produceAnalysisEngine(AnalysisEngineFactory.createEngineDescription(descMedXNTAE),
+                resMgr, null);
         cas = CasCreationUtils.createCas(Arrays.asList(aae.getMetaData()), null, resMgr);
     }
 
