@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
+    <title>Dictionary Builder | MedTagger Web</title>
+    <link href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <style>
+        .current {
+            font-weight: bold;
+        }
+    </style>
+    </head>
+
+<body>
+    
+    <div class="container-fluid bg-darkCyan fg-white mb-1">
+        <div class="row">
+            <div class="cell">
+                <p>
+                    <i class="fa fa-book-medical"></i>
+                    Dictionary Builder
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <nav data-role="ribbonmenu">
+        <ul class="tabs-holder">
+            <li><a href="#section-1-1">Main</a></li>
+        </ul>
+
+        <div class="content-holder">
+            <div class="section" id="section-1-1">
+
+                <div class="group">
+                    <div class="form-group">
+                        <label>Ontology</label>
+                        
+                        <select id="acronym" style="width: 150px;" data-role="select">
+                            <option value="CIDO">CIDO</option>
+                            <option value="MONDO">MONDO</option>
+                        </select>
+
+                    </div>
+                    <button class="ribbon-button"
+                        onclick="jarvis.load_ontology_csv();">
+                        <span class="icon">
+                            <i class="fa fa-envelope-open-text"></i>
+                        </span>
+                        <span class="caption">Load Data</span>
+                    </button>
+
+                    <span class="title">Ontology Database</span>
+                </div>
+
+                <div class="group">
+
+                    <button class="ribbon-button">
+                        <span class="icon">
+                            <i class="fa fa-file-archive"></i>
+                        </span>
+                        <span class="caption">Save as CSV</span>
+                    </button>
+
+                    <span class="title">Download</span>
+                </div>
+
+                <div class="group">
+                    
+                    <button class="ribbon-button">
+                        <span class="icon">
+                            <i class="fa fa-upload"></i>
+                        </span>
+                        <span class="caption">Upload to Server</span>
+                    </button>
+                    
+                    <span class="title">Deployment</span>
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="cell">
+
+                <div data-role="panel"
+                    data-title-caption="Ontology Tree"
+                    data-title-icon="<span class='mif-tree'></span>">
+                    
+                    <ul data-role="treeview" id="tv_1"></ul>
+
+                </div>
+            </div>
+
+
+
+            <div class="cell">
+
+                <div data-role="panel"
+                    data-title-caption="Term List"
+                    data-title-icon="<span class='mif-list'></span>">
+                    
+                    <ul data-role="treeview" id="tv_1"></ul>
+
+                </div>
+            </div>
+
+        </div>
+
+    
+    </div>
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.2.0/papaparse.min.js"></script>
+
+    <script>
+
+        var vw_treemap = {
+            vpp: null,
+            vpp_id: '#vw_treemap',
+
+            acronym: null,
+
+            init: function() {
+                this.vpp = new Vue({
+                    el: this.vpp_id,
+                    data: {
+
+                    },
+                    methods: {
+
+                    },
+                    mounted: function() {
+                        Metro.init();
+                    }
+                })
+            }
+        };
+
+        var vw_termeditor = {
+            vpp: null,
+            vpp_id: '#vw_termeditor',
+
+            acronym: null,
+
+            init: function() {
+                this.vpp = new Vue({
+                    el: this.vpp_id,
+                    data: {
+
+                    },
+                    methods: {
+
+                    },
+                    mounted: function() {
+                        Metro.init();
+                    }
+                })
+            }
+
+        };
+
+        var jarvis = {
+            
+            api_url: {
+                get_ontology_csv: 'get_ontology_csv',
+                get_ontology_root: '/get_ontology_root',
+                get_ontology_children: '/get_ontology_children'
+            },
+
+            init: function() { 
+
+            },
+
+            load_ontology_csv: function() {
+                var acronym = $('#acronym').val();
+                
+                $.get(
+                    this.api_url.get_ontology_csv,
+                    {acronym: acronym, ver: Math.random()},
+                    function(data) {
+                        jarvis.data = data;
+                        jarvis.csvtb = Papa.parse(data, {
+                            header: true
+                        });
+                        console.log('* done!');
+                    }, 'text'
+                )
+            },
+
+            load_ontology_root: function() {
+                var acronym = $('#acronym').val();
+                
+                $.get(
+                    this.api_url.get_ontology_root,
+                    {acronym: acronym, ver: Math.random()},
+                    function(data) {
+
+                    }, 'json'
+                )
+            },
+
+            load_ontology_children: function() {
+                var acronym = $('#acronym').val();
+                
+                $.get(
+                    this.api_url.get_ontology_children,
+                    {acronym: acronym, ver: Math.random()},
+                    function(data) {
+
+                    }, 'json'
+                )
+            }
+        };
+
+        $(document).ready(function() {
+
+        });
+    </script>
+</body>
+
+</html>

@@ -16,12 +16,16 @@ import org.apache.uima.resource.metadata.TypeSystemDescription;
 import org.apache.uima.util.InvalidXMLException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.ohnlp.medtagger.fit.demo.util.BioPortalAPI;
 import org.ohnlp.medtagger.type.ConceptMention;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -42,21 +46,24 @@ public class WebServiceController {
     private static TypeSystemDescription tsd;
     private AnalysisEngine aae;
 
+    @Value("${bioportal.apikey}")
+    private String bioportalAPIKey;
+
     /**
      * Trigger UIMA pipeline from the given texts and return only the concept mentions
      *
      * @param docText
      * @return
      */
-    Collection<ConceptMention> runPipeline(String docText) {
+    Collection<ConceptMention> runPipeline(final String docText) {
         Collection<ConceptMention> cms = null;
         try {
-            JCas sourceCas = createJCas(tsd);
+            final JCas sourceCas = createJCas(tsd);
             sourceCas.setDocumentText(docText);
             aae.process(sourceCas);
             cms = JCasUtil.select(sourceCas, ConceptMention.class);
             aae.collectionProcessComplete();
-        } catch (UIMAException e) {
+        } catch (final UIMAException e) {
             e.printStackTrace();
         }
         return cms;
@@ -67,26 +74,26 @@ public class WebServiceController {
      * @param cms List of ConceptMentions from UIMA
      * @return list of JSON array for Brat to display in the html template
      */
-    static JSONAnnotation generateBratJson(Collection<ConceptMention> cms) {
-        JSONArray cmList = new JSONArray();
-        JSONArray attribList = new JSONArray();
+    static JSONAnnotation generateBratJson(final Collection<ConceptMention> cms) {
+        final JSONArray cmList = new JSONArray();
+        final JSONArray attribList = new JSONArray();
 
         int entityIdInt = 1;
         int attribIdInt = 1;
-        for (ConceptMention cm : cms) {
-            JSONObject cmj = new JSONObject();
+        for (final ConceptMention cm : cms) {
+            final JSONObject cmj = new JSONObject();
 
             // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]
             // note that range of the offsets are [${START},${END})
             // ref: https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm
 
             // TODO: Add properties to show normalized concepts
-            JSONArray entityProperties = new JSONArray();
-            String bratEntityId = String.format("T%d", entityIdInt++);
+            final JSONArray entityProperties = new JSONArray();
+            final String bratEntityId = String.format("T%d", entityIdInt++);
             entityProperties.add(bratEntityId);
             entityProperties.add("Condition");
-            JSONArray spans = new JSONArray();
-            JSONArray tokenBeginEnd = new JSONArray();
+            final JSONArray spans = new JSONArray();
+            final JSONArray tokenBeginEnd = new JSONArray();
             tokenBeginEnd.add(cm.getBegin());
             tokenBeginEnd.add(cm.getEnd());
             spans.add(tokenBeginEnd);
@@ -107,14 +114,14 @@ public class WebServiceController {
              *    experiencer: "Patient"
              */
 
-            JSONArray attribProperties = new JSONArray();
+            final JSONArray attribProperties = new JSONArray();
             attribProperties.add(String.format("A%d", attribIdInt++));
             attribProperties.add("norm");
             attribProperties.add(bratEntityId);
             attribProperties.add(cm.getNormTarget());
             attribList.add(attribProperties);
 
-            JSONArray certaintyProperties = new JSONArray();
+            final JSONArray certaintyProperties = new JSONArray();
             certaintyProperties.add(String.format("A%d", attribIdInt++));
             certaintyProperties.add("certainty");
             certaintyProperties.add(bratEntityId);
@@ -122,14 +129,14 @@ public class WebServiceController {
             attribList.add(certaintyProperties);
 
 
-            JSONArray statusProperties = new JSONArray();
+            final JSONArray statusProperties = new JSONArray();
             statusProperties.add(String.format("A%d", attribIdInt++));
             statusProperties.add("status");
             statusProperties.add(bratEntityId);
             statusProperties.add(cm.getStatus());
             attribList.add(statusProperties);
 
-            JSONArray experiencerProperties = new JSONArray();
+            final JSONArray experiencerProperties = new JSONArray();
             experiencerProperties.add(String.format("A%d", attribIdInt++));
             experiencerProperties.add("experiencer");
             experiencerProperties.add(bratEntityId);
@@ -147,17 +154,17 @@ public class WebServiceController {
     public WebServiceController() {
 
         // TODO: Change hard code path from the file system into resource reference
-        Path ruleDirPath = Paths.get("covid19");
+        final Path ruleDirPath = Paths.get("covid19");
         System.out.println("IE Rules:\t" + ruleDirPath.toAbsolutePath().toString());
 
         try {
-            ResourceManager resMgr = ResourceManagerFactory.newResourceManager();
+            final ResourceManager resMgr = ResourceManagerFactory.newResourceManager();
 
             descMedTaggerTAE = createEngineDescription(
                     "desc.medtaggeriedesc.aggregate_analysis_engine.MedTaggerIEAggregateTAE");
-            AnalysisEngineMetaData metadata = descMedTaggerTAE.getAnalysisEngineMetaData();
+            final AnalysisEngineMetaData metadata = descMedTaggerTAE.getAnalysisEngineMetaData();
 
-            ConfigurationParameterSettings settings = metadata.getConfigurationParameterSettings();
+            final ConfigurationParameterSettings settings = metadata.getConfigurationParameterSettings();
             settings.setParameterValue("Resource_dir", ruleDirPath.toString());
             metadata.setConfigurationParameterSettings(settings);
 
@@ -168,11 +175,11 @@ public class WebServiceController {
             tsd.resolveImports(resMgr);
 
 
-        } catch (InvalidXMLException e) {
+        } catch (final InvalidXMLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
-        } catch (ResourceInitializationException e) {
+        } catch (final ResourceInitializationException e) {
             e.printStackTrace();
         }
     }
@@ -183,9 +190,8 @@ public class WebServiceController {
      */
     @GetMapping("/")
     public ModelAndView index() {
-        ModelAndView indexView = new ModelAndView();
-        indexView.setViewName("index-template");
-        indexView.addObject("input_text", "I have a dry cough and fever.");
+        final ModelAndView indexView = new ModelAndView();
+        indexView.setViewName("index.v2");
         return indexView;
     }
 
@@ -195,18 +201,18 @@ public class WebServiceController {
      */
 
     @PostMapping("/")
-    public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
+    public ModelAndView submit(@ModelAttribute final WebInputText webInputText) {
         // To get a list of concept mentions
 
-        Collection<ConceptMention> cms = runPipeline(webInputText.getDocText());
+        final Collection<ConceptMention> cms = runPipeline(webInputText.getDocText());
 
         // render template for the fields in index-template
-        ModelAndView indexView = new ModelAndView();
+        final ModelAndView indexView = new ModelAndView();
         indexView.setViewName("index-template");
         indexView.addObject("input_text", webInputText.getDocText());
         logger.info(webInputText.getDocText());
         // get a list of concepts as JSON list to feed into the template
-        JSONAnnotation jsAnnot = generateBratJson(cms);
+        final JSONAnnotation jsAnnot = generateBratJson(cms);
 
         indexView.addObject("cmList", jsAnnot.getCmList());
         indexView.addObject("attribList", jsAnnot.getAttribList());
@@ -214,5 +220,82 @@ public class WebServiceController {
 
         return indexView;
 
+    }
+
+    
+    @PostMapping("/parse")
+    public ModelAndView parse(@ModelAttribute final WebInputText webInputText) {
+        // To get a list of concept mentions
+        final Collection<ConceptMention> cms = runPipeline(webInputText.getDocText());
+
+        // render template for the fields in index-template
+        final ModelAndView indexView = new ModelAndView();
+        indexView.setViewName("parse");
+        indexView.addObject("input_text", webInputText.getDocText());
+        logger.info(webInputText.getDocText());
+        // get a list of concepts as JSON list to feed into the template
+        final JSONAnnotation jsAnnot = generateBratJson(cms);
+        indexView.addObject("cmList", jsAnnot.getCmList());
+        indexView.addObject("attribList", jsAnnot.getAttribList());
+        indexView.addObject("isResult", true);
+
+        return indexView;
+    }
+
+    /**
+     * The covid 19 demo page.
+     * @return the demo view
+     */
+    @GetMapping("/demo")
+    public ModelAndView demo() {
+        final ModelAndView indexView = new ModelAndView();
+        indexView.setViewName("demo");
+        return indexView;
+    }
+
+    /**
+     * The dictionary builder page.
+     * @return the dictionary builder view
+     */
+    @GetMapping("/dict_builder")
+    public ModelAndView dict_builder() {
+        final ModelAndView indexView = new ModelAndView();
+        indexView.setViewName("dict_builder");
+        return indexView;
+    }
+
+    @CrossOrigin
+    @GetMapping("/get_ontology_root")
+    public String get_ontology_root(@RequestParam(name="acronym") String acronym) throws Exception {
+        String ret = BioPortalAPI.getOntologyRoot(acronym, bioportalAPIKey);
+        return ret;
+    }
+
+    @CrossOrigin
+    @GetMapping("/get_ontology_children")
+    public String get_ontology_children(
+        @RequestParam(name="acronym") String acronym,
+        @RequestParam(name="classid") String classid) throws Exception {
+        String ret = BioPortalAPI.getOntologyChildren(acronym, classid, bioportalAPIKey);
+        return ret;
+    }
+
+    @CrossOrigin
+    @GetMapping("/get_ontology_csv")
+    public String get_ontology_csv(
+        @RequestParam(name="acronym") String acronym) throws Exception {
+        String ret = BioPortalAPI.downloadAndExtractOntology(acronym, bioportalAPIKey);
+        return ret;
+    }
+
+    /**
+     * The IE rule editor page.
+     * @return the dictionary builder view
+     */
+    @GetMapping("/ie_editor")
+    public ModelAndView ie_editor() {
+        final ModelAndView indexView = new ModelAndView();
+        indexView.setViewName("ie_editor");
+        return indexView;
     }
 }
