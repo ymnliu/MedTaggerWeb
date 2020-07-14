@@ -19,4 +19,8 @@ public class JSONAnnotation {
         this.attribList = attribList;
     }
 
+    public void add(JSONAnnotation toAdd) {
+        this.cmList.addAll(toAdd.getCmList());
+        this.attribList.addAll(toAdd.getAttribList());
+    }
 }
