@@ -5,7 +5,7 @@
   <version>1.0</version>
   <vendor/>
   <imports>
-    <import name="org.ohnlp.medtagger.types.MedTaggerTypes"/>
+    <import name="org.ohnlp.medtagger.ie.types.MedTaggerIETypes"/>
   </imports>
   <types>
     <typeDescription>

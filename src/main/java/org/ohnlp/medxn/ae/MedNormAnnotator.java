@@ -47,12 +47,16 @@ public class MedNormAnnotator extends JCasAnnotator_ImplBase {
 		//Get the list of drugs - if drug overlaps, use the longest one
 		while(drugItr.hasNext()) {
 			Drug d = (Drug) drugItr.next();
-			d.setNormDrug(normalizeDrug(d.getName(), d.getAttrs()));
+			try {
+				d.setNormDrug(normalizeDrug(d.getName(), d.getAttrs()));
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			}
 		}
-			
 	}
 	
-	//currently if there are multiple same-type attributes, use the first
+	//TODO: currently if there are multiple same-type attributes, use the first
 	//update it in the future
 	/**
 	 * Return a normalized form of RxNorm for med
@@ -143,8 +147,11 @@ public class MedNormAnnotator extends JCasAnnotator_ImplBase {
 				+ bn + "<bn>";
 		}
 		else {
-			if(!time.equals("")) normDrug = time + "<tm>";
-			else if(!volume.equals("")) normDrug = volume + "<vl>";
+			if(!time.equals("")) {
+				normDrug = time + "<tm>";
+			} else if(!volume.equals("")) {
+				normDrug = volume + "<vl>";
+			}
 			
 			String[] toks = med.getSemGroup().split("::");
 			String rxtype = toks[1];
