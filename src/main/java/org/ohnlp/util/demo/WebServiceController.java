@@ -258,12 +258,11 @@ public class WebServiceController {
     @GetMapping("/")
     public ModelAndView index() {
         ModelAndView indexView = new ModelAndView();
-        indexView.setViewName("index");
+        indexView.setViewName("demo");
         // indexView.addObject("input_text", "The patient had dry cough and took Aspirin
         // yesterday.");
         return indexView;
     }
-
 
     @GetMapping("/index_v0")
     public ModelAndView index_v0() {
@@ -272,6 +271,7 @@ public class WebServiceController {
         indexView.addObject("input_text", "The patient had dry cough and took Aspirin yesterday.");
         return indexView;
     }
+
 
     /**
      * How to display NLP results .
@@ -309,7 +309,7 @@ public class WebServiceController {
 
     }
 
-    
+
     /**
      * Parse the input text
      * @param doc_text

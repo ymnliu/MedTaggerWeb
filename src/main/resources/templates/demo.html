@@ -19,7 +19,6 @@
             height: 100%;
             padding: 0;
             margin: 0;
-            overflow: hidden;
             font-family: Arial, Helvetica, sans-serif;
         }
 
@@ -62,20 +61,14 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dict_builder">Dictionary Builder</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/ie_editor">IE Engine Editor</a>
+                        <a class="nav-link" href="http://ohnlp.org/">Home <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
 
                 <div class="my-2 my-lg-0">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa fa-github"></i> GitHub</a>
+                            <a class="nav-link" href="https://github.com/OHNLP/MedTagger"><i class="fa fa-github"></i> GitHub</a>
                         </li>
                     </ul>
                 </div>
@@ -85,7 +78,7 @@
 
     <div class="container-fluid" style="margin-top: 70px; height: calc(100% - 70px);">
 
-        <div class="row" style="height: 100%;">
+        <div class="row">
 
             <div class="col-md-5">
                 <h5>Input Text <small>Maximum length: 3,000 characters</small></h5>
@@ -122,7 +115,69 @@ Sore throat, congestion or runny nose, nausea or vomiting</textarea>
         </div>
         <!-- /.row -->
 
+        <div class="row">
+            <div class="col-md-8">
+                <h4>Concept/Term List</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul>
+                            <li>Dry cough</li>
+                            <li>Fever</li>
+                            <li>Lymphopenia</li>
+                            <li>Sore Throat</li>
+                            <li>Ground Flass Infiltrates</li>
+                            <li>Elevated LDH</li>
+                            <li>Diarrhea</li>
+                            <li>Nasal Congestion</li>
+                            <li>Loss of Appetite</li>
+                        </ul>
+                        <a class="btn btn-secondary"
+                           href="https://github.com/OHNLP/MedTagger/tree/master/src/main/resources/medtaggerieresources/covid19"
+                           target="_blank" role="button">Ruleset »</a>
+                    </div>
+                    <div class="col-md-4">
+                        <ul>
+                            <li>Fatigue</li>
+                            <li>Dyspnea</li>
+                            <li>Headache</li>
+                            <li>Myalgia</li>
+                            <li>Abdominal Pain</li>
+                            <li>Patchy Infiltrates</li>
+                            <li>Elevated PT Time</li>
+                            <li>Influenza</li>
+                        </ul>
+    
+                    </div>
+                </div>
+    
+            </div>
+            <div class="col-md-4">
+                <h4>COVID-19 Severe Case </h4>
+                <p>To identify people at higher risk for severe illness using structured
+                    and unstructured data according to the
+                    <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-at-higher-risk.html"
+                       target="_blank">CDC guideline</a>.</p>
+                <p><a class="btn btn-secondary"
+                      href="https://github.com/OHNLP/MedTagger/wiki/Risk-for-Severe-Illness-of-COVID-19" role="button">Wiki
+                    »</a></p>
+            </div>
+        </div>
+    
+    
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">&copy; 2020 Open Health Natural Language Processing (OHNLP) Consortium</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="http://184.73.168.219/index.php/OHNLP:Privacy_policy">Privacy</a></li>
+                <li class="list-inline-item"><a
+                        href="http://184.73.168.219/index.php/OHNLP:General_disclaimer">Disclaimers</a></li>
+                <li class="list-inline-item"><a href="https://github.com/OHNLP/MedTagger/issues">Support</a></li>
+                <li class="list-inline-item"><a href="http://ohnlp.org/">About</a></li>
+            </ul>
+        </footer>
+
     </div>
+
+
 
     <div id="toastmsg" class="toast" data-delay="8000" style="position: absolute; top: 20px; right: 20px;">
         <div class="toast-header">
@@ -147,7 +202,7 @@ Sore throat, congestion or runny nose, nausea or vomiting</textarea>
         integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="./static/lib/brat/lib/head.load.min.js"></script>
-
+    <script src="https://www.google.com/recaptcha/api.js"></script>
     <script>
         var collData = {
             entity_types: [{
