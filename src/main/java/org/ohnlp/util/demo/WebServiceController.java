@@ -5,15 +5,10 @@ import org.apache.uima.UIMAFramework;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
-import org.apache.uima.collection.CollectionProcessingEngine;
-import org.apache.uima.collection.metadata.CpeDescription;
-import org.apache.uima.fit.factory.AggregateBuilder;
 import org.apache.uima.fit.factory.TypeSystemDescriptionFactory;
 import org.apache.uima.fit.internal.ResourceManagerFactory;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
-import org.apache.uima.jcas.tcas.Annotation;
-import org.apache.uima.resource.ResourceAccessException;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
@@ -22,7 +17,6 @@ import org.apache.uima.util.InvalidXMLException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.type.ConceptMention;
-import org.ohnlp.medxn.type.Drug;
 import org.ohnlp.util.BioPortalAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,9 +56,9 @@ public class WebServiceController {
      * @param docText
      * @return
      */
-    HashMap<String, Collection> runPipeline(String docText) {
+    HashMap<String, Collection<ConceptMention>> runPipeline(String docText) {
 
-        HashMap<String, Collection> annotMap = new HashMap<>();
+        HashMap<String, Collection<ConceptMention>> annotMap = new HashMap<String, Collection<ConceptMention>>();
         Collection<ConceptMention> cms = null;
         try {
             JCas cmCas = createJCas(tsd);
@@ -98,6 +92,7 @@ public class WebServiceController {
         int attribIdInt = 1;
 
         if (cms == null) {
+            // Return empty lists
             return new JSONAnnotation(cmList, attribList);
         }
 
@@ -233,7 +228,7 @@ public class WebServiceController {
     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
         // To get a list of concept mentions
 
-        HashMap<String, Collection> annotMap = runPipeline(webInputText.getDocText());
+        HashMap<String, Collection<ConceptMention>> annotMap = runPipeline(webInputText.getDocText());
 
         // render template for the fields in index-template
         ModelAndView indexView = new ModelAndView();
@@ -241,16 +236,11 @@ public class WebServiceController {
         indexView.addObject("input_text", webInputText.getDocText());
         logger.info(String.format("Input for submit \"%s\"", webInputText.getDocText()));
 
-        System.out.println(annotMap);
+        logger.info(String.format("Output map \"%s\"", annotMap));
 
         // get a list of concepts as JSON list to feed into the template
 
         JSONAnnotation jsAnnot = generateConceptMentionBratJson(annotMap.get("cm"));
-        // int drugIdStart = jsAnnot.getCmList().size() + 1;
-        // int drugAttribIdStart = jsAnnot.getAttribList().size() + 1;
-        //
-        // jsAnnot.add(generateDrugBratJson(annotMap.get("drug"), drugIdStart,
-        // drugAttribIdStart));
 
         indexView.addObject("cmList", jsAnnot.getCmList());
         indexView.addObject("attribList", jsAnnot.getAttribList());
@@ -271,7 +261,7 @@ public class WebServiceController {
         // TODO: check the input 
 
         // get the list of concept metions
-        HashMap<String, Collection> annotMap = runPipeline(doc_text);
+        HashMap<String, Collection<ConceptMention>> annotMap = runPipeline(doc_text);
         JSONAnnotation jsAnnot = generateConceptMentionBratJson(annotMap.get("cm"));
 
         // build the output data
