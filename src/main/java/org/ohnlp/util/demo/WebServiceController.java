@@ -373,6 +373,13 @@ public class WebServiceController {
         return ret;
     }
 
+    /**
+     * Get the ontology children of a class from BioPortal
+     * @param acronym
+     * @param classid
+     * @return
+     * @throws Exception
+     */
     @CrossOrigin
     @GetMapping("/get_ontology_children")
     public String get_ontology_children(@RequestParam(name = "acronym") String acronym,
