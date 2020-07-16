@@ -125,6 +125,13 @@
             <artifactId>commons-csv</artifactId>
             <version>1.8</version>
         </dependency>
+        <!-- for auto-reloading changes in spring-boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>true</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
