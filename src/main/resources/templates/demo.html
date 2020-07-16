@@ -305,7 +305,7 @@ Sore throat, congestion or runny nose, nausea or vomiting</textarea>
                 // send to backend
                 $.post(
                     this.url.parse,
-                    { docText: text },
+                    { doc_text: text },
                     function (data) {
                         console.log(data);
                         jarvis.msg('Parse result: ' + data.success);
