@@ -67,14 +67,15 @@
 
                 <div class="group">
 
-                    <button class="ribbon-button">
+                    <button class="ribbon-button"
+                        onclick="vw_treemap.extract_selected();">
                         <span class="icon">
-                            <i class="fa fa-file-archive"></i>
+                            <i class='fa fa-arrow-alt-circle-right'></i> 
                         </span>
-                        <span class="caption">Save as CSV</span>
+                        <span class="caption">Extract Selection</span>
                     </button>
 
-                    <span class="title">Download</span>
+                    <span class="title">Build Dictionary</span>
                 </div>
 
                 <div class="group">
@@ -109,14 +110,9 @@
                         v-if="items.length == 0"
                         v-html="msg">
                     </div>
-                    <div class="text-right" 
+                    <div class="text-left" 
                         v-else>
-                        The tree is built on {{ ontology.info.num_classes }} classes 
-                        <button class="button info"
-                            v-on:click="extract_selected">
-                            <i class='fa fa-arrow-alt-circle-right'></i> 
-                            Extract Selected
-                        </button>
+                        The tree is built on {{ ontology.info.num_classes }} classes
                     </div>
                     
                     <template>
@@ -200,10 +196,6 @@
                         load_tree: function() {
                             vw_treemap.clear();
                             vw_treemap.load(this.ontology.selected);
-                        },
-
-                        extract_selected: function() {
-                            vw_treemap.extract_selected(this._selection);
                         }
                     },
                     computed: {
@@ -275,7 +267,11 @@
                 this.vpp.items = [];
             },
 
-            extract_selected: function(selection) {
+            extract_selected: function() {
+                var selection = this.vpp.selection;
+                if (selection.length == 0) {
+                    return;
+                }
                 // get the item list by the class id of selection
                 var nodes = [];
                 for (let i = 0; i < selection.length; i++) {
@@ -334,7 +330,7 @@
                         var syns = item['Synonyms'].split('|');
                         for (let j = 0; j < syns.length; j++) {
                             const syn = syns[j];
-                            line.push([syn, def, norm, smtc]);
+                            lines.push([syn, def, norm, smtc]);
                         }
                     }
                 }

@@ -5,12 +5,15 @@ import org.apache.uima.UIMAFramework;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
 import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
+import org.apache.uima.collection.CollectionProcessingEngine;
+import org.apache.uima.collection.metadata.CpeDescription;
 import org.apache.uima.fit.factory.AggregateBuilder;
 import org.apache.uima.fit.factory.TypeSystemDescriptionFactory;
 import org.apache.uima.fit.internal.ResourceManagerFactory;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
+import org.apache.uima.resource.ResourceAccessException;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
@@ -229,6 +232,7 @@ public class WebServiceController {
 
             cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
 
+
         } catch (InvalidXMLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -236,6 +240,14 @@ public class WebServiceController {
         } catch (ResourceInitializationException e) {
             e.printStackTrace();
         }
+
+        // init the CollectionProcessingEngine
+        // CpeDescription cpeDesc = UIMAFramework.getXMLParser()
+        //     .parseCpeDescription(
+        //         new XMLInputSource(
+        //             cpeFilePath.toAbsolutePath().toString()
+        //         )
+        //     );
     }
 
     /**
@@ -297,6 +309,11 @@ public class WebServiceController {
 
     }
 
+    /**
+     * Parse the input text
+     * @param doc_text
+     * @return attributes and concepts
+     */
     @PostMapping("/parse")
     public JSONObject parse(@RequestParam(name = "doc_text") String doc_text) {
         // TODO: check the input 
@@ -343,6 +360,12 @@ public class WebServiceController {
         return indexView;
     }
 
+    /**
+     * Get the ontology root from BioPortal
+     * @param acronym
+     * @return
+     * @throws Exception
+     */
     @CrossOrigin
     @GetMapping("/get_ontology_root")
     public String get_ontology_root(@RequestParam(name = "acronym") String acronym) throws Exception {
