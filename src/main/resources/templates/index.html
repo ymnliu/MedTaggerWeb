@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
+    <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
+    <title>MedTagger Web</title>
+    <link href="./static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+</head>
+<body>
+    <div data-role="appbar" data-expand-point="md">
+        <a href="#" class="brand no-hover">
+            <img style="height: 65px;" src="./static/img/medtaggerweb_logo.png" alt="medtaggerweb_logo.png">
+        </a>
+    
+        <ul class="app-bar-menu">
+            <li><a href="#">HOME</a></li>
+            <li><a href="#">ABOUT</a></li>
+            <li>
+                <a href="#" class="dropdown-toggle">DEMO</a>
+                <ul class="d-menu" data-role="dropdown">
+                    <li><a href="/demo">
+                        <i class="fa fa-head-side-mask"></i> 
+                        COVID-19 Term Detector
+                    </a></li>
+                    <li><a href="/dict_builder">
+                        <i class="fa fa-book-medical"></i>
+                        Ontology Dictionary Builder
+                    </a></li>
+                    <li><a href="/ie_editor">
+                        <i class="fa fa-edit"></i>
+                        IE Engine Editor
+                    </a></li>
+                </ul>
+            </li>
+            <li><a href="#">CONTACTS</a></li>
+        </ul>
+    </div>
+    
+<div class="container-fluid mt-4 mb-10">
+    <div data-role="carousel"
+        data-controls-on-mouse="true" data-cls-controls="fg-white">
+        <div class="slide p-2 pl-10 pr-10">
+            <div class="row flex-align-center h-100">
+                <div class="cell-md-12 text-center">
+                    <img style="max-width: 80%;" src="./static/img/medtaggerweb_logo.png" alt="medtaggerweb_logo.png">
+                    <p class="display2">Now avaliable.</p>
+                    <p><a href="#">Learn more &gt;</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid bg-lightGray pt-10 pb-10">
+    <div class="container">
+        <div class="row">
+            <div class="cell text-center">
+                <h1>MedTagger: Towards a semantic lexicon for clinical NLP</h1>
+                <p>A semantic lexicon which associates words and phrases in text to concepts is critical for extracting and encoding clinical information in free text and therefore achieving semantic interoperability between structured and unstructured data in Electronic Health Records (EHRs). Directly using existing standard terminologies may have limited coverage with respect to concepts and their corresponding mentions in text. With MedTagger, we analyze how tokens and phrases in a large corpus distribute and how well the UMLS captures the semantics. A corpus-driven semantic lexicon, MedLex, has been constructed where the semantics is based on the UMLS assisted with variants mined and usage information gathered from clinical text. The detailed corpus analysis of tokens, chunks, and concept mentions shows the UMLS is an invaluable source for natural language processing. Increasing the semantic coverage of tokens provides a good foundation in capturing clinical information comprehensively. The study also yields some insights in developing practical NLP systems.</p>
+                <p>
+                    <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3540492/">Learn more &gt;</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid pt-10 pb-10">
+    <div class="container">
+        <div class="row">
+            <div class="cell text-center" style="margin-bottom: -120px; z-index: 10;">
+                <h1>
+                    COVID-19 Term Detector
+                </h1>
+                <p class="display1">Powered by MedTagger IE Engine</p>
+                <p>
+                    <a href="#">Learn more &gt;</a>&nbsp;&nbsp;
+                    <a href="/demo">Demo &gt;</a>
+                </p>
+            </div>
+            <div class="img-container">
+                <img src="./static/img/demo1.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-10 pt-10 pb-10">
+    <div class="row" style="padding-bottom: 100px;">
+        <div class="cell text-center">
+            <h1>Dictionary Builder</h1>
+            <p class="display1">From ontology to dictionary.</p>
+            <p>
+                <a href="#">Learn more &gt;</a>&nbsp;&nbsp;
+                <a href="/dict_builder">Try &gt;</a>
+            </p>
+        </div>
+
+        <div class="cell text-center">
+            <h1>IE Engine Editor</h1>
+            <p class="display1">The expert knowledge.</p>
+            <p>
+                <a href="#">Learn more &gt;</a>&nbsp;&nbsp;
+                <a href="/ie_editor">Try &gt;</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid bg-lightGray mt-10 pt-10 pb-10">
+    <div class="container">
+        <div class="row">
+            <div class="cell-4">
+                <p>MedTagger &copy; 2020</p>
+            </div>
+            <div class="cell-4">
+            </div>
+            <div class="cell-4">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>
+<script>
+
+</script>
+</body>
+</html>
