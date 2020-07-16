@@ -66,17 +66,13 @@ public class WebServiceController {
 
         HashMap<String, Collection> annotMap = new HashMap<>();
         Collection<ConceptMention> cms = null;
-        Collection<Drug> drugs = null;
         try {
             JCas cmCas = createJCas(tsd);
             cmCas.setDocumentText(docText);
             cmAae.process(cmCas);
-
             cms = JCasUtil.select(cmCas, ConceptMention.class);
-            drugs = JCasUtil.select(cmCas, Drug.class);
 
-            annotMap.put("cms", cms);
-            annotMap.put("drugs", drugs);
+            annotMap.put("cm", cms);
 
             cmAae.collectionProcessComplete();
 
@@ -105,7 +101,7 @@ public class WebServiceController {
             return new JSONAnnotation(cmList, attribList);
         }
 
-        for (final ConceptMention cm : cms) {
+        for (ConceptMention cm: cms) {
 
             // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]
             // note that range of the offsets are [${START},${END})
@@ -162,50 +158,6 @@ public class WebServiceController {
         return new JSONAnnotation(cmList, attribList);
     }
 
-    /**
-     * Wrap list of concept mentions into json list to feed into the "entity" js
-     * field.
-     * 
-     * @param drugs List of Drugs
-     * @return list of JSON array for Brat to display in the html template
-     */
-    static JSONAnnotation generateDrugBratJson(Collection<Drug> drugs, int entityIdInt, int attribIdInt) {
-        JSONArray drugList = new JSONArray();
-        JSONArray attribList = new JSONArray();
-
-        if (drugs == null) {
-            return new JSONAnnotation(drugList, attribList);
-        }
-
-        for (Drug drug : drugs) {
-
-            // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]
-            // note that range of the offsets are [${START},${END})
-            // ref:
-            // https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm
-
-            JSONArray entityProperties = new JSONArray();
-            String bratEntityId = String.format("T%d", entityIdInt++);
-            entityProperties.add(bratEntityId);
-            entityProperties.add("Condition");
-            JSONArray spans = new JSONArray();
-            JSONArray tokenBeginEnd = new JSONArray();
-            tokenBeginEnd.add(drug.getBegin());
-            tokenBeginEnd.add(drug.getEnd());
-            spans.add(tokenBeginEnd);
-            entityProperties.add(spans);
-            drugList.add(entityProperties);
-
-            JSONArray attribProperties = new JSONArray();
-            attribProperties.add(String.format("A%d", attribIdInt++));
-            attribProperties.add("norm");
-            attribProperties.add(bratEntityId);
-            attribProperties.add(drug.getName());
-            attribList.add(attribProperties);
-        }
-
-        return new JSONAnnotation(drugList, attribList);
-    }
 
     /**
      * To initialize UIMA resources and type systesms
@@ -231,7 +183,6 @@ public class WebServiceController {
             tsd.resolveImports(resMgr);
 
             cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
-
 
         } catch (InvalidXMLException e) {
             e.printStackTrace();
@@ -288,7 +239,7 @@ public class WebServiceController {
         ModelAndView indexView = new ModelAndView();
         indexView.setViewName("index-template");
         indexView.addObject("input_text", webInputText.getDocText());
-        logger.info(webInputText.getDocText());
+        logger.info(String.format("Input for submit \"%s\"", webInputText.getDocText()));
 
         System.out.println(annotMap);
 
