@@ -278,6 +278,6 @@
       ], 
       "text": "I have a dry cough and fever or chills. And the following:\nShortness of breath or difficulty breathing.\nFatigue, Muscle or body aches, diarrhea\nHeadache, new loss of taste or smell\nSore throat, congestion or runny nose, nausea or vomiting"
     }, 
-    "msg": "Failed", 
+    "msg": "Success", 
     "success": true
   }  

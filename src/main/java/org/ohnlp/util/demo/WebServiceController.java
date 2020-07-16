@@ -246,9 +246,18 @@ public class WebServiceController {
     @GetMapping("/")
     public ModelAndView index() {
         ModelAndView indexView = new ModelAndView();
-        indexView.setViewName("index-template");
+        indexView.setViewName("index");
         // indexView.addObject("input_text", "The patient had dry cough and took Aspirin
         // yesterday.");
+        return indexView;
+    }
+
+
+    @GetMapping("/index_v0")
+    public ModelAndView index_v0() {
+        ModelAndView indexView = new ModelAndView();
+        indexView.setViewName("index_v0");
+        indexView.addObject("input_text", "The patient had dry cough and took Aspirin yesterday.");
         return indexView;
     }
 
@@ -257,7 +266,6 @@ public class WebServiceController {
      * 
      * @return the updated view out of index-template
      */
-
     @PostMapping("/")
     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
         // To get a list of concept mentions
@@ -297,12 +305,16 @@ public class WebServiceController {
         HashMap<String, Collection> annotMap = runPipeline(doc_text);
         JSONAnnotation jsAnnot = generateConceptMentionBratJson(annotMap.get("cm"));
 
-        // build the output
+        // build the output data
+        JSONObject data = new JSONObject();
+        data.put("attributes", jsAnnot.getAttribList());
+        data.put("entities", jsAnnot.getCmList());
+
+        // build the output json
         JSONObject ret = new JSONObject();
-        ret.put("cmList", jsAnnot.getCmList());
-        ret.put("attribList", jsAnnot.getCmList());
-        ret.put("isResult", true);
-        ret.put("input_text", doc_text);
+        ret.put("data", data);
+        ret.put("success", true);
+        ret.put("msg", "text is parsed.");
 
         return ret;
     }
