@@ -33,29 +33,6 @@
         <delegateAnalysisEngine key="LineSentenceDetectorAE">
             <import name="org.ohnlp.medtagger.aes.LineSentenceDetectorAE"/>
         </delegateAnalysisEngine>
-        <!-- MedXN Start -->
-        <delegateAnalysisEngine key="ACLookupDrugAE">
-            <import name="org.ohnlp.medxn.aes.ACLookupDrugAE"/>
-        </delegateAnalysisEngine>
-        <delegateAnalysisEngine key="ACLookupDrugNormAE">
-            <import name="org.ohnlp.medxn.aes.ACLookupDrugNormAE"/>
-        </delegateAnalysisEngine>
-        <delegateAnalysisEngine key="MedNormRxCUIAE">
-            <import name="org.ohnlp.medxn.aes.MedNormRxCUIAE"/>
-        </delegateAnalysisEngine>
-        <delegateAnalysisEngine key="MedNormAE">
-            <import name="org.ohnlp.medxn.aes.MedNormAE"/>
-        </delegateAnalysisEngine>
-        <delegateAnalysisEngine key="ACLookupRxCUIDrugNormAE">
-            <import name="org.ohnlp.medxn.aes.ACLookupRxCUIDrugNormAE"/>
-        </delegateAnalysisEngine>
-        <delegateAnalysisEngine key="MedAttrAE">
-            <import name="org.ohnlp.medxn.aes.MedAttrAE"/>
-        </delegateAnalysisEngine>
-        <delegateAnalysisEngine key="MedExtAE">
-            <import name="org.ohnlp.medxn.aes.MedExtAE"/>
-        </delegateAnalysisEngine>
-        <!-- MedXN End -->
     </delegateAnalysisEngineSpecifiers>
 
     <analysisEngineMetaData>
@@ -230,34 +207,6 @@
                 </fileResourceSpecifier>
             </externalResource>
 
-            <externalResource>
-                <name>RxNorm_BNIN</name>
-                <description>drug dictionary compiled from RxNorm BN, IN, PIN, MIN, and synonym</description>
-                <fileResourceSpecifier>
-                    <fileUrl>file:medxnresources/lookup/RxNorm_BNIN.alphanum.BnInPinMinSyn.txt</fileUrl>
-                </fileResourceSpecifier>
-            </externalResource>
-            <externalResource>
-                <name>RxNorm_Name</name>
-                <description>drug dictionary compiled from RxNorm SCDC, SCDF, SCD, SBDC, SBDF, SBD, and SY</description>
-                <fileResourceSpecifier>
-                    <fileUrl>file:medxnresources/lookup/RxNorm_Name.norm.txt</fileUrl>
-                </fileResourceSpecifier>
-            </externalResource>
-            <externalResource>
-                <name>RxCUI</name>
-                <description/>
-                <fileResourceSpecifier>
-                    <fileUrl>file:medxnresources/lookup/RxCUI.norm.txt</fileUrl>
-                </fileResourceSpecifier>
-            </externalResource>
-            <externalResource>
-                <name>doseDict</name>
-                <description>A dictionary containing dose information used for MedNormRxCUIAE.</description>
-                <fileResourceSpecifier>
-                    <fileUrl>file:medxnresources/lookup/doseDict.txt</fileUrl>
-                </fileResourceSpecifier>
-            </externalResource>
         </externalResources>
         <externalResourceBindings>
             <externalResourceBinding>
@@ -315,7 +264,6 @@
             </externalResourceBinding>
 
             <externalResourceBinding>
-
                 <key>LvgLookupAE/lvg_dict</key>
                 <resourceName>lvg_dict</resourceName>
             </externalResourceBinding>
@@ -335,32 +283,6 @@
                 <resourceName>openclass</resourceName>
             </externalResourceBinding>
 
-            <externalResourceBinding>
-                <key>MedAttrAE/regExPatterns</key>
-                <resourceName>regExPatterns</resourceName>
-            </externalResourceBinding>
-            <externalResourceBinding>
-                <key>ACLookupDrugNormAE/RxNorm_Name</key>
-                <resourceName>RxNorm_Name</resourceName>
-            </externalResourceBinding>
-            <externalResourceBinding>
-                <key>MedNormRxCUIAE/doseDict</key>
-                <resourceName>doseDict</resourceName>
-            </externalResourceBinding>
-            <externalResourceBinding>
-                <key>MedExtAE/falseMedDict</key>
-                <resourceName>falseMedDict</resourceName>
-            </externalResourceBinding>
-            <externalResourceBinding>
-                <key>ACLookupDrugAE/RxNorm_BNIN</key>
-                <resourceName>RxNorm_BNIN</resourceName>
-            </externalResourceBinding>
-            <externalResourceBinding>
-                <key>ACLookupRxCUIDrugNormAE/RxCUI</key>
-                <resourceName>RxCUI</resourceName>
-            </externalResourceBinding>
         </externalResourceBindings>
-
-
     </resourceManagerConfiguration>
 </analysisEngineDescription>
