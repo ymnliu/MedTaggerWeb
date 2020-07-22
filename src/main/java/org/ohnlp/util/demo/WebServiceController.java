@@ -188,13 +188,6 @@ public class WebServiceController {
             e.printStackTrace();
         }
 
-        // init the CollectionProcessingEngine
-        // CpeDescription cpeDesc = UIMAFramework.getXMLParser()
-        //     .parseCpeDescription(
-        //         new XMLInputSource(
-        //             cpeFilePath.toAbsolutePath().toString()
-        //         )
-        //     );
     }
 
     /**
