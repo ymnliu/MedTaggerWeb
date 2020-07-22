@@ -107,9 +107,11 @@ public class IETabDelimitedWriter extends JCasAnnotator_ImplBase {
 			return;
 		}
 
-		String metaSenstr="";
+		String metaSenstr = "";
 
-		if(metaSen.getCoveredText().startsWith("[meta")){ metaSenstr=metaSen.getCoveredText();} 
+		if(metaSen.getCoveredText().startsWith("[meta")){
+			metaSenstr = metaSen.getCoveredText();
+		}
 		while (cmIter.hasNext()) {
 			ConceptMention cm = (ConceptMention) cmIter.next();
 				toprint += inFile.getName()+"\t"+metaSenstr+"\t";

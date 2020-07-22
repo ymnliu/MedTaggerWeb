@@ -1,0 +1,2203 @@
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Compiled class file\n*.class\n\n# Log file\n*.log\n\n# BlueJ files\n*.ctxt\n\n# Mobile Tools for Java (J2ME)\n.mtj.tmp/\n\n# Package Files #\n*.jar\n*.war\n*.nar\n*.ear\n*.zip\n*.tar.gz\n*.rar\n\n# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml\nhs_err_pid*\n\ntarget/\n\n**/.DS_Store\n.DS_Store\n.classpath\n.project\n.settings/org.eclipse.core.resources.prefs\n.settings/org.eclipse.jdt.apt.core.prefs\n.settings/org.eclipse.jdt.core.prefs\n.settings/org.eclipse.m2e.core.prefs\n.settings/\n.vscode/
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .gitignore	(revision bc1edb8f7034283ab6e9ae1af15b385aed937084)
++++ .gitignore	(date 1594927767854)
+@@ -23,9 +23,6 @@
+ hs_err_pid*
+ 
+ target/
+-
+-**/.DS_Store
+-.DS_Store
+ .classpath
+ .project
+ .settings/org.eclipse.core.resources.prefs
+Index: src/main/java/org/ohnlp/util/demo/WebServiceController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.ohnlp.util.demo;\n\nimport org.apache.uima.UIMAException;\nimport org.apache.uima.UIMAFramework;\nimport org.apache.uima.analysis_engine.AnalysisEngine;\nimport org.apache.uima.analysis_engine.AnalysisEngineDescription;\nimport org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;\nimport org.apache.uima.collection.CollectionProcessingEngine;\nimport org.apache.uima.collection.metadata.CpeDescription;\nimport org.apache.uima.fit.factory.AggregateBuilder;\nimport org.apache.uima.fit.factory.TypeSystemDescriptionFactory;\nimport org.apache.uima.fit.internal.ResourceManagerFactory;\nimport org.apache.uima.fit.util.JCasUtil;\nimport org.apache.uima.jcas.JCas;\nimport org.apache.uima.jcas.tcas.Annotation;\nimport org.apache.uima.resource.ResourceAccessException;\nimport org.apache.uima.resource.ResourceInitializationException;\nimport org.apache.uima.resource.ResourceManager;\nimport org.apache.uima.resource.metadata.ConfigurationParameterSettings;\nimport org.apache.uima.resource.metadata.TypeSystemDescription;\nimport org.apache.uima.util.InvalidXMLException;\nimport org.json.simple.JSONArray;\nimport org.json.simple.JSONObject;\nimport org.ohnlp.medtagger.type.ConceptMention;\nimport org.ohnlp.medxn.type.Drug;\nimport org.ohnlp.util.BioPortalAPI;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport org.springframework.beans.factory.annotation.Value;\nimport org.springframework.web.bind.annotation.CrossOrigin;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.ModelAttribute;\nimport org.springframework.web.bind.annotation.PostMapping;\nimport org.springframework.web.bind.annotation.RequestParam;\nimport org.springframework.web.bind.annotation.RestController;\nimport org.springframework.web.servlet.ModelAndView;\n\nimport java.io.IOException;\nimport java.nio.file.Path;\nimport java.nio.file.Paths;\nimport java.util.Collection;\nimport java.util.HashMap;\n\nimport static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;\nimport static org.apache.uima.fit.factory.JCasFactory.createJCas;\n\n@RestController\npublic class WebServiceController {\n\n    private final Logger logger = LoggerFactory.getLogger(this.getClass());\n\n    private static TypeSystemDescription tsd;\n    private AnalysisEngine cmAae;\n\n    @Value(\"${bioportal.apikey}\")\n    private String bioportalAPIKey;\n\n    /**\n     * Trigger UIMA pipeline from the given texts and return only the concept\n     * mentions\n     *\n     * @param docText\n     * @return\n     */\n    HashMap<String, Collection> runPipeline(String docText) {\n\n        HashMap<String, Collection> annotMap = new HashMap<>();\n        Collection<ConceptMention> cms = null;\n        Collection<Drug> drugs = null;\n        try {\n            JCas cmCas = createJCas(tsd);\n            cmCas.setDocumentText(docText);\n            cmAae.process(cmCas);\n\n            cms = JCasUtil.select(cmCas, ConceptMention.class);\n            drugs = JCasUtil.select(cmCas, Drug.class);\n\n            annotMap.put(\"cms\", cms);\n            annotMap.put(\"drugs\", drugs);\n\n            cmAae.collectionProcessComplete();\n\n        } catch (UIMAException e) {\n            e.printStackTrace();\n        }\n\n        return annotMap;\n    }\n\n    /**\n     * Wrap list of concept mentions into json list to feed into the \"entity\" js\n     * field.\n     * \n     * @param cms List of Annotation from UIMA\n     * @return list of JSON array for Brat to display in the html template\n     */\n    static JSONAnnotation generateConceptMentionBratJson(final Collection<ConceptMention> cms) {\n        JSONArray cmList = new JSONArray();\n        JSONArray attribList = new JSONArray();\n\n        int entityIdInt = 1;\n        int attribIdInt = 1;\n\n        if (cms == null) {\n            return new JSONAnnotation(cmList, attribList);\n        }\n\n        for (final ConceptMention cm : cms) {\n\n            // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]\n            // note that range of the offsets are [${START},${END})\n            // ref:\n            // https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm\n\n            JSONArray entityProperties = new JSONArray();\n            String bratEntityId = String.format(\"T%d\", entityIdInt++);\n            entityProperties.add(bratEntityId);\n            entityProperties.add(\"Condition\");\n            JSONArray spans = new JSONArray();\n            JSONArray tokenBeginEnd = new JSONArray();\n            tokenBeginEnd.add(cm.getBegin());\n            tokenBeginEnd.add(cm.getEnd());\n            spans.add(tokenBeginEnd);\n            entityProperties.add(spans);\n            cmList.add(entityProperties);\n\n            /**\n             * ConceptMention begin: 9 end: 18 detectionMethod: \"Matched\" normTarget:\n             * \"DRY_COUGH\" Certainty: \"Positive\" semGroup: <null> status: \"Present\"\n             * sentence: Sentence experiencer: \"Patient\"\n             */\n\n            JSONArray attribProperties = new JSONArray();\n            attribProperties.add(String.format(\"A%d\", attribIdInt++));\n            attribProperties.add(\"norm\");\n            attribProperties.add(bratEntityId);\n            attribProperties.add(cm.getNormTarget());\n            attribList.add(attribProperties);\n\n            JSONArray certaintyProperties = new JSONArray();\n            certaintyProperties.add(String.format(\"A%d\", attribIdInt++));\n            certaintyProperties.add(\"certainty\");\n            certaintyProperties.add(bratEntityId);\n            certaintyProperties.add(cm.getCertainty());\n            attribList.add(certaintyProperties);\n\n            JSONArray statusProperties = new JSONArray();\n            statusProperties.add(String.format(\"A%d\", attribIdInt++));\n            statusProperties.add(\"status\");\n            statusProperties.add(bratEntityId);\n            statusProperties.add(cm.getStatus());\n            attribList.add(statusProperties);\n\n            JSONArray experiencerProperties = new JSONArray();\n            experiencerProperties.add(String.format(\"A%d\", attribIdInt++));\n            experiencerProperties.add(\"experiencer\");\n            experiencerProperties.add(bratEntityId);\n            experiencerProperties.add(cm.getExperiencer());\n            attribList.add(experiencerProperties);\n        }\n\n        return new JSONAnnotation(cmList, attribList);\n    }\n\n    /**\n     * Wrap list of concept mentions into json list to feed into the \"entity\" js\n     * field.\n     * \n     * @param drugs List of Drugs\n     * @return list of JSON array for Brat to display in the html template\n     */\n    static JSONAnnotation generateDrugBratJson(Collection<Drug> drugs, int entityIdInt, int attribIdInt) {\n        JSONArray drugList = new JSONArray();\n        JSONArray attribList = new JSONArray();\n\n        if (drugs == null) {\n            return new JSONAnnotation(drugList, attribList);\n        }\n\n        for (Drug drug : drugs) {\n\n            // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]\n            // note that range of the offsets are [${START},${END})\n            // ref:\n            // https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm\n\n            JSONArray entityProperties = new JSONArray();\n            String bratEntityId = String.format(\"T%d\", entityIdInt++);\n            entityProperties.add(bratEntityId);\n            entityProperties.add(\"Condition\");\n            JSONArray spans = new JSONArray();\n            JSONArray tokenBeginEnd = new JSONArray();\n            tokenBeginEnd.add(drug.getBegin());\n            tokenBeginEnd.add(drug.getEnd());\n            spans.add(tokenBeginEnd);\n            entityProperties.add(spans);\n            drugList.add(entityProperties);\n\n            JSONArray attribProperties = new JSONArray();\n            attribProperties.add(String.format(\"A%d\", attribIdInt++));\n            attribProperties.add(\"norm\");\n            attribProperties.add(bratEntityId);\n            attribProperties.add(drug.getName());\n            attribList.add(attribProperties);\n        }\n\n        return new JSONAnnotation(drugList, attribList);\n    }\n\n    /**\n     * To initialize UIMA resources and type systesms\n     */\n    public WebServiceController() {\n\n        // TODO: Change hard code path from the file system into resource reference\n        Path ruleDirPath = Paths.get(\"covid19\");\n        System.out.println(\"IE Rules:\\t\" + ruleDirPath.toAbsolutePath().toString());\n\n        try {\n            ResourceManager resMgr = ResourceManagerFactory.newResourceManager();\n            AnalysisEngineDescription descN3cTAE = createEngineDescription(\n                    \"desc.medtaggerdesc.aggregate_analysis_engine.N3CAggregateTAE\");\n            AnalysisEngineMetaData metadata = descN3cTAE.getAnalysisEngineMetaData();\n\n            ConfigurationParameterSettings settings = metadata.getConfigurationParameterSettings();\n            settings.setParameterValue(\"Resource_dir\", ruleDirPath.toString());\n            metadata.setConfigurationParameterSettings(settings);\n\n            // modified MedXNTypes now importing MedTaggerIE types\n            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription(\"org.ohnlp.medxn.types.MedXNTypes\");\n            tsd.resolveImports(resMgr);\n\n            cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);\n\n\n        } catch (InvalidXMLException e) {\n            e.printStackTrace();\n        } catch (IOException e) {\n            e.printStackTrace();\n        } catch (ResourceInitializationException e) {\n            e.printStackTrace();\n        }\n\n        // init the CollectionProcessingEngine\n        // CpeDescription cpeDesc = UIMAFramework.getXMLParser()\n        //     .parseCpeDescription(\n        //         new XMLInputSource(\n        //             cpeFilePath.toAbsolutePath().toString()\n        //         )\n        //     );\n    }\n\n    /**\n     * The index page. Display a default sentence to start.\n     * \n     * @return the initial view out of index-template\n     */\n    @GetMapping(\"/\")\n    public ModelAndView index() {\n        ModelAndView indexView = new ModelAndView();\n        indexView.setViewName(\"demo\");\n        // indexView.addObject(\"input_text\", \"The patient had dry cough and took Aspirin\n        // yesterday.\");\n        return indexView;\n    }\n\n    @GetMapping(\"/index_v0\")\n    public ModelAndView index_v0() {\n        ModelAndView indexView = new ModelAndView();\n        indexView.setViewName(\"index_v0\");\n        indexView.addObject(\"input_text\", \"The patient had dry cough and took Aspirin yesterday.\");\n        return indexView;\n    }\n\n\n    /**\n     * How to display NLP results .\n     * \n     * @return the updated view out of index-template\n     */\n    @PostMapping(\"/\")\n    public ModelAndView submit(@ModelAttribute WebInputText webInputText) {\n        // To get a list of concept mentions\n\n        HashMap<String, Collection> annotMap = runPipeline(webInputText.getDocText());\n\n        // render template for the fields in index-template\n        ModelAndView indexView = new ModelAndView();\n        indexView.setViewName(\"index-template\");\n        indexView.addObject(\"input_text\", webInputText.getDocText());\n        logger.info(webInputText.getDocText());\n\n        System.out.println(annotMap);\n\n        // get a list of concepts as JSON list to feed into the template\n\n        JSONAnnotation jsAnnot = generateConceptMentionBratJson(annotMap.get(\"cm\"));\n        // int drugIdStart = jsAnnot.getCmList().size() + 1;\n        // int drugAttribIdStart = jsAnnot.getAttribList().size() + 1;\n        //\n        // jsAnnot.add(generateDrugBratJson(annotMap.get(\"drug\"), drugIdStart,\n        // drugAttribIdStart));\n\n        indexView.addObject(\"cmList\", jsAnnot.getCmList());\n        indexView.addObject(\"attribList\", jsAnnot.getAttribList());\n        indexView.addObject(\"isResult\", true);\n\n        return indexView;\n\n    }\n\n\n    /**\n     * Parse the input text\n     * @param doc_text\n     * @return attributes and concepts\n     */\n    @PostMapping(\"/parse\")\n    public JSONObject parse(@RequestParam(name = \"doc_text\") String doc_text) {\n        // TODO: check the input \n\n        // get the list of concept metions\n        HashMap<String, Collection> annotMap = runPipeline(doc_text);\n        JSONAnnotation jsAnnot = generateConceptMentionBratJson(annotMap.get(\"cm\"));\n\n        // build the output data\n        JSONObject data = new JSONObject();\n        data.put(\"attributes\", jsAnnot.getAttribList());\n        data.put(\"entities\", jsAnnot.getCmList());\n\n        // build the output json\n        JSONObject ret = new JSONObject();\n        ret.put(\"data\", data);\n        ret.put(\"success\", true);\n        ret.put(\"msg\", \"text is parsed.\");\n\n        return ret;\n    }\n\n    /**\n     * The covid 19 demo page.\n     * \n     * @return the demo view\n     */\n    @GetMapping(\"/demo\")\n    public ModelAndView demo() {\n        final ModelAndView indexView = new ModelAndView();\n        indexView.setViewName(\"demo\");\n        return indexView;\n    }\n\n    /**\n     * The dictionary builder page.\n     * \n     * @return the dictionary builder view\n     */\n    @GetMapping(\"/dict_builder\")\n    public ModelAndView dict_builder() {\n        final ModelAndView indexView = new ModelAndView();\n        indexView.setViewName(\"dict_builder\");\n        return indexView;\n    }\n\n    /**\n     * Get the ontology root from BioPortal\n     * @param acronym\n     * @return\n     * @throws Exception\n     */\n    @CrossOrigin\n    @GetMapping(\"/get_ontology_root\")\n    public String get_ontology_root(@RequestParam(name = \"acronym\") String acronym) throws Exception {\n        String ret = BioPortalAPI.getOntologyRoot(acronym, bioportalAPIKey);\n        return ret;\n    }\n\n    /**\n     * Get the ontology children of a class from BioPortal\n     * @param acronym\n     * @param classid\n     * @return\n     * @throws Exception\n     */\n    @CrossOrigin\n    @GetMapping(\"/get_ontology_children\")\n    public String get_ontology_children(@RequestParam(name = \"acronym\") String acronym,\n            @RequestParam(name = \"classid\") String classid) throws Exception {\n        String ret = BioPortalAPI.getOntologyChildren(acronym, classid, bioportalAPIKey);\n        return ret;\n    }\n\n    /**\n     * Get the sliced ontology CSV data from BioPortal\n     * \n     * @param acronym\n     * @return\n     * @throws Exception\n     */\n    @CrossOrigin\n    @GetMapping(\"/get_ontology_csv\")\n    public String get_ontology_csv(@RequestParam(name = \"acronym\") String acronym) throws Exception {\n        String ret = BioPortalAPI.downloadAndExtractOntology(acronym, bioportalAPIKey);\n        return ret;\n    }\n\n    /**\n     * The IE rule editor page.\n     * \n     * @return the dictionary builder view\n     */\n    @GetMapping(\"/ie_editor\")\n    public ModelAndView ie_editor() {\n        final ModelAndView indexView = new ModelAndView();\n        indexView.setViewName(\"ie_editor\");\n        return indexView;\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/ohnlp/util/demo/WebServiceController.java	(revision bc1edb8f7034283ab6e9ae1af15b385aed937084)
++++ src/main/java/org/ohnlp/util/demo/WebServiceController.java	(date 1594927767775)
+@@ -5,15 +5,12 @@
+ import org.apache.uima.analysis_engine.AnalysisEngine;
+ import org.apache.uima.analysis_engine.AnalysisEngineDescription;
+ import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
+-import org.apache.uima.collection.CollectionProcessingEngine;
+-import org.apache.uima.collection.metadata.CpeDescription;
+ import org.apache.uima.fit.factory.AggregateBuilder;
+ import org.apache.uima.fit.factory.TypeSystemDescriptionFactory;
+ import org.apache.uima.fit.internal.ResourceManagerFactory;
+ import org.apache.uima.fit.util.JCasUtil;
+ import org.apache.uima.jcas.JCas;
+ import org.apache.uima.jcas.tcas.Annotation;
+-import org.apache.uima.resource.ResourceAccessException;
+ import org.apache.uima.resource.ResourceInitializationException;
+ import org.apache.uima.resource.ResourceManager;
+ import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
+@@ -23,15 +20,11 @@
+ import org.json.simple.JSONObject;
+ import org.ohnlp.medtagger.type.ConceptMention;
+ import org.ohnlp.medxn.type.Drug;
+-import org.ohnlp.util.BioPortalAPI;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+-import org.springframework.beans.factory.annotation.Value;
+-import org.springframework.web.bind.annotation.CrossOrigin;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.ModelAttribute;
+ import org.springframework.web.bind.annotation.PostMapping;
+-import org.springframework.web.bind.annotation.RequestParam;
+ import org.springframework.web.bind.annotation.RestController;
+ import org.springframework.web.servlet.ModelAndView;
+ 
+@@ -52,12 +45,9 @@
+     private static TypeSystemDescription tsd;
+     private AnalysisEngine cmAae;
+ 
+-    @Value("${bioportal.apikey}")
+-    private String bioportalAPIKey;
+ 
+     /**
+-     * Trigger UIMA pipeline from the given texts and return only the concept
+-     * mentions
++     * Trigger UIMA pipeline from the given texts and return only the concept mentions
+      *
+      * @param docText
+      * @return
+@@ -65,18 +55,13 @@
+     HashMap<String, Collection> runPipeline(String docText) {
+ 
+         HashMap<String, Collection> annotMap = new HashMap<>();
+-        Collection<ConceptMention> cms = null;
+-        Collection<Drug> drugs = null;
++
+         try {
+             JCas cmCas = createJCas(tsd);
+             cmCas.setDocumentText(docText);
+             cmAae.process(cmCas);
+-
+-            cms = JCasUtil.select(cmCas, ConceptMention.class);
+-            drugs = JCasUtil.select(cmCas, Drug.class);
+-
+-            annotMap.put("cms", cms);
+-            annotMap.put("drugs", drugs);
++            annotMap.put("cm", JCasUtil.select(cmCas, ConceptMention.class));
++            annotMap.put("drug", JCasUtil.select(cmCas, Drug.class));
+ 
+             cmAae.collectionProcessComplete();
+ 
+@@ -88,29 +73,26 @@
+     }
+ 
+     /**
+-     * Wrap list of concept mentions into json list to feed into the "entity" js
+-     * field.
+-     * 
++     * Wrap list of concept mentions into json list to feed into the "entity" js field.
+      * @param cms List of Annotation from UIMA
+      * @return list of JSON array for Brat to display in the html template
+      */
+-    static JSONAnnotation generateConceptMentionBratJson(final Collection<ConceptMention> cms) {
++    static JSONAnnotation generateConceptMentionBratJson(Collection<ConceptMention> cms) {
+         JSONArray cmList = new JSONArray();
+         JSONArray attribList = new JSONArray();
+ 
+         int entityIdInt = 1;
+         int attribIdInt = 1;
+ 
+-        if (cms == null) {
++        if(cms == null){
+             return new JSONAnnotation(cmList, attribList);
+         }
+ 
+-        for (final ConceptMention cm : cms) {
++        for (ConceptMention cm : cms) {
+ 
+             // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]
+             // note that range of the offsets are [${START},${END})
+-            // ref:
+-            // https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm
++            // ref: https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm
+ 
+             JSONArray entityProperties = new JSONArray();
+             String bratEntityId = String.format("T%d", entityIdInt++);
+@@ -124,48 +106,55 @@
+             entityProperties.add(spans);
+             cmList.add(entityProperties);
+ 
+-            /**
+-             * ConceptMention begin: 9 end: 18 detectionMethod: "Matched" normTarget:
+-             * "DRY_COUGH" Certainty: "Positive" semGroup: <null> status: "Present"
+-             * sentence: Sentence experiencer: "Patient"
+-             */
++                /**
++                 * ConceptMention
++                 *    begin: 9
++                 *    end: 18
++                 *    detectionMethod: "Matched"
++                 *    normTarget: "DRY_COUGH"
++                 *    Certainty: "Positive"
++                 *    semGroup: <null>
++                 *    status: "Present"
++                 *    sentence: Sentence
++                 *    experiencer: "Patient"
++                 */
+ 
+-            JSONArray attribProperties = new JSONArray();
+-            attribProperties.add(String.format("A%d", attribIdInt++));
+-            attribProperties.add("norm");
+-            attribProperties.add(bratEntityId);
+-            attribProperties.add(cm.getNormTarget());
+-            attribList.add(attribProperties);
++                JSONArray attribProperties = new JSONArray();
++                attribProperties.add(String.format("A%d", attribIdInt++));
++                attribProperties.add("norm");
++                attribProperties.add(bratEntityId);
++                attribProperties.add(cm.getNormTarget());
++                attribList.add(attribProperties);
+ 
+-            JSONArray certaintyProperties = new JSONArray();
+-            certaintyProperties.add(String.format("A%d", attribIdInt++));
+-            certaintyProperties.add("certainty");
+-            certaintyProperties.add(bratEntityId);
+-            certaintyProperties.add(cm.getCertainty());
+-            attribList.add(certaintyProperties);
++                JSONArray certaintyProperties = new JSONArray();
++                certaintyProperties.add(String.format("A%d", attribIdInt++));
++                certaintyProperties.add("certainty");
++                certaintyProperties.add(bratEntityId);
++                certaintyProperties.add(cm.getCertainty());
++                attribList.add(certaintyProperties);
+ 
+-            JSONArray statusProperties = new JSONArray();
+-            statusProperties.add(String.format("A%d", attribIdInt++));
+-            statusProperties.add("status");
+-            statusProperties.add(bratEntityId);
+-            statusProperties.add(cm.getStatus());
+-            attribList.add(statusProperties);
++
++                JSONArray statusProperties = new JSONArray();
++                statusProperties.add(String.format("A%d", attribIdInt++));
++                statusProperties.add("status");
++                statusProperties.add(bratEntityId);
++                statusProperties.add(cm.getStatus());
++                attribList.add(statusProperties);
+ 
+-            JSONArray experiencerProperties = new JSONArray();
+-            experiencerProperties.add(String.format("A%d", attribIdInt++));
+-            experiencerProperties.add("experiencer");
+-            experiencerProperties.add(bratEntityId);
+-            experiencerProperties.add(cm.getExperiencer());
+-            attribList.add(experiencerProperties);
+-        }
++                JSONArray experiencerProperties = new JSONArray();
++                experiencerProperties.add(String.format("A%d", attribIdInt++));
++                experiencerProperties.add("experiencer");
++                experiencerProperties.add(bratEntityId);
++                experiencerProperties.add(cm.getExperiencer());
++                attribList.add(experiencerProperties);
++            }
+ 
++
+         return new JSONAnnotation(cmList, attribList);
+     }
+ 
+     /**
+-     * Wrap list of concept mentions into json list to feed into the "entity" js
+-     * field.
+-     * 
++     * Wrap list of concept mentions into json list to feed into the "entity" js field.
+      * @param drugs List of Drugs
+      * @return list of JSON array for Brat to display in the html template
+      */
+@@ -173,7 +162,8 @@
+         JSONArray drugList = new JSONArray();
+         JSONArray attribList = new JSONArray();
+ 
+-        if (drugs == null) {
++
++        if(drugs == null){
+             return new JSONAnnotation(drugList, attribList);
+         }
+ 
+@@ -181,8 +171,7 @@
+ 
+             // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]
+             // note that range of the offsets are [${START},${END})
+-            // ref:
+-            // https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm
++            // ref: https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm
+ 
+             JSONArray entityProperties = new JSONArray();
+             String bratEntityId = String.format("T%d", entityIdInt++);
+@@ -208,7 +197,7 @@
+     }
+ 
+     /**
+-     * To initialize UIMA resources and type systesms
++     *  To initialize UIMA resources and type systesms
+      */
+     public WebServiceController() {
+ 
+@@ -227,12 +216,12 @@
+             metadata.setConfigurationParameterSettings(settings);
+ 
+             // modified MedXNTypes now importing MedTaggerIE types
+-            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription("org.ohnlp.medxn.types.MedXNTypes");
++            tsd = TypeSystemDescriptionFactory.
++                    createTypeSystemDescription("org.ohnlp.medxn.types.MedXNTypes");
+             tsd.resolveImports(resMgr);
+ 
+             cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
+ 
+-
+         } catch (InvalidXMLException e) {
+             e.printStackTrace();
+         } catch (IOException e) {
+@@ -240,44 +229,25 @@
+         } catch (ResourceInitializationException e) {
+             e.printStackTrace();
+         }
+-
+-        // init the CollectionProcessingEngine
+-        // CpeDescription cpeDesc = UIMAFramework.getXMLParser()
+-        //     .parseCpeDescription(
+-        //         new XMLInputSource(
+-        //             cpeFilePath.toAbsolutePath().toString()
+-        //         )
+-        //     );
+     }
+ 
+     /**
+      * The index page. Display a default sentence to start.
+-     * 
+      * @return the initial view out of index-template
+      */
+     @GetMapping("/")
+     public ModelAndView index() {
+         ModelAndView indexView = new ModelAndView();
+-        indexView.setViewName("demo");
+-        // indexView.addObject("input_text", "The patient had dry cough and took Aspirin
+-        // yesterday.");
+-        return indexView;
+-    }
+-
+-    @GetMapping("/index_v0")
+-    public ModelAndView index_v0() {
+-        ModelAndView indexView = new ModelAndView();
+-        indexView.setViewName("index_v0");
++        indexView.setViewName("index-template");
+         indexView.addObject("input_text", "The patient had dry cough and took Aspirin yesterday.");
+         return indexView;
+     }
+ 
+-
+     /**
+      * How to display NLP results .
+-     * 
+      * @return the updated view out of index-template
+      */
++
+     @PostMapping("/")
+     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
+         // To get a list of concept mentions
+@@ -290,16 +260,13 @@
+         indexView.addObject("input_text", webInputText.getDocText());
+         logger.info(webInputText.getDocText());
+ 
+-        System.out.println(annotMap);
+-
+         // get a list of concepts as JSON list to feed into the template
+ 
+         JSONAnnotation jsAnnot = generateConceptMentionBratJson(annotMap.get("cm"));
+-        // int drugIdStart = jsAnnot.getCmList().size() + 1;
+-        // int drugAttribIdStart = jsAnnot.getAttribList().size() + 1;
+-        //
+-        // jsAnnot.add(generateDrugBratJson(annotMap.get("drug"), drugIdStart,
+-        // drugAttribIdStart));
++//        int drugIdStart = jsAnnot.getCmList().size() + 1;
++//        int drugAttribIdStart = jsAnnot.getAttribList().size() + 1;
++//
++//        jsAnnot.add(generateDrugBratJson(annotMap.get("drug"), drugIdStart, drugAttribIdStart));
+ 
+         indexView.addObject("cmList", jsAnnot.getCmList());
+         indexView.addObject("attribList", jsAnnot.getAttribList());
+@@ -307,111 +274,5 @@
+ 
+         return indexView;
+ 
+-    }
+-
+-
+-    /**
+-     * Parse the input text
+-     * @param doc_text
+-     * @return attributes and concepts
+-     */
+-    @PostMapping("/parse")
+-    public JSONObject parse(@RequestParam(name = "doc_text") String doc_text) {
+-        // TODO: check the input 
+-
+-        // get the list of concept metions
+-        HashMap<String, Collection> annotMap = runPipeline(doc_text);
+-        JSONAnnotation jsAnnot = generateConceptMentionBratJson(annotMap.get("cm"));
+-
+-        // build the output data
+-        JSONObject data = new JSONObject();
+-        data.put("attributes", jsAnnot.getAttribList());
+-        data.put("entities", jsAnnot.getCmList());
+-
+-        // build the output json
+-        JSONObject ret = new JSONObject();
+-        ret.put("data", data);
+-        ret.put("success", true);
+-        ret.put("msg", "text is parsed.");
+-
+-        return ret;
+-    }
+-
+-    /**
+-     * The covid 19 demo page.
+-     * 
+-     * @return the demo view
+-     */
+-    @GetMapping("/demo")
+-    public ModelAndView demo() {
+-        final ModelAndView indexView = new ModelAndView();
+-        indexView.setViewName("demo");
+-        return indexView;
+-    }
+-
+-    /**
+-     * The dictionary builder page.
+-     * 
+-     * @return the dictionary builder view
+-     */
+-    @GetMapping("/dict_builder")
+-    public ModelAndView dict_builder() {
+-        final ModelAndView indexView = new ModelAndView();
+-        indexView.setViewName("dict_builder");
+-        return indexView;
+-    }
+-
+-    /**
+-     * Get the ontology root from BioPortal
+-     * @param acronym
+-     * @return
+-     * @throws Exception
+-     */
+-    @CrossOrigin
+-    @GetMapping("/get_ontology_root")
+-    public String get_ontology_root(@RequestParam(name = "acronym") String acronym) throws Exception {
+-        String ret = BioPortalAPI.getOntologyRoot(acronym, bioportalAPIKey);
+-        return ret;
+-    }
+-
+-    /**
+-     * Get the ontology children of a class from BioPortal
+-     * @param acronym
+-     * @param classid
+-     * @return
+-     * @throws Exception
+-     */
+-    @CrossOrigin
+-    @GetMapping("/get_ontology_children")
+-    public String get_ontology_children(@RequestParam(name = "acronym") String acronym,
+-            @RequestParam(name = "classid") String classid) throws Exception {
+-        String ret = BioPortalAPI.getOntologyChildren(acronym, classid, bioportalAPIKey);
+-        return ret;
+-    }
+-
+-    /**
+-     * Get the sliced ontology CSV data from BioPortal
+-     * 
+-     * @param acronym
+-     * @return
+-     * @throws Exception
+-     */
+-    @CrossOrigin
+-    @GetMapping("/get_ontology_csv")
+-    public String get_ontology_csv(@RequestParam(name = "acronym") String acronym) throws Exception {
+-        String ret = BioPortalAPI.downloadAndExtractOntology(acronym, bioportalAPIKey);
+-        return ret;
+-    }
+-
+-    /**
+-     * The IE rule editor page.
+-     * 
+-     * @return the dictionary builder view
+-     */
+-    @GetMapping("/ie_editor")
+-    public ModelAndView ie_editor() {
+-        final ModelAndView indexView = new ModelAndView();
+-        indexView.setViewName("ie_editor");
+-        return indexView;
+     }
+ }
+Index: .idea/libraries/Maven__org_apache_commons_commons_csv_1_8.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/libraries/Maven__org_apache_commons_commons_csv_1_8.xml	(date 1594927767991)
++++ .idea/libraries/Maven__org_apache_commons_commons_csv_1_8.xml	(date 1594927767991)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.apache.commons:commons-csv:1.8">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-csv/1.8/commons-csv-1.8.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-csv/1.8/commons-csv-1.8-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-csv/1.8/commons-csv-1.8-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: src/test/java/org/ohnlp/n3c/PipelineMergeTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.ohnlp.n3c;\n\nimport org.apache.uima.UIMAFramework;\nimport org.apache.uima.analysis_engine.AnalysisEngine;\nimport org.apache.uima.analysis_engine.AnalysisEngineDescription;\nimport org.apache.uima.analysis_engine.AnalysisEngineProcessException;\nimport org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;\nimport org.apache.uima.cas.CAS;\nimport org.apache.uima.cas.CASException;\nimport org.apache.uima.fit.factory.TypeSystemDescriptionFactory;\nimport org.apache.uima.fit.internal.ResourceManagerFactory;\nimport org.apache.uima.fit.util.JCasUtil;\nimport org.apache.uima.resource.ResourceInitializationException;\nimport org.apache.uima.resource.ResourceManager;\nimport org.apache.uima.resource.metadata.ConfigurationParameterSettings;\nimport org.apache.uima.resource.metadata.TypeSystemDescription;\nimport org.apache.uima.util.CasCreationUtils;\nimport org.apache.uima.util.InvalidXMLException;\nimport org.junit.BeforeClass;\nimport org.junit.Test;\nimport org.ohnlp.medtagger.type.ConceptMention;\nimport org.ohnlp.medxn.MedXNStringBuildTests;\n\nimport java.io.IOException;\nimport java.nio.file.Path;\nimport java.nio.file.Paths;\nimport java.util.Arrays;\nimport java.util.Collection;\n\nimport static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;\nimport static org.junit.Assert.assertNotEquals;\n\npublic class PipelineMergeTests {\n    static AnalysisEngine cmAae;\n    static ResourceManager resMgr;\n    static CAS cas;\n    static ClassLoader clsLoader;\n\n\n    @BeforeClass\n    public static void initPipeline() throws ResourceInitializationException, IOException, InvalidXMLException {\n        clsLoader = MedXNStringBuildTests.class.getClassLoader();\n\n        resMgr = ResourceManagerFactory.newResourceManager();\n        AnalysisEngineDescription descN3cTAE = createEngineDescription(\n                \"desc.medtaggerdesc.aggregate_analysis_engine.N3CAggregateTAE\");\n        AnalysisEngineMetaData metadata = descN3cTAE.getAnalysisEngineMetaData();\n\n        ConfigurationParameterSettings settings = metadata.getConfigurationParameterSettings();\n        Path ruleDirPath = Paths.get(\"covid19\");\n        System.out.println(\"IE Rules:\\t\" + ruleDirPath.toAbsolutePath().toString());\n\n        settings.setParameterValue(\"Resource_dir\", ruleDirPath.toString());\n        metadata.setConfigurationParameterSettings(settings);\n\n\n        cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);\n\n        cas = CasCreationUtils.createCas(Arrays.asList(cmAae.getMetaData()), null, resMgr);\n\n    }\n\n    @Test\n    public void processString() throws AnalysisEngineProcessException, CASException {\n        String text = \"The patient had dry cough and took Aspirin yesterday.\";\n        cas.setDocumentText(text);\n        cmAae.process(cas);\n        Collection<ConceptMention> results = JCasUtil.select(cas.getJCas(), ConceptMention.class);\n        System.out.println(results);\n        assertNotEquals(0, results.size());\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/org/ohnlp/n3c/PipelineMergeTests.java	(revision bc1edb8f7034283ab6e9ae1af15b385aed937084)
++++ src/test/java/org/ohnlp/n3c/PipelineMergeTests.java	(date 1594927767832)
+@@ -34,12 +34,10 @@
+     static AnalysisEngine cmAae;
+     static ResourceManager resMgr;
+     static CAS cas;
+-    static ClassLoader clsLoader;
+ 
+ 
+     @BeforeClass
+     public static void initPipeline() throws ResourceInitializationException, IOException, InvalidXMLException {
+-        clsLoader = MedXNStringBuildTests.class.getClassLoader();
+ 
+         resMgr = ResourceManagerFactory.newResourceManager();
+         AnalysisEngineDescription descN3cTAE = createEngineDescription(
+Index: .idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_3.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_3.xml	(date 1594927768066)
++++ .idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_3.xml	(date 1594927768066)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.apache.httpcomponents:httpclient:4.5.3">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.5.3/httpclient-4.5.3-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_12.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_12.xml	(date 1594927768039)
++++ .idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_12.xml	(date 1594927768039)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.apache.httpcomponents:httpcore:4.4.12">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.4.12/httpcore-4.4.12.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.4.12/httpcore-4.4.12-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.4.12/httpcore-4.4.12-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__org_springframework_boot_spring_boot_devtools_2_2_2_RELEASE.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/libraries/Maven__org_springframework_boot_spring_boot_devtools_2_2_2_RELEASE.xml	(date 1594927768030)
++++ .idea/libraries/Maven__org_springframework_boot_spring_boot_devtools_2_2_2_RELEASE.xml	(date 1594927768030)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: org.springframework.boot:spring-boot-devtools:2.2.2.RELEASE">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-devtools/2.2.2.RELEASE/spring-boot-devtools-2.2.2.RELEASE.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-devtools/2.2.2.RELEASE/spring-boot-devtools-2.2.2.RELEASE-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-devtools/2.2.2.RELEASE/spring-boot-devtools-2.2.2.RELEASE-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: .idea/libraries/Maven__commons_codec_commons_codec_1_13.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/libraries/Maven__commons_codec_commons_codec_1_13.xml	(date 1594927768017)
++++ .idea/libraries/Maven__commons_codec_commons_codec_1_13.xml	(date 1594927768017)
+@@ -0,0 +1,13 @@
++<component name="libraryTable">
++  <library name="Maven: commons-codec:commons-codec:1.13">
++    <CLASSES>
++      <root url="jar://$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.13/commons-codec-1.13.jar!/" />
++    </CLASSES>
++    <JAVADOC>
++      <root url="jar://$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.13/commons-codec-1.13-javadoc.jar!/" />
++    </JAVADOC>
++    <SOURCES>
++      <root url="jar://$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.13/commons-codec-1.13-sources.jar!/" />
++    </SOURCES>
++  </library>
++</component>
+\ No newline at end of file
+Index: src/main/resources/templates/index.v1.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/templates/index.v1.html	(date 1594927768174)
++++ src/main/resources/templates/index.v1.html	(date 1594927768174)
+@@ -0,0 +1,280 @@
++<!doctype html>
++<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
++<head>
++    <meta charset="utf-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
++    <meta name="description" content="">
++    <meta name="author" content="Sijia Liu">
++    <title>OHNLP MedTagger Demo</title>
++
++    <!-- Bootstrap core CSS -->
++    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
++          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
++    <link rel="stylesheet" type="text/css" href="/css/style-vis.css">
++    <script type="text/javascript" src="/js/head.js"></script>
++
++
++    <style>
++        .bd-placeholder-img {
++            font-size: 1.125rem;
++            text-anchor: middle;
++            -webkit-user-select: none;
++            -moz-user-select: none;
++            -ms-user-select: none;
++            user-select: none;
++        }
++
++        @media (min-width: 768px) {
++            .bd-placeholder-img-lg {
++                font-size: 3.5rem;
++            }
++        }
++    </style>
++</head>
++<body class="bg-light">
++
++<!-- Navbar content -->
++<div class="container">
++    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
++        <a class="navbar-brand" href="#">MedTagger Demo</a>
++
++
++        <ul class="navbar-nav ml-auto">
++            <li class="nav-item ">
++                <a class="nav-link " href="http://ohnlp.org/">OHNLP</a>
++            </li>
++            <li>
++                <a class="navbar-nav  mr-sm-0" href="https://github.com/OHNLP/MedTagger" target="_blank">
++                    <img src="/images/GitHub-Mark-32px.png" alt="Github">
++                </a>
++            </li>
++        </ul>
++
++
++    </nav>
++</div>
++
++
++<script type="text/javascript" src="/js/brat_loader.js"></script>
++
++<script type="text/javascript">
++    var collData = {
++        entity_types: [{
++            type: 'Condition',
++            labels: ['Condition'],
++            bgColor: '#7fa2ff',
++            borderColor: 'darken'
++        }],
++        entity_attribute_types: [{
++            type: 'norm',
++            /* brat supports multi-valued attributes, but in our case we will only
++                use a single value and add a glyph to the visualisation to indicate
++                that the entity carries that attribute */
++            values: {
++                'DRY_COUGH': {"glyph": "[DRY_COUGH]",},
++                'FEVER': {"glyph": "[FEVER]",},
++                'LYMPHOPENIA': {"glyph": "[LYMPHOPENIA]",},
++                'SORE_THROAT': {"glyph": "[SORE_THROAT]",},
++                'GROUND_GLASS_INFILTRATES': {"glyph": "[GROUND_GLASS_INFILTRATES]",},
++                'ELEVATED_LDH': {"glyph": "[ELEVATED_LDH]",},
++                'DIARRHEA': {"glyph": "[DIARRHEA]",},
++                'NASAL_CONGESTION': {"glyph": "[NASAL_CONGESTION]",},
++                'FATIGUE': {"glyph": "[FATIGUE]",},
++                'DYSPNEA': {"glyph": "[DYSPNEA]",},
++                'HEADACHE': {"glyph": "[HEADACHE]",},
++                'MYALGIA': {"glyph": "[MYALGIA]",},
++                'ABDOMINAL_PAIN': {"glyph": "[ABDOMINAL_PAIN]",},
++                'PATCHY_INFILTRATES': {"glyph": "[PATCHY_INFILTRATES]",},
++                'ELEVATED_PT_TIME': {"glyph": "[ELEVATED_PT_TIME]",},
++                'INFLUENZA_EXPL': {"glyph": "[INFLUENZA_EXPL]",},
++                'LOSS_OF_APPETITE': {"glyph": "[LOSS_OF_APPETITE]",},
++                'REMOVE': {"glyph": "[FLU_SHOT]",},
++            }
++        },
++            {
++                "values": {
++                    "Positive": {
++                        // "box": "none",
++                        "glyph": "[Positive]",
++                        // "dashArray": "1,2" //Incertitude
++                    },
++                    "Negated": {
++                        // "box": "crossed",
++                        "glyph": "[Negated]",
++                        // "dashArray": "3,4" //Incertitude
++                    }
++                },
++                "type": "certainty",
++                "name": "certainty"
++            },
++            {
++                "values": {
++                    "Present": {
++                        "glyph": "[Present]",
++                    },
++                    "HistoryOf": {
++                        "glyph": "[HistoryOf]",
++                    }
++                },
++                "type": "status",
++                "name": "status"
++            },
++            {
++                "values": {
++                    "Patient": {
++                        "glyph": "[Patient]",
++                    },
++                    "Others": {
++                        "glyph": "[Others]",
++                    }
++                },
++                "type": "experiencer",
++                "name": "experiencer"
++            },
++        ]
++    };
++</script>
++
++<script th:inline="javascript">
++    var docData = {
++        text: [[${input_text}]],
++        entities:
++            [[${cmList}]],
++        attributes:
++            [[${attribList}]],
++    };
++</script>
++
++<div class="container">
++    <div class="py-5 text-center">
++        <h2>MedTagger COVID 19 Demo</h2>
++        <p class="lead">Extracting symptoms of COVID 19 from clinical texts</p>
++    </div>
++
++    <div class="row">
++        <div class="col-md-12 order-md-1">
++            <h4 class="mb-3">Input text here</h4>
++            <p class="mb-3">Maximum length: 3000 characters</p>
++
++            <form class="needs-validation" novalidate id="textform"
++                  method="POST">
++                <div class="mb-3">
++                    <textarea class="form-control" rows="3" name="docText" form="textform" maxlength="3000"
++                              th:text="${input_text}"></textarea>
++                </div>
++                <div class="row">
++                    <div class="col-md-4  mx-auto">
++                        <input class="btn btn-primary btn-lg btn-block" type="submit" value="Run MedTagger"/>
++                    </div>
++                </div>
++            </form>
++        </div>
++    </div>
++
++    <hr class="mb-3">
++
++    <div class="row">
++
++        <div class="col-md-12 order-md-1">
++            <h4 class="mb-3"><span th:if="${isResult}">Results</span></h4>
++
++            <p><span th:if="${isResult}">The results may take several seconds to load.</span></p>
++
++        </div>
++    </div>
++    <div class="row">
++        <div class="col-md-12 order-md-1">
++
++            <div id="embedding-entity-example"></div>
++
++            <div class="col-md-12 ">
++                <script type="text/javascript">
++                    head.ready(function () {
++                        // Evaluate the code from the example (with ID
++                        // 'embedding-entity-example') and show it to the user
++                        Util.embed('embedding-entity-example', $.extend({}, collData),
++                            $.extend({}, docData), webFontURLs);
++                    });
++                </script>
++            </div>
++            <p><span th:if="${isResult}"><hr class="md-3"></span></p>
++
++        </div>
++    </div>
++    <div class="row">
++        <div class="col-md-8">
++            <h4>Concept/Term List</h4>
++            <div class="row">
++                <div class="col-md-4">
++                    <ul>
++                        <li>Dry cough</li>
++                        <li>Fever</li>
++                        <li>Lymphopenia</li>
++                        <li>Sore Throat</li>
++                        <li>Ground Flass Infiltrates</li>
++                        <li>Elevated LDH</li>
++                        <li>Diarrhea</li>
++                        <li>Nasal Congestion</li>
++                        <li>Loss of Appetite</li>
++                    </ul>
++                    <a class="btn btn-secondary"
++                       href="https://github.com/OHNLP/MedTagger/tree/master/src/main/resources/medtaggerieresources/covid19"
++                       target="_blank" role="button">Ruleset »</a>
++                </div>
++                <div class="col-md-4">
++                    <ul>
++                        <li>Fatigue</li>
++                        <li>Dyspnea</li>
++                        <li>Headache</li>
++                        <li>Myalgia</li>
++                        <li>Abdominal Pain</li>
++                        <li>Patchy Infiltrates</li>
++                        <li>Elevated PT Time</li>
++                        <li>Influenza</li>
++                    </ul>
++
++                </div>
++            </div>
++
++        </div>
++        <div class="col-md-4">
++            <h4>COVID-19 Severe Case </h4>
++            <p>To identify people at higher risk for severe illness using structured
++                and unstructured data according to the
++                <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-at-higher-risk.html"
++                   target="_blank">CDC guideline</a>.</p>
++            <p><a class="btn btn-secondary"
++                  href="https://github.com/OHNLP/MedTagger/wiki/Risk-for-Severe-Illness-of-COVID-19" role="button">Wiki
++                »</a></p>
++        </div>
++    </div>
++
++
++    <footer class="my-5 pt-5 text-muted text-center text-small">
++        <p class="mb-1">&copy; 2020 Open Health Natural Language Processing (OHNLP) Consortium</p>
++        <ul class="list-inline">
++            <li class="list-inline-item"><a href="http://184.73.168.219/index.php/OHNLP:Privacy_policy">Privacy</a></li>
++            <li class="list-inline-item"><a
++                    href="http://184.73.168.219/index.php/OHNLP:General_disclaimer">Disclaimers</a></li>
++            <li class="list-inline-item"><a href="https://github.com/OHNLP/MedTagger/issues">Support</a></li>
++            <li class="list-inline-item"><a href="http://ohnlp.org/">About</a></li>
++        </ul>
++    </footer>
++</div>
++<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
++        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
++        crossorigin="anonymous"></script>
++<script>window.jQuery || document.write('<script src="/docs/4.4/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
++<script src="/docs/4.4/dist/js/bootstrap.bundle.min.js"
++        integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm"
++        crossorigin="anonymous"></script>
++<!--<script src="form-validation.js"></script>-->
++<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
++        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
++        crossorigin="anonymous"></script>
++<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
++        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
++        crossorigin="anonymous"></script>
++
++</body>
++</html>
+Index: src/main/resources/templates/index.v2.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/templates/index.v2.html	(date 1594927768127)
++++ src/main/resources/templates/index.v2.html	(date 1594927768127)
+@@ -0,0 +1,133 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <meta charset="UTF-8">
++    <meta name="viewport" content="width=device-width, initial-scale=1.0">
++    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
++    <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
++    <title>MedTagger Web</title>
++    <link href="./static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
++</head>
++<body>
++    <div data-role="appbar" data-expand-point="md">
++        <a href="#" class="brand no-hover">
++            <img style="height: 65px;" src="./static/img/medtaggerweb_logo.png" alt="medtaggerweb_logo.png">
++        </a>
++    
++        <ul class="app-bar-menu">
++            <li><a href="#">HOME</a></li>
++            <li><a href="#">ABOUT</a></li>
++            <li>
++                <a href="#" class="dropdown-toggle">DEMO</a>
++                <ul class="d-menu" data-role="dropdown">
++                    <li><a href="/demo">
++                        <i class="fa fa-head-side-mask"></i> 
++                        COVID-19 Term Detector
++                    </a></li>
++                    <li><a href="/dict_builder">
++                        <i class="fa fa-book-medical"></i>
++                        Ontology Dictionary Builder
++                    </a></li>
++                    <li><a href="/ie_editor">
++                        <i class="fa fa-edit"></i>
++                        IE Engine Editor
++                    </a></li>
++                </ul>
++            </li>
++            <li><a href="#">CONTACTS</a></li>
++        </ul>
++    </div>
++    
++<div class="container-fluid mt-4 mb-10">
++    <div data-role="carousel"
++        data-controls-on-mouse="true" data-cls-controls="fg-white">
++        <div class="slide p-2 pl-10 pr-10">
++            <div class="row flex-align-center h-100">
++                <div class="cell-md-12 text-center">
++                    <img style="max-width: 80%;" src="./static/img/medtaggerweb_logo.png" alt="medtaggerweb_logo.png">
++                    <p class="display2">Now avaliable.</p>
++                    <p><a href="#">Learn more &gt;</a></p>
++                </div>
++            </div>
++        </div>
++    </div>
++</div>
++
++<div class="container-fluid bg-lightGray pt-10 pb-10">
++    <div class="container">
++        <div class="row">
++            <div class="cell text-center">
++                <h1>MedTagger: Towards a semantic lexicon for clinical NLP</h1>
++                <p>A semantic lexicon which associates words and phrases in text to concepts is critical for extracting and encoding clinical information in free text and therefore achieving semantic interoperability between structured and unstructured data in Electronic Health Records (EHRs). Directly using existing standard terminologies may have limited coverage with respect to concepts and their corresponding mentions in text. With MedTagger, we analyze how tokens and phrases in a large corpus distribute and how well the UMLS captures the semantics. A corpus-driven semantic lexicon, MedLex, has been constructed where the semantics is based on the UMLS assisted with variants mined and usage information gathered from clinical text. The detailed corpus analysis of tokens, chunks, and concept mentions shows the UMLS is an invaluable source for natural language processing. Increasing the semantic coverage of tokens provides a good foundation in capturing clinical information comprehensively. The study also yields some insights in developing practical NLP systems.</p>
++                <p>
++                    <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3540492/">Learn more &gt;</a>
++                </p>
++            </div>
++        </div>
++    </div>
++</div>
++
++<div class="container-fluid pt-10 pb-10">
++    <div class="container">
++        <div class="row">
++            <div class="cell text-center" style="margin-bottom: -120px; z-index: 10;">
++                <h1>
++                    COVID-19 Term Detector
++                </h1>
++                <p class="display1">Powered by MedTagger IE Engine</p>
++                <p>
++                    <a href="#">Learn more &gt;</a>&nbsp;&nbsp;
++                    <a href="/demo">Demo &gt;</a>
++                </p>
++            </div>
++            <div class="img-container">
++                <img src="./static/img/demo1.png" alt="">
++            </div>
++        </div>
++    </div>
++</div>
++
++
++<div class="container mt-10 pt-10 pb-10">
++    <div class="row" style="padding-bottom: 100px;">
++        <div class="cell text-center">
++            <h1>Dictionary Builder</h1>
++            <p class="display1">From ontology to dictionary.</p>
++            <p>
++                <a href="#">Learn more &gt;</a>&nbsp;&nbsp;
++                <a href="/dict_builder">Try &gt;</a>
++            </p>
++        </div>
++
++        <div class="cell text-center">
++            <h1>IE Engine Editor</h1>
++            <p class="display1">The expert knowledge.</p>
++            <p>
++                <a href="#">Learn more &gt;</a>&nbsp;&nbsp;
++                <a href="/ie_editor">Try &gt;</a>
++            </p>
++        </div>
++    </div>
++</div>
++
++
++<div class="container-fluid bg-lightGray mt-10 pt-10 pb-10">
++    <div class="container">
++        <div class="row">
++            <div class="cell-4">
++                <p>MedTagger &copy; 2020</p>
++            </div>
++            <div class="cell-4">
++            </div>
++            <div class="cell-4">
++            </div>
++        </div>
++    </div>
++</div>
++
++<script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>
++<script>
++
++</script>
++</body>
++</html>
+\ No newline at end of file
+Index: src/main/resources/templates/parse.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/templates/parse.html	(date 1594927768115)
++++ src/main/resources/templates/parse.html	(date 1594927768115)
+@@ -0,0 +1,283 @@
++{
++    "data": {
++      "attributes": [
++        [
++          "A1", 
++          "norm", 
++          "T1", 
++          "DRY_COUGH"
++        ], 
++        [
++          "A2", 
++          "certainty", 
++          "T1", 
++          "Positive"
++        ], 
++        [
++          "A3", 
++          "status", 
++          "T1", 
++          "Present"
++        ], 
++        [
++          "A4", 
++          "experiencer", 
++          "T1", 
++          "Patient"
++        ], 
++        [
++          "A5", 
++          "norm", 
++          "T2", 
++          "FEVER"
++        ], 
++        [
++          "A6", 
++          "certainty", 
++          "T2", 
++          "Positive"
++        ], 
++        [
++          "A7", 
++          "status", 
++          "T2", 
++          "Present"
++        ], 
++        [
++          "A8", 
++          "experiencer", 
++          "T2", 
++          "Patient"
++        ], 
++        [
++          "A9", 
++          "norm", 
++          "T3", 
++          "DYSPNEA"
++        ], 
++        [
++          "A10", 
++          "certainty", 
++          "T3", 
++          "Positive"
++        ], 
++        [
++          "A11", 
++          "status", 
++          "T3", 
++          "Present"
++        ], 
++        [
++          "A12", 
++          "experiencer", 
++          "T3", 
++          "Patient"
++        ], 
++        [
++          "A13", 
++          "norm", 
++          "T4", 
++          "FATIGUE"
++        ], 
++        [
++          "A14", 
++          "certainty", 
++          "T4", 
++          "Positive"
++        ], 
++        [
++          "A15", 
++          "status", 
++          "T4", 
++          "Present"
++        ], 
++        [
++          "A16", 
++          "experiencer", 
++          "T4", 
++          "Patient"
++        ], 
++        [
++          "A17", 
++          "norm", 
++          "T5", 
++          "DIARRHEA"
++        ], 
++        [
++          "A18", 
++          "certainty", 
++          "T5", 
++          "Positive"
++        ], 
++        [
++          "A19", 
++          "status", 
++          "T5", 
++          "Present"
++        ], 
++        [
++          "A20", 
++          "experiencer", 
++          "T5", 
++          "Patient"
++        ], 
++        [
++          "A21", 
++          "norm", 
++          "T6", 
++          "HEADACHE"
++        ], 
++        [
++          "A22", 
++          "certainty", 
++          "T6", 
++          "Positive"
++        ], 
++        [
++          "A23", 
++          "status", 
++          "T6", 
++          "Present"
++        ], 
++        [
++          "A24", 
++          "experiencer", 
++          "T6", 
++          "Patient"
++        ], 
++        [
++          "A25", 
++          "norm", 
++          "T7", 
++          "SORE_THROAT"
++        ], 
++        [
++          "A26", 
++          "certainty", 
++          "T7", 
++          "Positive"
++        ], 
++        [
++          "A27", 
++          "status", 
++          "T7", 
++          "Present"
++        ], 
++        [
++          "A28", 
++          "experiencer", 
++          "T7", 
++          "Patient"
++        ], 
++        [
++          "A29", 
++          "norm", 
++          "T8", 
++          "NASAL_CONGESTION"
++        ], 
++        [
++          "A30", 
++          "certainty", 
++          "T8", 
++          "Positive"
++        ], 
++        [
++          "A31", 
++          "status", 
++          "T8", 
++          "Present"
++        ], 
++        [
++          "A32", 
++          "experiencer", 
++          "T8", 
++          "Patient"
++        ]
++      ], 
++      "entities": [
++        [
++          "T1", 
++          "Condition", 
++          [
++            [
++              9, 
++              18
++            ]
++          ]
++        ], 
++        [
++          "T2", 
++          "Condition", 
++          [
++            [
++              23, 
++              28
++            ]
++          ]
++        ], 
++        [
++          "T3", 
++          "Condition", 
++          [
++            [
++              59, 
++              78
++            ]
++          ]
++        ], 
++        [
++          "T4", 
++          "Condition", 
++          [
++            [
++              104, 
++              111
++            ]
++          ]
++        ], 
++        [
++          "T5", 
++          "Condition", 
++          [
++            [
++              135, 
++              143
++            ]
++          ]
++        ], 
++        [
++          "T6", 
++          "Condition", 
++          [
++            [
++              144, 
++              152
++            ]
++          ]
++        ], 
++        [
++          "T7", 
++          "Condition", 
++          [
++            [
++              181, 
++              192
++            ]
++          ]
++        ], 
++        [
++          "T8", 
++          "Condition", 
++          [
++            [
++              208, 
++              218
++            ]
++          ]
++        ]
++      ], 
++      "text": "I have a dry cough and fever or chills. And the following:\nShortness of breath or difficulty breathing.\nFatigue, Muscle or body aches, diarrhea\nHeadache, new loss of taste or smell\nSore throat, congestion or runny nose, nausea or vomiting"
++    }, 
++    "msg": "Failed", 
++    "success": true
++  }  
+\ No newline at end of file
+Index: MedTaggerWeb.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule=\"true\" type=\"JAVA_MODULE\" version=\"4\">\n  <component name=\"NewModuleRootManager\" LANGUAGE_LEVEL=\"JDK_1_8\">\n    <output url=\"file://$MODULE_DIR$/target/classes\" />\n    <output-test url=\"file://$MODULE_DIR$/target/test-classes\" />\n    <content url=\"file://$MODULE_DIR$\">\n      <sourceFolder url=\"file://$MODULE_DIR$/src/main/java\" isTestSource=\"false\" />\n      <sourceFolder url=\"file://$MODULE_DIR$/src/main/resources\" type=\"java-resource\" />\n      <sourceFolder url=\"file://$MODULE_DIR$/src/test/java\" isTestSource=\"true\" />\n      <sourceFolder url=\"file://$MODULE_DIR$/src/test/resources\" type=\"java-test-resource\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/target\" />\n    </content>\n    <orderEntry type=\"inheritedJdk\" />\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot-starter-web:2.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot-starter:2.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot:2.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot-autoconfigure:2.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot-starter-logging:2.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: ch.qos.logback:logback-classic:1.2.3\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: ch.qos.logback:logback-core:1.2.3\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.logging.log4j:log4j-to-slf4j:2.12.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.logging.log4j:log4j-api:2.12.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.slf4j:jul-to-slf4j:1.7.29\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: jakarta.annotation:jakarta.annotation-api:1.3.5\" level=\"project\" />\n    <orderEntry type=\"library\" scope=\"RUNTIME\" name=\"Maven: org.yaml:snakeyaml:1.25\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot-starter-json:2.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: com.fasterxml.jackson.core:jackson-databind:2.10.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: com.fasterxml.jackson.core:jackson-core:2.10.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.10.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot-starter-tomcat:2.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.tomcat.embed:tomcat-embed-core:9.0.29\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.29\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.tomcat.embed:tomcat-embed-websocket:9.0.29\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot-starter-validation:2.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: jakarta.validation:jakarta.validation-api:2.0.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.hibernate.validator:hibernate-validator:6.0.18.Final\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.jboss.logging:jboss-logging:3.4.1.Final\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: com.fasterxml:classmate:1.5.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework:spring-web:5.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework:spring-webmvc:5.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework:spring-aop:5.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework:spring-expression:5.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: commons-io:commons-io:2.5\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.commons:commons-lang3:3.9\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: commons-lang:commons-lang:2.6\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: commons-logging:commons-logging:1.2\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: net.sf.jwordnet:jwnl:1.3.3\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: log4j:log4j:1.2.17\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: com.googlecode.json-simple:json-simple:1.1.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: junit:junit:4.12\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.hamcrest:hamcrest-core:2.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.hamcrest:hamcrest:2.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.thymeleaf:thymeleaf-spring5:3.0.10.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.thymeleaf:thymeleaf:3.0.11.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.attoparser:attoparser:2.0.5.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.unbescape:unbescape:1.1.6.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.slf4j:slf4j-api:1.7.29\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework.boot:spring-boot-starter-thymeleaf:1.5.6.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.thymeleaf:thymeleaf-spring4:2.1.5.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: nz.net.ultraq.thymeleaf:thymeleaf-expression-processor:1.1.3\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.codehaus.groovy:groovy:2.5.8\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.opennlp:opennlp-maxent:3.0.3\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.opennlp:opennlp-tools:1.9.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.opennlp:opennlp-uima:1.9.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.uima:uimaj-adapter-vinci:2.10.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.uima:jVinci:2.10.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.uima:uimaj-core:2.10.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.uima:uimafit-core:2.4.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: commons-logging:commons-logging-api:1.1\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework:spring-core:5.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework:spring-jcl:5.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework:spring-context:5.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.springframework:spring-beans:5.2.2.RELEASE\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.uima:uimaj-cpe:2.10.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.uima:uimaj-document-annotation:2.10.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.apache.uima:uimaj-tools:2.10.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.ahocorasick:ahocorasick:0.4.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: me.tongfei:progressbar:0.7.4\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.jline:jline:3.11.0\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.fusesource.jansi:jansi:1.18\" level=\"project\" />\n    <orderEntry type=\"library\" name=\"Maven: org.jetbrains:annotations:13.0\" level=\"project\" />\n  </component>\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- MedTaggerWeb.iml	(revision bc1edb8f7034283ab6e9ae1af15b385aed937084)
++++ MedTaggerWeb.iml	(date 1594927767841)
+@@ -14,8 +14,6 @@
+     <orderEntry type="sourceFolder" forTests="false" />
+     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.2.2.RELEASE" level="project" />
+     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.2.2.RELEASE" level="project" />
+-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.2.2.RELEASE" level="project" />
+-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.2.2.RELEASE" level="project" />
+     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.2.2.RELEASE" level="project" />
+     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.2.3" level="project" />
+     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.2.3" level="project" />
+@@ -45,6 +43,10 @@
+     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.2.2.RELEASE" level="project" />
+     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.2.RELEASE" level="project" />
+     <orderEntry type="library" name="Maven: commons-io:commons-io:2.5" level="project" />
++    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.3" level="project" />
++    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.12" level="project" />
++    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.13" level="project" />
++    <orderEntry type="library" name="Maven: org.apache.commons:commons-csv:1.8" level="project" />
+     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.9" level="project" />
+     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.2" level="project" />
+@@ -64,6 +66,9 @@
+     <orderEntry type="library" name="Maven: nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.4.1" level="project" />
+     <orderEntry type="library" name="Maven: nz.net.ultraq.thymeleaf:thymeleaf-expression-processor:1.1.3" level="project" />
+     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy:2.5.8" level="project" />
++    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-devtools:2.2.2.RELEASE" level="project" />
++    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.2.2.RELEASE" level="project" />
++    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.2.2.RELEASE" level="project" />
+     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-maxent:3.0.3" level="project" />
+     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-tools:1.9.0" level="project" />
+     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-uima:1.9.0" level="project" />
+Index: _config.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- _config.yml	(date 1594927768209)
++++ _config.yml	(date 1594927768209)
+@@ -0,0 +1,1 @@
++theme: jekyll-theme-minimal
+\ No newline at end of file
+Index: src/main/java/org/ohnlp/util/demo/util/BioPortalAPI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/ohnlp/util/demo/util/BioPortalAPI.java	(date 1594927768198)
++++ src/main/java/org/ohnlp/util/demo/util/BioPortalAPI.java	(date 1594927768198)
+@@ -0,0 +1,162 @@
++package org.ohnlp.medtagger.fit.demo.util;
++
++import java.io.File;
++import java.io.IOException;
++import java.io.InputStream;
++import java.io.Reader;
++import java.io.StringWriter;
++import java.net.URL;
++import java.nio.file.Files;
++import java.nio.file.Paths;
++
++import org.apache.commons.csv.CSVFormat;
++import org.apache.commons.csv.CSVParser;
++import org.apache.commons.csv.CSVPrinter;
++import org.apache.commons.csv.CSVRecord;
++import org.apache.commons.io.FileUtils;
++import org.apache.commons.io.IOUtils;
++import org.apache.http.HttpEntity;
++import org.apache.http.HttpResponse;
++import org.apache.http.client.ResponseHandler;
++import org.apache.http.client.methods.CloseableHttpResponse;
++import org.apache.http.client.methods.HttpGet;
++import org.apache.http.impl.client.CloseableHttpClient;
++import org.apache.http.impl.client.HttpClients;
++import org.apache.http.impl.client.LaxRedirectStrategy;
++import org.apache.http.util.EntityUtils;
++
++public class BioPortalAPI {
++
++    public static final String BASE_URL_BIO_PORTAL = "http://data.bioontology.org";
++
++    /**
++     * Download the ontology data CSV file from BioPortal and slice
++     * @param acronym the ontology name
++     * @param apikey the apikey for BioPortal
++     * @return string contains CSV data
++     * @throws Exception
++     */
++    public static String downloadAndExtractOntology(String acronym, String apikey) throws Exception {
++        String ontologyURL = BASE_URL_BIO_PORTAL + "/ontologies/" + acronym + "/download?download_format=csv&apikey="
++                + apikey;
++        URL url = new URL(ontologyURL);
++
++        /*
++         * Get the ontology data gzipped csv file from BioPortal
++         */
++        CloseableHttpClient httpclient = HttpClients.custom().setRedirectStrategy(new LaxRedirectStrategy()).build();
++
++        File dstFile = File.createTempFile(acronym + "-", ".csv.gz");
++        System.out.println("* created temp file " + dstFile.getAbsolutePath());
++        File downloadedFile = null;
++        try {
++            HttpGet request = new HttpGet(url.toURI()); // we're using GET but it could be via POST as well
++            downloadedFile = httpclient.execute(request, new FileDownloadResponseHandler(dstFile));
++
++        } catch (Exception e) {
++            throw new IllegalStateException(e);
++        } finally {
++            IOUtils.closeQuietly(httpclient);
++        }
++
++        // downloaded, unzip the downloaded file
++        String unzippedCSVFilePath = GZFileHelper.unzip(downloadedFile.getAbsolutePath());
++
++        // create a reader for the unzipped CSV file
++        Reader reader = Files.newBufferedReader(Paths.get(unzippedCSVFilePath));
++        CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
++                    .withFirstRecordAsHeader()
++                    .withIgnoreHeaderCase()
++                    .withTrim());
++
++        // create a writer for the sliced CSV file as string for output
++        StringWriter writer = new StringWriter();
++        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
++                    .withHeader("Class ID", "Preferred Label", "Synonyms", "Definitions", "Parents"));
++
++        // slice the original CSV file
++        for (CSVRecord csvRecord : csvParser) {
++            // Accessing values by Header names
++            String class_id = csvRecord.get("Class ID");
++            String preferred_label = csvRecord.get("Preferred Label");
++            String synonyms = csvRecord.get("Synonyms");
++            String definitions = csvRecord.get("Definitions");
++            String parents = csvRecord.get("Parents");
++
++            csvPrinter.printRecord(class_id, preferred_label, synonyms, definitions, parents);
++            csvPrinter.flush();    
++        }
++        csvPrinter.close();
++        csvParser.close();
++
++        return writer.toString();
++    }
++
++    /**
++     * Get the Ontology Root node(s) of a specific ontology acronym
++     * @param acronym the ontology name
++     * @param apikey the apikey for BioPortal
++     * @return the string contains JSON data
++     * @throws Exception
++     */
++    public static String getOntologyRoot(String acronym, String apikey) throws Exception {
++        // create the URL for the ontology
++        String ontologyURL = BASE_URL_BIO_PORTAL + "/ontologies/" + acronym + "/classes/roots?apikey=" + apikey;
++
++        // get content
++        HttpGet request = new HttpGet(ontologyURL);
++
++        CloseableHttpClient httpClient = HttpClients.createDefault();
++        CloseableHttpResponse response = httpClient.execute(request);
++        HttpEntity entity = response.getEntity();
++
++        // return it as a String
++        String result = EntityUtils.toString(entity);
++        return result;
++    }
++
++    /**
++     * Get the children classes information from BioPortal
++     * @param acronym the ontology name
++     * @param classid the class id
++     * @param apikey the apikey for BioPortal
++     * @return the string contains JSON data
++     * @throws Exception
++     */
++    public static String getOntologyChildren(String acronym, String classid, String apikey) throws Exception {
++        // create the URL for the ontology
++        String childrenURL = BASE_URL_BIO_PORTAL + "/ontologies/" + acronym + "/classes/" + classid
++                + "/children?apikey=" + apikey;
++
++        // get content
++        HttpGet request = new HttpGet(childrenURL);
++
++        CloseableHttpClient httpClient = HttpClients.createDefault();
++        CloseableHttpResponse response = httpClient.execute(request);
++        HttpEntity entity = response.getEntity();
++
++        // return it as a String
++        String result = EntityUtils.toString(entity);
++        return result;
++    }
++
++    /**
++     * For downloading file
++     */
++    static class FileDownloadResponseHandler implements ResponseHandler<File> {
++
++        private final File target;
++
++        public FileDownloadResponseHandler(File target) {
++            this.target = target;
++        }
++
++        @Override
++        public File handleResponse(HttpResponse response) throws IOException {
++			InputStream source = response.getEntity().getContent();
++			FileUtils.copyInputStreamToFile(source, this.target);
++			return this.target;
++		}
++		
++	}
++}
+\ No newline at end of file
+Index: src/main/java/org/ohnlp/util/demo/util/GZFileHelper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/org/ohnlp/util/demo/util/GZFileHelper.java	(date 1594927768185)
++++ src/main/java/org/ohnlp/util/demo/util/GZFileHelper.java	(date 1594927768185)
+@@ -0,0 +1,43 @@
++package org.ohnlp.medtagger.fit.demo.util;
++
++import java.io.FileInputStream;
++import java.io.FileOutputStream;
++import java.io.IOException;
++import java.util.zip.GZIPInputStream;
++
++public class GZFileHelper {
++    
++    public static String unzip(String filePath) {
++
++        String opFilePath = filePath.substring(0, filePath.lastIndexOf("."));
++        System.out.println("* filePath: " + filePath);
++        System.out.println("* opFilePath: " + opFilePath);
++        byte[] buffer = new byte[1024];
++
++        try {
++            FileInputStream fileIn = new FileInputStream(filePath);
++            GZIPInputStream gZIPInputStream = new GZIPInputStream(fileIn);
++            FileOutputStream fileOutputStream = new FileOutputStream(opFilePath);
++            int bytes_read;
++
++            while ((bytes_read = gZIPInputStream.read(buffer)) > 0) {
++                fileOutputStream.write(buffer, 0, bytes_read);
++            }
++ 
++            gZIPInputStream.close();
++            fileOutputStream.close();
++ 
++            System.out.println("* Decompressed successfully!");
++ 
++        } catch (IOException ex) {
++            ex.printStackTrace();
++        }
++
++        return opFilePath;
++    }
++
++    public static void main(String[] args) {
++        String filePath = args[0];
++        GZFileHelper.unzip(filePath);
++    }
++}
+\ No newline at end of file
+Index: src/main/resources/templates/dict_builder.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link rel=\"stylesheet\" href=\"https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css\">\n    <link href=\"https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900\" rel=\"stylesheet\">\n\n    <link href=\"https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css\" rel=\"stylesheet\">\n    <link href=\"https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css\" rel=\"stylesheet\">\n    <script src=\"https://kit.fontawesome.com/cb45cc91b0.js\" crossorigin=\"anonymous\"></script>\n    <title>Dictionary Builder | MedTagger Web</title>\n    <link href=\"/static/img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\" />\n    <style>\n        .current {\n            font-weight: bold;\n        }\n        /* fix vuetify.js default style */\n        .v-treeview--dense .v-treeview-node__root {\n            min-height: 24px;\n        }\n    </style>\n    </head>\n\n<body>\n    \n    <div class=\"container-fluid bg-darkCyan fg-white mb-1\">\n        <div class=\"row\">\n            <div class=\"cell\">\n                <p>\n                    <i class=\"fa fa-book-medical\"></i>\n                    Dictionary Builder\n                </p>\n            </div>\n        </div>\n    </div>\n\n    <nav data-role=\"ribbonmenu\">\n        <ul class=\"tabs-holder\">\n            <li><a href=\"#section-1-1\">Main</a></li>\n        </ul>\n\n        <div class=\"content-holder\">\n            <div class=\"section\" id=\"section-1-1\">\n\n                <div class=\"group\">\n                    <div class=\"form-group\">\n                        <label>Ontology</label>\n                        \n                        <select id=\"acronym\" style=\"width: 150px;\" data-role=\"select\">\n                            <option value=\"CIDO\">CIDO</option>\n                            <option value=\"MONDO\">MONDO</option>\n                        </select>\n\n                    </div>\n                    <button id=\"btn_load_data\" class=\"ribbon-button\"\n                        onclick=\"jarvis.load_ontology_csv();\">\n                        <span class=\"icon\">\n                            <i class=\"fa fa-envelope-open-text\"></i>\n                        </span>\n                        <span class=\"caption\">Load Data</span>\n                    </button>\n\n                    <span class=\"title\">Ontology Database</span>\n                </div>\n\n                <div class=\"group\">\n\n                    <button class=\"ribbon-button\"\n                        onclick=\"vw_treemap.extract_selected();\">\n                        <span class=\"icon\">\n                            <i class='fa fa-arrow-alt-circle-right'></i> \n                        </span>\n                        <span class=\"caption\">Extract Selection</span>\n                    </button>\n\n                    <span class=\"title\">Build Dictionary</span>\n                </div>\n\n                <div class=\"group\">\n                    \n                    <button class=\"ribbon-button\">\n                        <span class=\"icon\">\n                            <i class=\"fa fa-upload\"></i>\n                        </span>\n                        <span class=\"caption\">Upload to Server</span>\n                    </button>\n                    \n                    <span class=\"title\">Deployment</span>\n                </div>\n\n            </div>\n\n        </div>\n    </nav>\n\n    <div class=\"container-fluid\">\n\n        <div class=\"row\">\n\n            <div class=\"cell\">\n\n                <div id=\"vw_treemap\" data-role=\"panel\"\n                    data-title-caption=\"Ontology Tree\"\n                    data-title-icon=\"<span class='mif-tree'></span>\"\n                    data-custom-buttons=\"vw_treemap.panel_buttons\">\n\n                    <div class=\"pl-5 pr-5\" \n                        v-if=\"items.length == 0\"\n                        v-html=\"msg\">\n                    </div>\n                    <div class=\"text-left\" \n                        v-else>\n                        The tree is built on {{ ontology.info.num_classes }} classes\n                    </div>\n                    \n                    <template>\n                        <v-treeview dense selectable hoverable return-object open-on-click\n                            v-model=\"selection\" :load-children=\"fetch_nodes\" v-bind:items=\"items\"\n                            selection-type=\"independent\" item-key=\"id\">\n                        </v-treeview>\n                    </template>\n\n                </div>\n            </div>\n\n\n            <div class=\"cell\">\n\n                <div id=\"vw_termeditor\" data-role=\"panel\"\n                    data-title-caption=\"Term List\"\n                    data-title-icon=\"<span class='mif-list'></span>\">\n                    \n                    <div v-if=\"lines.length == 0\">\n                        &nbsp;\n                    </div>\n                    <div v-else>\n                        <div v-for=\"line in lines\">\n                            {{ line[0] }}|{{ line[1] }}|{{ line[2] }}|{{ line[3] }}\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n        </div>\n\n    \n    </div>\n    \n\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js\"\n        integrity=\"sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==\"\n        crossorigin=\"anonymous\"></script>\n    <script src=\"https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js\"></script>\n    <script src=\"https://cdn.jsdelivr.net/npm/vue@2.6.11\"></script>\n    <script src=\"https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js\"></script>\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.2.0/papaparse.min.js\"></script>\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js\"></script>\n\n    <script>\n\n        var vw_treemap = {\n            vpp: null,\n            vpp_id: '#vw_treemap',\n            acronym: null,\n\n            init: function () {\n                this.vpp = new Vue({\n                    el: this.vpp_id,\n                    vuetify: new Vuetify(),\n                    data: {\n                        ontology: {\n                            selected: '',\n                            status: 'none',\n                            info: {\n                                num_classes: 0,\n                                num_subtrees: 0\n                            }\n                        },\n                        msg: '',\n                        btn_load: {\n                            disabled: false\n                        },\n                        selectionType: 'leaf',\n                        allParentNodes: true,\n                        selection: [],\n                        items: []\n                    },\n                    methods: {\n                        fetch_nodes: function (item) {\n                            console.log(item);\n                            return true;\n                        },\n\n                        load_tree: function() {\n                            vw_treemap.clear();\n                            vw_treemap.load(this.ontology.selected);\n                        }\n                    },\n                    computed: {\n                        _items() {\n                            const replaceChildren = (obj, parent) => {\n                                const clone = Object.assign({}, obj)\n                                delete clone.children\n                                if (parent) clone.parent = parent\n                                return clone\n                            }\n\n                            const addItems = (arr, parent) => {\n                                const items = arr.reduce((acc, x) => {\n\n                                    acc.push(replaceChildren(x, parent))\n\n                                    if (x.children) {\n                                        acc.push(addItems(x.children, x.id))\n                                    }\n                                    return acc\n                                }, [])\n\n                                return items.flat()\n                            }\n\n                            return addItems(this.items).reduce((acc, x) => {\n                                acc[x.id] = x\n                                return acc\n                            }, {})\n                        },\n                        _selection() {\n                            const proxy = {}\n                            addParents = (x, all) => {\n                                const parentId = this._items[x.id].parent\n                                if (parentId) {\n                                    if (all) addParents(this._items[parentId])\n                                    proxy[parentId] = this._items[parentId]\n                                }\n                            }\n                            this.selection.forEach(x => {\n                                addParents(x, this.allParentNodes)\n                                proxy[x.id] = x\n                            })\n                            return Object.values(proxy)\n                        }\n                    },\n                    mounted: function() {\n                        Metro.init();\n                    }\n                })\n            },\n\n            draw: function (data) {\n                // bin data\n                this.data = data;\n\n                // update settings\n                this.vpp.selection = [];\n                this.vpp.ontology.info.num_classes = data.num_classes;\n                this.vpp.ontology.info.num_subtrees = data.num_subtrees;\n                this.vpp.items = data.tree.children;\n\n                // updated \n                console.log('* drawn ontology tree');\n            },\n\n            clear: function () {\n                this.vpp.selection = [];\n                this.vpp.items = [];\n            },\n\n            extract_selected: function() {\n                var selection = this.vpp.selection;\n                if (selection.length == 0) {\n                    return;\n                }\n                // get the item list by the class id of selection\n                var nodes = [];\n                for (let i = 0; i < selection.length; i++) {\n                    const item = selection[i];\n                    var class_id = item.id;\n                    var node = this.data.node_dict.get(class_id);\n                    nodes.push(node);\n                }\n                \n                // send the selections to termlist\n                vw_termeditor.draw(nodes);\n                \n                console.log('* extracted and sent to vw_termeditor!');\n            }\n        };\n\n        var vw_termeditor = {\n            vpp: null,\n            vpp_id: '#vw_termeditor',\n\n            acronym: null,\n\n            init: function() {\n                this.vpp = new Vue({\n                    el: this.vpp_id,\n                    data: {\n                        lines: []\n                    },\n                    methods: {\n\n                    },\n                    mounted: function() {\n                        Metro.init();\n                    }\n                })\n            },\n\n            draw: function(nodes) {\n                this.data = nodes;\n\n                var lines = [];\n\n                // parse the node / csv records into raw dictionary records\n                for (let i = 0; i < nodes.length; i++) {\n                    const item = nodes[i];\n\n                    // so, preferred label can be used as one raw dict record\n                    var text = item['Preferred Label'];\n                    var def = item['Definitions'];\n                    var norm = item['Preferred Label'];\n                    var smtc = 'OBJC';\n                    lines.push([text, def, norm, smtc])\n\n                    // then synonyms can be used as more raw dict records if exists\n                    if (item['Synonyms'] != \"\") {\n                        var syns = item['Synonyms'].split('|');\n                        for (let j = 0; j < syns.length; j++) {\n                            const syn = syns[j];\n                            lines.push([syn, def, norm, smtc]);\n                        }\n                    }\n                }\n\n                // update the app\n                this.vpp.lines = lines;\n            }\n\n        };\n\n        var jarvis = {\n            \n            api_url: {\n                get_ontology_csv: 'get_ontology_csv',\n                get_ontology_root: '/get_ontology_root',\n                get_ontology_children: '/get_ontology_children'\n            },\n\n            init: function() { \n\n            },\n\n            make_tree: function() {\n                var tree_dict = d3.map();\n                var node_dict = d3.map();\n                // just for back up and later use\n                var node_dict_bak = d3.map();\n\n                // build a node_dict \n                for (let i = 0; i < this.csvtb.data.length; i++) {\n                    const row = this.csvtb.data[i];\n                    var class_id = row['Class ID'];\n                    if (class_id == '') { continue }\n                    var parent_class_ids = row['Parents'];\n                    parent_class_ids = parent_class_ids.split('|');\n                    parent_class_id = parent_class_ids[0];\n                    var label = row['Preferred Label'];\n                    var synonyms = row['Synonyms'];\n                    var definitions = row['Definitions'];\n                    \n                    // add this new node\n                    node_dict.set(class_id, {\n                        'id': class_id,\n                        'name': label,\n                        'children': []\n                    });\n                    // add to the copy of node_dict\n                    node_dict_bak.set(class_id, row);\n\n                    // extend subtree dict\n                    if (tree_dict.has(parent_class_id)) {\n                        \n                    } else {\n                        tree_dict.set(parent_class_id, []);\n                    }\n\n                    // add this relationship to subtree\n                    tree_dict.get(parent_class_id).push(class_id);\n                }\n\n                var num_classes = node_dict.size();\n                var num_subtrees = tree_dict.size();\n                console.log(`* built a node dict contains ${num_classes} nodes`);\n                console.log(`* built a tree dict contains ${num_subtrees} subtrees`);\n                \n\n                // build tree!\n                var tree = {\n                    'id': 'http://www.w3.org/2002/07/owl#Thing',\n                    'name': 'Thing',\n                    'children': []\n                };\n\n                // define a BFS algorithm for building tree\n                function bfs_fill_children(node) {\n                    // exit on leaf node\n                    if (tree_dict.has(node['id'])) {\n                        \n                    } else {\n                        // this is a leaf node\n                        delete node['children'];\n                        return;\n                    }\n\n                    // put child node to children\n                    var children_ids = tree_dict.get(node['id']);\n\n                    for (let i = 0; i < children_ids.length; i++ ) {\n                        var child_id = children_ids[i];\n                        if (node_dict.has(child_id)) {\n                            var node_child = node_dict.get(child_id);\n                            // remove from node_dict\n                            node_dict.remove(child_id);\n                            // append new child\n                            node['children'].push(node_child);\n                        } else {\n                            continue \n                        } \n                        \n                    }\n                        \n                    if (node['children'].length == 0) {\n                        delete node['children'];\n                        return;\n                    }\n\n                    for (let i=0; i<node['children'].length; i++) {\n                        var child = node['children'][i];\n                        bfs_fill_children(child);\n                    }\n                }\n\n                // run the BFS algorithm on tree\n                bfs_fill_children(tree);\n\n                // bind result\n                this.ontology_tree = {\n                    num_classes: num_classes,\n                    num_subtrees: num_subtrees,\n                    node_dict: node_dict_bak,\n                    tree: tree\n                };\n                console.log('* built tree!');\n            },\n\n            load_ontology_csv: function() {\n                var acronym = $('#acronym').val();\n                // update msg\n                vw_treemap.vpp.msg = `<div data-role=\"activity\" data-type=\"simple\" data-style=\"dark\"></div> loading and parsing [${acronym}] data from BioPortal ...`;\n\n                // disable the button\n                $('#btn_load_data').attr('disabled', true);\n                \n                $.get(\n                    this.api_url.get_ontology_csv,\n                    {acronym: acronym, ver: Math.random()},\n                    function(data) {\n                        // enable the button\n                        $('#btn_load_data').attr('disabled', false);\n                        \n                        // update message\n                        vw_treemap.vpp.msg = `<div data-role=\"activity\" data-type=\"simple\" data-style=\"color\"></div> preparing data for display ...`;\n                        jarvis.data = data;\n                        jarvis.csvtb = Papa.parse(data, {\n                            header: true\n                        });\n                        console.log('* parsed into csv table!');\n\n                        // build tree \n                        jarvis.make_tree();\n\n                        // draw this tree \n                        vw_treemap.draw(jarvis.ontology_tree);\n                    }, 'text'\n                )\n            },\n\n            load_ontology_root: function() {\n                var acronym = $('#acronym').val();\n                \n                $.get(\n                    this.api_url.get_ontology_root,\n                    {acronym: acronym, ver: Math.random()},\n                    function(data) {\n\n                    }, 'json'\n                )\n            },\n\n            load_ontology_children: function() {\n                var acronym = $('#acronym').val();\n                \n                $.get(\n                    this.api_url.get_ontology_children,\n                    {acronym: acronym, ver: Math.random()},\n                    function(data) {\n\n                    }, 'json'\n                )\n            }\n        };\n\n        $(document).ready(function() {\n            vw_treemap.init();\n            vw_termeditor.init();\n        });\n    </script>\n</body>\n\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/templates/dict_builder.html	(revision bc1edb8f7034283ab6e9ae1af15b385aed937084)
++++ src/main/resources/templates/dict_builder.html	(date 1594927768098)
+@@ -5,9 +5,6 @@
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
+-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+-
+-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+     <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
+     <title>Dictionary Builder | MedTagger Web</title>
+@@ -16,10 +13,6 @@
+         .current {
+             font-weight: bold;
+         }
+-        /* fix vuetify.js default style */
+-        .v-treeview--dense .v-treeview-node__root {
+-            min-height: 24px;
+-        }
+     </style>
+     </head>
+ 
+@@ -54,7 +47,7 @@
+                         </select>
+ 
+                     </div>
+-                    <button id="btn_load_data" class="ribbon-button"
++                    <button class="ribbon-button"
+                         onclick="jarvis.load_ontology_csv();">
+                         <span class="icon">
+                             <i class="fa fa-envelope-open-text"></i>
+@@ -67,15 +60,14 @@
+ 
+                 <div class="group">
+ 
+-                    <button class="ribbon-button"
+-                        onclick="vw_treemap.extract_selected();">
++                    <button class="ribbon-button">
+                         <span class="icon">
+-                            <i class='fa fa-arrow-alt-circle-right'></i> 
++                            <i class="fa fa-file-archive"></i>
+                         </span>
+-                        <span class="caption">Extract Selection</span>
++                        <span class="caption">Save as CSV</span>
+                     </button>
+ 
+-                    <span class="title">Build Dictionary</span>
++                    <span class="title">Download</span>
+                 </div>
+ 
+                 <div class="group">
+@@ -101,50 +93,30 @@
+ 
+             <div class="cell">
+ 
+-                <div id="vw_treemap" data-role="panel"
++                <div data-role="panel"
+                     data-title-caption="Ontology Tree"
+-                    data-title-icon="<span class='mif-tree'></span>"
+-                    data-custom-buttons="vw_treemap.panel_buttons">
+-
+-                    <div class="pl-5 pr-5" 
+-                        v-if="items.length == 0"
+-                        v-html="msg">
+-                    </div>
+-                    <div class="text-left" 
+-                        v-else>
+-                        The tree is built on {{ ontology.info.num_classes }} classes
+-                    </div>
++                    data-title-icon="<span class='mif-tree'></span>">
+                     
+-                    <template>
+-                        <v-treeview dense selectable hoverable return-object open-on-click
+-                            v-model="selection" :load-children="fetch_nodes" v-bind:items="items"
+-                            selection-type="independent" item-key="id">
+-                        </v-treeview>
+-                    </template>
++                    <ul data-role="treeview" id="tv_1"></ul>
+ 
+                 </div>
+             </div>
+ 
+ 
++
+             <div class="cell">
+ 
+-                <div id="vw_termeditor" data-role="panel"
++                <div data-role="panel"
+                     data-title-caption="Term List"
+                     data-title-icon="<span class='mif-list'></span>">
+                     
+-                    <div v-if="lines.length == 0">
+-                        &nbsp;
+-                    </div>
+-                    <div v-else>
+-                        <div v-for="line in lines">
+-                            {{ line[0] }}|{{ line[1] }}|{{ line[2] }}|{{ line[3] }}
+-                        </div>
+-                    </div>
+-                </div>
+-            </div>
++                    <ul data-role="treeview" id="tv_1"></ul>
++
++                </div>
++            </div>
++
++        </div>
+ 
+-        </div>
+-
+     
+     </div>
+     
+@@ -155,136 +127,30 @@
+     <script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
++    
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.2.0/papaparse.min.js"></script>
+-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js"></script>
+ 
+     <script>
+ 
+         var vw_treemap = {
+             vpp: null,
+             vpp_id: '#vw_treemap',
++
+             acronym: null,
+ 
+-            init: function () {
++            init: function() {
+                 this.vpp = new Vue({
+                     el: this.vpp_id,
+-                    vuetify: new Vuetify(),
+                     data: {
+-                        ontology: {
+-                            selected: '',
+-                            status: 'none',
+-                            info: {
+-                                num_classes: 0,
+-                                num_subtrees: 0
+-                            }
+-                        },
+-                        msg: '',
+-                        btn_load: {
+-                            disabled: false
+-                        },
+-                        selectionType: 'leaf',
+-                        allParentNodes: true,
+-                        selection: [],
+-                        items: []
++
+                     },
+                     methods: {
+-                        fetch_nodes: function (item) {
+-                            console.log(item);
+-                            return true;
+-                        },
+-
+-                        load_tree: function() {
+-                            vw_treemap.clear();
+-                            vw_treemap.load(this.ontology.selected);
+-                        }
+-                    },
+-                    computed: {
+-                        _items() {
+-                            const replaceChildren = (obj, parent) => {
+-                                const clone = Object.assign({}, obj)
+-                                delete clone.children
+-                                if (parent) clone.parent = parent
+-                                return clone
+-                            }
+ 
+-                            const addItems = (arr, parent) => {
+-                                const items = arr.reduce((acc, x) => {
+-
+-                                    acc.push(replaceChildren(x, parent))
+-
+-                                    if (x.children) {
+-                                        acc.push(addItems(x.children, x.id))
+-                                    }
+-                                    return acc
+-                                }, [])
+-
+-                                return items.flat()
+-                            }
+-
+-                            return addItems(this.items).reduce((acc, x) => {
+-                                acc[x.id] = x
+-                                return acc
+-                            }, {})
+-                        },
+-                        _selection() {
+-                            const proxy = {}
+-                            addParents = (x, all) => {
+-                                const parentId = this._items[x.id].parent
+-                                if (parentId) {
+-                                    if (all) addParents(this._items[parentId])
+-                                    proxy[parentId] = this._items[parentId]
+-                                }
+-                            }
+-                            this.selection.forEach(x => {
+-                                addParents(x, this.allParentNodes)
+-                                proxy[x.id] = x
+-                            })
+-                            return Object.values(proxy)
+-                        }
+                     },
+                     mounted: function() {
+                         Metro.init();
+                     }
+                 })
+-            },
+-
+-            draw: function (data) {
+-                // bin data
+-                this.data = data;
+-
+-                // update settings
+-                this.vpp.selection = [];
+-                this.vpp.ontology.info.num_classes = data.num_classes;
+-                this.vpp.ontology.info.num_subtrees = data.num_subtrees;
+-                this.vpp.items = data.tree.children;
+-
+-                // updated 
+-                console.log('* drawn ontology tree');
+-            },
+-
+-            clear: function () {
+-                this.vpp.selection = [];
+-                this.vpp.items = [];
+-            },
+-
+-            extract_selected: function() {
+-                var selection = this.vpp.selection;
+-                if (selection.length == 0) {
+-                    return;
+-                }
+-                // get the item list by the class id of selection
+-                var nodes = [];
+-                for (let i = 0; i < selection.length; i++) {
+-                    const item = selection[i];
+-                    var class_id = item.id;
+-                    var node = this.data.node_dict.get(class_id);
+-                    nodes.push(node);
+-                }
+-                
+-                // send the selections to termlist
+-                vw_termeditor.draw(nodes);
+-                
+-                console.log('* extracted and sent to vw_termeditor!');
+             }
+         };
+ 
+@@ -298,7 +164,7 @@
+                 this.vpp = new Vue({
+                     el: this.vpp_id,
+                     data: {
+-                        lines: []
++
+                     },
+                     methods: {
+ 
+@@ -307,36 +173,6 @@
+                         Metro.init();
+                     }
+                 })
+-            },
+-
+-            draw: function(nodes) {
+-                this.data = nodes;
+-
+-                var lines = [];
+-
+-                // parse the node / csv records into raw dictionary records
+-                for (let i = 0; i < nodes.length; i++) {
+-                    const item = nodes[i];
+-
+-                    // so, preferred label can be used as one raw dict record
+-                    var text = item['Preferred Label'];
+-                    var def = item['Definitions'];
+-                    var norm = item['Preferred Label'];
+-                    var smtc = 'OBJC';
+-                    lines.push([text, def, norm, smtc])
+-
+-                    // then synonyms can be used as more raw dict records if exists
+-                    if (item['Synonyms'] != "") {
+-                        var syns = item['Synonyms'].split('|');
+-                        for (let j = 0; j < syns.length; j++) {
+-                            const syn = syns[j];
+-                            lines.push([syn, def, norm, smtc]);
+-                        }
+-                    }
+-                }
+-
+-                // update the app
+-                this.vpp.lines = lines;
+             }
+ 
+         };
+@@ -353,137 +189,18 @@
+ 
+             },
+ 
+-            make_tree: function() {
+-                var tree_dict = d3.map();
+-                var node_dict = d3.map();
+-                // just for back up and later use
+-                var node_dict_bak = d3.map();
+-
+-                // build a node_dict 
+-                for (let i = 0; i < this.csvtb.data.length; i++) {
+-                    const row = this.csvtb.data[i];
+-                    var class_id = row['Class ID'];
+-                    if (class_id == '') { continue }
+-                    var parent_class_ids = row['Parents'];
+-                    parent_class_ids = parent_class_ids.split('|');
+-                    parent_class_id = parent_class_ids[0];
+-                    var label = row['Preferred Label'];
+-                    var synonyms = row['Synonyms'];
+-                    var definitions = row['Definitions'];
+-                    
+-                    // add this new node
+-                    node_dict.set(class_id, {
+-                        'id': class_id,
+-                        'name': label,
+-                        'children': []
+-                    });
+-                    // add to the copy of node_dict
+-                    node_dict_bak.set(class_id, row);
+-
+-                    // extend subtree dict
+-                    if (tree_dict.has(parent_class_id)) {
+-                        
+-                    } else {
+-                        tree_dict.set(parent_class_id, []);
+-                    }
+-
+-                    // add this relationship to subtree
+-                    tree_dict.get(parent_class_id).push(class_id);
+-                }
+-
+-                var num_classes = node_dict.size();
+-                var num_subtrees = tree_dict.size();
+-                console.log(`* built a node dict contains ${num_classes} nodes`);
+-                console.log(`* built a tree dict contains ${num_subtrees} subtrees`);
+-                
+-
+-                // build tree!
+-                var tree = {
+-                    'id': 'http://www.w3.org/2002/07/owl#Thing',
+-                    'name': 'Thing',
+-                    'children': []
+-                };
+-
+-                // define a BFS algorithm for building tree
+-                function bfs_fill_children(node) {
+-                    // exit on leaf node
+-                    if (tree_dict.has(node['id'])) {
+-                        
+-                    } else {
+-                        // this is a leaf node
+-                        delete node['children'];
+-                        return;
+-                    }
+-
+-                    // put child node to children
+-                    var children_ids = tree_dict.get(node['id']);
+-
+-                    for (let i = 0; i < children_ids.length; i++ ) {
+-                        var child_id = children_ids[i];
+-                        if (node_dict.has(child_id)) {
+-                            var node_child = node_dict.get(child_id);
+-                            // remove from node_dict
+-                            node_dict.remove(child_id);
+-                            // append new child
+-                            node['children'].push(node_child);
+-                        } else {
+-                            continue 
+-                        } 
+-                        
+-                    }
+-                        
+-                    if (node['children'].length == 0) {
+-                        delete node['children'];
+-                        return;
+-                    }
+-
+-                    for (let i=0; i<node['children'].length; i++) {
+-                        var child = node['children'][i];
+-                        bfs_fill_children(child);
+-                    }
+-                }
+-
+-                // run the BFS algorithm on tree
+-                bfs_fill_children(tree);
+-
+-                // bind result
+-                this.ontology_tree = {
+-                    num_classes: num_classes,
+-                    num_subtrees: num_subtrees,
+-                    node_dict: node_dict_bak,
+-                    tree: tree
+-                };
+-                console.log('* built tree!');
+-            },
+-
+             load_ontology_csv: function() {
+                 var acronym = $('#acronym').val();
+-                // update msg
+-                vw_treemap.vpp.msg = `<div data-role="activity" data-type="simple" data-style="dark"></div> loading and parsing [${acronym}] data from BioPortal ...`;
+-
+-                // disable the button
+-                $('#btn_load_data').attr('disabled', true);
+                 
+                 $.get(
+                     this.api_url.get_ontology_csv,
+                     {acronym: acronym, ver: Math.random()},
+                     function(data) {
+-                        // enable the button
+-                        $('#btn_load_data').attr('disabled', false);
+-                        
+-                        // update message
+-                        vw_treemap.vpp.msg = `<div data-role="activity" data-type="simple" data-style="color"></div> preparing data for display ...`;
+                         jarvis.data = data;
+                         jarvis.csvtb = Papa.parse(data, {
+                             header: true
+                         });
+-                        console.log('* parsed into csv table!');
+-
+-                        // build tree 
+-                        jarvis.make_tree();
+-
+-                        // draw this tree 
+-                        vw_treemap.draw(jarvis.ontology_tree);
++                        console.log('* done!');
+                     }, 'text'
+                 )
+             },
+@@ -514,8 +231,7 @@
+         };
+ 
+         $(document).ready(function() {
+-            vw_treemap.init();
+-            vw_termeditor.init();
++
+         });
+     </script>
+ </body>
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>server.port=8080\nspring.application.name=covid_demo\nspring.resources.add-mappings=true\nspring.main.allow-bean-definition-overriding=true\nlogging.file=/tmp/covid-application-debug.log\nbioportal.apikey=71052efe-e688-4883-8888-3b2e7ddb32a0\nspring.thymeleaf.cache=false
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/application.properties	(revision bc1edb8f7034283ab6e9ae1af15b385aed937084)
++++ src/main/resources/application.properties	(date 1594927768228)
+@@ -4,4 +4,6 @@
+ spring.main.allow-bean-definition-overriding=true
+ logging.file=/tmp/covid-application-debug.log
+ bioportal.apikey=71052efe-e688-4883-8888-3b2e7ddb32a0
++spring.thymeleaf.cache=false
++bioportal.apikey=71052efe-e688-4883-8888-3b2e7ddb32a0
+ spring.thymeleaf.cache=false
+\ No newline at end of file
+Index: src/main/resources/templates/demo.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html lang=\"en\">\n\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900\" rel=\"stylesheet\">\n    <link href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css\" rel=\"stylesheet\"\n        integrity=\"sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk\" crossorigin=\"anonymous\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"./static/lib/brat/css/style.css\"/>\n    <script src=\"https://kit.fontawesome.com/cb45cc91b0.js\" crossorigin=\"anonymous\"></script>\n    <title>COVID-19 Term Detector</title>\n    <link href=\"./static/img/favicon.ico\" rel=\"shortcut icon\" type=\"image/x-icon\" />\n    <style>\n        /* global setting */\n        html,\n        body {\n            width: 100%;\n            height: 100%;\n            padding: 0;\n            margin: 0;\n            font-family: Arial, Helvetica, sans-serif;\n        }\n\n        /* for bootstrap */\n\n\n        /* fix vuetify.js default style */\n        .v-treeview--dense .v-treeview-node__root {\n            min-height: 24px;\n        }\n\n        .container {\n            padding: 0;\n        }\n\n        /* for this page */\n        #output-json {\n            font-size: 10px;\n            line-height: 12px;\n            max-height: 200px;\n            height: 200px;\n            border: 1px solid #dddddd;\n            overflow-y: auto;\n            padding: 5px;\n            background: #eeeeee;\n        }\n    </style>\n\n</head>\n\n<body>\n    <header>\n        <!-- Fixed navbar -->\n        <nav class=\"navbar navbar-expand-md navbar-dark fixed-top bg-dark\">\n            <a class=\"navbar-brand\" href=\"#\"><i class=\"fa fa-chalkboard\"></i> COVID-19 Term Detector</a>\n            <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarCollapse\"\n                aria-controls=\"navbarCollapse\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n                <span class=\"navbar-toggler-icon\"></span>\n            </button>\n            <div class=\"collapse navbar-collapse\" id=\"navbarCollapse\">\n                <ul class=\"navbar-nav mr-auto\">\n                    <li class=\"nav-item active\">\n                        <a class=\"nav-link\" href=\"http://ohnlp.org/\">Home <span class=\"sr-only\">(current)</span></a>\n                    </li>\n                </ul>\n\n                <div class=\"my-2 my-lg-0\">\n                    <ul class=\"navbar-nav mr-auto\">\n                        <li class=\"nav-item\">\n                            <a class=\"nav-link\" href=\"https://github.com/OHNLP/MedTagger\"><i class=\"fa fa-github\"></i> GitHub</a>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </nav>\n    </header>\n\n    <div class=\"container-fluid\" style=\"margin-top: 70px; height: calc(100% - 70px);\">\n\n        <div class=\"row\">\n\n            <div class=\"col-md-5\">\n                <h5>Input Text <small>Maximum length: 3,000 characters</small></h5>\n                <div class=\"form-group\">\n                    <textarea id=\"text\" maxlength=\"3000\" width=\"100%\" class=\"form-control\"\n                        rows=\"10\">I have a dry cough and fever or chills. And the following:\nShortness of breath or difficulty breathing.\nFatigue, Muscle or body aches, diarrhea\nHeadache, new loss of taste or smell\nSore throat, congestion or runny nose, nausea or vomiting</textarea>\n                </div>\n                <div class=\"form-group\">\n                    <button class=\"btn btn-primary btn-sm\" onclick=\"jarvis.parse();\">\n                        <i class=\"fa fa-pencil-alt\"></i>\n                        Run MedTagger\n                    </button>\n                </div>\n            </div>\n\n\n            <div class=\"col-md-7\">\n                <h5>Output</h5>\n                <p id=\"output-msg\">The server response:</p>\n                <div id=\"output\" style=\"width: 100%;\">\n                    <pre id=\"output-json\"></pre>\n\n                    <p>The BRAT visualization</p>\n                    <div id=\"fig_bratvis\">\n                        \n                    </div>\n                </div>\n            </div>\n\n        </div>\n        <!-- /.row -->\n\n        <div class=\"row\">\n            <div class=\"col-md-8\">\n                <h4>Concept/Term List</h4>\n                <div class=\"row\">\n                    <div class=\"col-md-4\">\n                        <ul>\n                            <li>Dry cough</li>\n                            <li>Fever</li>\n                            <li>Lymphopenia</li>\n                            <li>Sore Throat</li>\n                            <li>Ground Flass Infiltrates</li>\n                            <li>Elevated LDH</li>\n                            <li>Diarrhea</li>\n                            <li>Nasal Congestion</li>\n                            <li>Loss of Appetite</li>\n                        </ul>\n                        <a class=\"btn btn-secondary\"\n                           href=\"https://github.com/OHNLP/MedTagger/tree/master/src/main/resources/medtaggerieresources/covid19\"\n                           target=\"_blank\" role=\"button\">Ruleset »</a>\n                    </div>\n                    <div class=\"col-md-4\">\n                        <ul>\n                            <li>Fatigue</li>\n                            <li>Dyspnea</li>\n                            <li>Headache</li>\n                            <li>Myalgia</li>\n                            <li>Abdominal Pain</li>\n                            <li>Patchy Infiltrates</li>\n                            <li>Elevated PT Time</li>\n                            <li>Influenza</li>\n                        </ul>\n    \n                    </div>\n                </div>\n    \n            </div>\n            <div class=\"col-md-4\">\n                <h4>COVID-19 Severe Case </h4>\n                <p>To identify people at higher risk for severe illness using structured\n                    and unstructured data according to the\n                    <a href=\"https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-at-higher-risk.html\"\n                       target=\"_blank\">CDC guideline</a>.</p>\n                <p><a class=\"btn btn-secondary\"\n                      href=\"https://github.com/OHNLP/MedTagger/wiki/Risk-for-Severe-Illness-of-COVID-19\" role=\"button\">Wiki\n                    »</a></p>\n            </div>\n        </div>\n    \n    \n        <footer class=\"my-5 pt-5 text-muted text-center text-small\">\n            <p class=\"mb-1\">&copy; 2020 Open Health Natural Language Processing (OHNLP) Consortium</p>\n            <ul class=\"list-inline\">\n                <li class=\"list-inline-item\"><a href=\"http://184.73.168.219/index.php/OHNLP:Privacy_policy\">Privacy</a></li>\n                <li class=\"list-inline-item\"><a\n                        href=\"http://184.73.168.219/index.php/OHNLP:General_disclaimer\">Disclaimers</a></li>\n                <li class=\"list-inline-item\"><a href=\"https://github.com/OHNLP/MedTagger/issues\">Support</a></li>\n                <li class=\"list-inline-item\"><a href=\"http://ohnlp.org/\">About</a></li>\n            </ul>\n        </footer>\n\n    </div>\n\n\n\n    <div id=\"toastmsg\" class=\"toast\" data-delay=\"8000\" style=\"position: absolute; top: 20px; right: 20px;\">\n        <div class=\"toast-header\">\n            <i class=\"fa fa-info-circle\"></i>&nbsp;&nbsp;\n            <strong class=\"mr-auto\">System Message</strong>\n            <!-- <small>11 mins ago</small> -->\n            <button type=\"button\" class=\"ml-2 mb-1 close\" data-dismiss=\"toast\" aria-label=\"Close\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div id=\"toastmsg-body\" class=\"toast-body\">\n            &nbsp;\n        </div>\n    </div>\n\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js\"></script>\n\n    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js\"\n        integrity=\"sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI\"\n        crossorigin=\"anonymous\"></script>\n    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js\"\n        integrity=\"sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd\"\n        crossorigin=\"anonymous\"></script>\n    <script type=\"text/javascript\" src=\"./static/lib/brat/lib/head.load.min.js\"></script>\n    <script src=\"https://www.google.com/recaptcha/api.js\"></script>\n    <script>\n        var collData = {\n            entity_types: [{\n                type: 'Condition',\n                labels: ['Condition'],\n                bgColor: '#7fa2ff',\n                borderColor: 'darken'\n            }],\n            entity_attribute_types: [{\n                type: 'norm',\n                /* brat supports multi-valued attributes, but in our case we will only\n                    use a single value and add a glyph to the visualisation to indicate\n                    that the entity carries that attribute */\n                values: {\n                    'DRY_COUGH': { \"glyph\": \"[DRY_COUGH]\", },\n                    'FEVER': { \"glyph\": \"[FEVER]\", },\n                    'LYMPHOPENIA': { \"glyph\": \"[LYMPHOPENIA]\", },\n                    'SORE_THROAT': { \"glyph\": \"[SORE_THROAT]\", },\n                    'GROUND_GLASS_INFILTRATES': { \"glyph\": \"[GROUND_GLASS_INFILTRATES]\", },\n                    'ELEVATED_LDH': { \"glyph\": \"[ELEVATED_LDH]\", },\n                    'DIARRHEA': { \"glyph\": \"[DIARRHEA]\", },\n                    'NASAL_CONGESTION': { \"glyph\": \"[NASAL_CONGESTION]\", },\n                    'FATIGUE': { \"glyph\": \"[FATIGUE]\", },\n                    'DYSPNEA': { \"glyph\": \"[DYSPNEA]\", },\n                    'HEADACHE': { \"glyph\": \"[HEADACHE]\", },\n                    'MYALGIA': { \"glyph\": \"[MYALGIA]\", },\n                    'ABDOMINAL_PAIN': { \"glyph\": \"[ABDOMINAL_PAIN]\", },\n                    'PATCHY_INFILTRATES': { \"glyph\": \"[PATCHY_INFILTRATES]\", },\n                    'ELEVATED_PT_TIME': { \"glyph\": \"[ELEVATED_PT_TIME]\", },\n                    'INFLUENZA_EXPL': { \"glyph\": \"[INFLUENZA_EXPL]\", },\n                    'LOSS_OF_APPETITE': { \"glyph\": \"[LOSS_OF_APPETITE]\", },\n                    'REMOVE': { \"glyph\": \"[FLU_SHOT]\", },\n                }\n            },\n            {\n                \"values\": {\n                    \"Positive\": {\n                        // \"box\": \"none\",\n                        \"glyph\": \"[Positive]\",\n                        // \"dashArray\": \"1,2\" //Incertitude\n                    },\n                    \"Negated\": {\n                        // \"box\": \"crossed\",\n                        \"glyph\": \"[Negated]\",\n                        // \"dashArray\": \"3,4\" //Incertitude\n                    }\n                },\n                \"type\": \"certainty\",\n                \"name\": \"certainty\"\n            },\n            {\n                \"values\": {\n                    \"Present\": {\n                        \"glyph\": \"[Present]\",\n                    },\n                    \"HistoryOf\": {\n                        \"glyph\": \"[HistoryOf]\",\n                    }\n                },\n                \"type\": \"status\",\n                \"name\": \"status\"\n            },\n            {\n                \"values\": {\n                    \"Patient\": {\n                        \"glyph\": \"[Patient]\",\n                    },\n                    \"Others\": {\n                        \"glyph\": \"[Others]\",\n                    }\n                },\n                \"type\": \"experiencer\",\n                \"name\": \"experiencer\"\n            },\n            ]\n        };\n\n        var fig_bratvis = {\n            plot_id: 'fig_bratvis',\n            bratLocation: '/static/lib/brat',\n\n            init: function() {\n\n                head.js(\n                    // External libraries\n                    this.bratLocation + '/lib/jquery.min.js',\n                    this.bratLocation + '/lib/jquery.svg.min.js',\n                    this.bratLocation + '/lib/jquery.svgdom.min.js',\n\n                    // brat helper modules\n                    this.bratLocation + '/src/configuration.js',\n                    this.bratLocation + '/src/util.js',\n                    this.bratLocation + '/src/annotation_log.js',\n                    this.bratLocation + '/lib/webfont.js',\n\n                    // brat modules\n                    this.bratLocation + '/src/dispatcher.js',\n                    this.bratLocation + '/src/url_monitor.js',\n                    this.bratLocation + '/src/visualizer.js'\n                );\n\n                head.ready(function() {\n                    // bind to local variable\n                    fig_bratvis.Util = Util;\n\n                    //\n                    jarvis.msg('inited Brat lib');\n                });\n            },\n\n            draw: function(data) {\n                // $('#' + this.plot_id).html('');\n                // create a new div\n                var new_div_id = this.plot_id + '_' + (Math.random()*100000).toFixed(0);\n                \n                $('#' + this.plot_id).html(`\n                <div id=\"${new_div_id}\" style=\"width:100%;\">\n                </div>\n                `);\n\n                this.Util.embed(\n                    new_div_id,\n                    $.extend({}, collData),\n                    $.extend({}, data),\n                    webFontURLs\n                )\n            }\n        };\n\n\n        var webFontURLs = [\n            fig_bratvis.bratLocation + '/css/fonts/Astloch-Bold.ttf',\n            fig_bratvis.bratLocation + '/css/fonts/PT_Sans-Caption-Web-Regular.ttf',\n            fig_bratvis.bratLocation + '/css/fonts/Liberation_Sans-Regular.ttf'\n        ];\n\n\n\n        var jarvis = {\n            url: {\n                parse: '/parse'\n            },\n\n            init: function () {\n                fig_bratvis.init();\n            },\n\n            parse: function () {\n                var text = $('#text').val().trim();\n                if (text == '') { return }\n\n                // clear the output\n                $('#output-json').html('');\n\n                // send to backend\n                $.post(\n                    this.url.parse,\n                    { doc_text: text },\n                    function (data) {\n                        console.log(data);\n                        jarvis.msg('Parse result: ' + data.success);\n                        if (data.success) {\n                            jarvis.show(data);\n                        } else {\n                            $('#output').html(data.msg);\n                        }\n                    }, 'json'\n                )\n            },\n\n            show: function (data) {\n                // show text\n                $('#output-json').html(JSON.stringify(data.data, null, 2));\n\n                // draw plot\n                fig_bratvis.draw(data.data);\n            },\n\n            msg: function (s) {\n                console.log('* ' + s);\n                toast(s);\n            }\n        };\n\n        function toast(msg) {\n            // $('#toastmsg-body').html(msg);\n            // $('#toastmsg').toast('show');\n        }\n\n        $(document).ready(function () {\n            jarvis.init();\n        });\n    </script>\n</body>\n\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/resources/templates/demo.html	(revision bc1edb8f7034283ab6e9ae1af15b385aed937084)
++++ src/main/resources/templates/demo.html	(date 1594927768162)
+@@ -9,6 +9,7 @@
+         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+     <link rel="stylesheet" type="text/css" href="./static/lib/brat/css/style.css"/>
+     <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
++    <script src="https://www.google.com/recaptcha/api.js"></script>
+     <title>COVID-19 Term Detector</title>
+     <link href="./static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+     <style>
+@@ -19,6 +20,7 @@
+             height: 100%;
+             padding: 0;
+             margin: 0;
++            overflow: hidden;
+             font-family: Arial, Helvetica, sans-serif;
+         }
+ 
+@@ -61,14 +63,20 @@
+             <div class="collapse navbar-collapse" id="navbarCollapse">
+                 <ul class="navbar-nav mr-auto">
+                     <li class="nav-item active">
+-                        <a class="nav-link" href="http://ohnlp.org/">Home <span class="sr-only">(current)</span></a>
++                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
++                    </li>
++                    <li class="nav-item">
++                        <a class="nav-link" href="/dict_builder">Dictionary Builder</a>
++                    </li>
++                    <li class="nav-item">
++                        <a class="nav-link" href="/ie_editor">IE Engine Editor</a>
+                     </li>
+                 </ul>
+ 
+                 <div class="my-2 my-lg-0">
+                     <ul class="navbar-nav mr-auto">
+                         <li class="nav-item">
+-                            <a class="nav-link" href="https://github.com/OHNLP/MedTagger"><i class="fa fa-github"></i> GitHub</a>
++                            <a class="nav-link" href="#"><i class="fa fa-github"></i> GitHub</a>
+                         </li>
+                     </ul>
+                 </div>
+@@ -78,17 +86,17 @@
+ 
+     <div class="container-fluid" style="margin-top: 70px; height: calc(100% - 70px);">
+ 
+-        <div class="row">
++        <div class="row" style="height: 100%;">
+ 
+             <div class="col-md-5">
+                 <h5>Input Text <small>Maximum length: 3,000 characters</small></h5>
+                 <div class="form-group">
+                     <textarea id="text" maxlength="3000" width="100%" class="form-control"
+-                        rows="10">I have a dry cough and fever or chills. And the following:
++                        rows="10">The patient had a dry cough and fever or chills. And the following:
+ Shortness of breath or difficulty breathing.
+ Fatigue, Muscle or body aches, diarrhea
+ Headache, new loss of taste or smell
+-Sore throat, congestion or runny nose, nausea or vomiting</textarea>
++Sore throat, congestion or runny nose, nausea or vomiting.</textarea>
+                 </div>
+                 <div class="form-group">
+                     <button class="btn btn-primary btn-sm" onclick="jarvis.parse();">
+@@ -115,69 +123,7 @@
+         </div>
+         <!-- /.row -->
+ 
+-        <div class="row">
+-            <div class="col-md-8">
+-                <h4>Concept/Term List</h4>
+-                <div class="row">
+-                    <div class="col-md-4">
+-                        <ul>
+-                            <li>Dry cough</li>
+-                            <li>Fever</li>
+-                            <li>Lymphopenia</li>
+-                            <li>Sore Throat</li>
+-                            <li>Ground Flass Infiltrates</li>
+-                            <li>Elevated LDH</li>
+-                            <li>Diarrhea</li>
+-                            <li>Nasal Congestion</li>
+-                            <li>Loss of Appetite</li>
+-                        </ul>
+-                        <a class="btn btn-secondary"
+-                           href="https://github.com/OHNLP/MedTagger/tree/master/src/main/resources/medtaggerieresources/covid19"
+-                           target="_blank" role="button">Ruleset »</a>
+-                    </div>
+-                    <div class="col-md-4">
+-                        <ul>
+-                            <li>Fatigue</li>
+-                            <li>Dyspnea</li>
+-                            <li>Headache</li>
+-                            <li>Myalgia</li>
+-                            <li>Abdominal Pain</li>
+-                            <li>Patchy Infiltrates</li>
+-                            <li>Elevated PT Time</li>
+-                            <li>Influenza</li>
+-                        </ul>
+-    
+-                    </div>
+-                </div>
+-    
+-            </div>
+-            <div class="col-md-4">
+-                <h4>COVID-19 Severe Case </h4>
+-                <p>To identify people at higher risk for severe illness using structured
+-                    and unstructured data according to the
+-                    <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-at-higher-risk.html"
+-                       target="_blank">CDC guideline</a>.</p>
+-                <p><a class="btn btn-secondary"
+-                      href="https://github.com/OHNLP/MedTagger/wiki/Risk-for-Severe-Illness-of-COVID-19" role="button">Wiki
+-                    »</a></p>
+-            </div>
+-        </div>
+-    
+-    
+-        <footer class="my-5 pt-5 text-muted text-center text-small">
+-            <p class="mb-1">&copy; 2020 Open Health Natural Language Processing (OHNLP) Consortium</p>
+-            <ul class="list-inline">
+-                <li class="list-inline-item"><a href="http://184.73.168.219/index.php/OHNLP:Privacy_policy">Privacy</a></li>
+-                <li class="list-inline-item"><a
+-                        href="http://184.73.168.219/index.php/OHNLP:General_disclaimer">Disclaimers</a></li>
+-                <li class="list-inline-item"><a href="https://github.com/OHNLP/MedTagger/issues">Support</a></li>
+-                <li class="list-inline-item"><a href="http://ohnlp.org/">About</a></li>
+-            </ul>
+-        </footer>
+-
+     </div>
+-
+-
+ 
+     <div id="toastmsg" class="toast" data-delay="8000" style="position: absolute; top: 20px; right: 20px;">
+         <div class="toast-header">
+@@ -202,7 +148,7 @@
+         integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+         crossorigin="anonymous"></script>
+     <script type="text/javascript" src="./static/lib/brat/lib/head.load.min.js"></script>
+-    <script src="https://www.google.com/recaptcha/api.js"></script>
++
+     <script>
+         var collData = {
+             entity_types: [{
+@@ -360,7 +306,7 @@
+                 // send to backend
+                 $.post(
+                     this.url.parse,
+-                    { doc_text: text },
++                    { docText: text },
+                     function (data) {
+                         console.log(data);
+                         jarvis.msg('Parse result: ' + data.success);
+diff --git src/main/resources/static/static/lib/brat/lib/jquery.svg.min.js src/main/resources/static/static/lib/brat/lib/jquery.svg.min.js
+diff --git src/main/resources/static/static/lib/brat/lib/jquery.svgdom.min.js src/main/resources/static/static/lib/brat/lib/jquery.svgdom.min.js

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
+    <title>API Test</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <div>
+            <h2>/parse</h2>
+            <p>Parse the input text</p>
+            <form action="/parse" method="POST">
+                <div class="row">
+                    <label class="cell-sm-2" for="parse_doc_text">doc_text</label>
+                    <div class="cell-sm-8">
+                        <input type="text" id="parse_doc_text" name="doc_text" value="fever"><br>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="cell">
+                        <button id="demo-form" type="submit" class="button primary" class="g-recaptcha"
+                            data-sitekey="6LfvLbIZAAAAABJG8IOWn57IUBfsIIpi_Ig0gTFu" data-callback='onSubmit'
+                            data-action='submit'>Submit</button>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>/get_ontology_csv</h2>
+            <p>Get the csv data of an ontology from BioPortal by acronym name</p>
+
+            <form action="/get_ontology_csv" method="GET">
+                <div class="row">
+                    <label class="cell-sm-2" for="get_ontology_root_acronym">acronym</label>
+                    <div class="cell-sm-8">
+                        <input type="text" id="get_ontology_root_acronym" name="acronym" value="CIDO"><br>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="cell">
+                        <button type="submit" class="button primary">Submit</button>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>/get_ontology_root</h2>
+            <p>Get the ontology root elements from BioPortal by acronym name</p>
+
+            <form action="/get_ontology_root" method="GET">
+                <div class="row">
+                    <label class="cell-sm-2" for="get_ontology_root_acronym">acronym</label>
+                    <div class="cell-sm-8">
+                        <input type="text" id="get_ontology_root_acronym" name="acronym" value="CIDO"><br>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="cell">
+                        <button type="submit" class="button primary">Submit</button>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <hr>
+
+        <div>
+            <h2>/get_ontology_children</h2>
+            <p>Get the ontology sub elements from BioPortal by acronym name</p>
+
+            <form action="/get_ontology_children" method="GET">
+                <div class="row">
+                    <label class="cell-sm-2" for="get_ontology_children_acronym">acronym</label>
+                    <div class="cell-sm-8">
+                        <input type="text" id="get_ontology_children_acronym" name="acronym" value="CIDO"><br>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="cell-sm-2" for="get_ontology_children_classid">classid</label>
+
+                    <div class="cell-sm-8">
+                        <input type="text" id="get_ontology_children_classid" name="classid"
+                            value="http://purl.obolibrary.org/obo/SO_0000110"><br>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="cell">
+                        <button class="button primary" type="submit">Submit</button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+
+    <script>
+        function onSubmit(token) {
+            document.getElementById("demo-form").submit();
+        }
+    </script>
+</body>
+
+</html>

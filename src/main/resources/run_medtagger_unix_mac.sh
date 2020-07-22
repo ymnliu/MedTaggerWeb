@@ -7,4 +7,4 @@ RULEDIR="FULL_PATH_TO_YOUR_RULES_DIR_HERE"
 MEDTAGGER_DIR=$(cd `dirname $0` && pwd)
 cd $MEDTAGGER_DIR
 
-java -cp MedTagger.jar org.ohnlp.medtagger.fit.Main $INPUTDIR $OUTPUTDIR $RULEDIR
+java -cp MedTagger.jar org.ohnlp.medtagger.Main $INPUTDIR $OUTPUTDIR $RULEDIR

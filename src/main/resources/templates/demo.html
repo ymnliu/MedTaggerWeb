@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="./static/lib/brat/css/style.css"/>
+    <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
+    <title>COVID-19 Term Detector</title>
+    <link href="./static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <style>
+        /* global setting */
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* for bootstrap */
+
+
+        /* fix vuetify.js default style */
+        .v-treeview--dense .v-treeview-node__root {
+            min-height: 24px;
+        }
+
+        .container {
+            padding: 0;
+        }
+
+        /* for this page */
+        #output-json {
+            font-size: 10px;
+            line-height: 12px;
+            max-height: 200px;
+            height: 200px;
+            border: 1px solid #dddddd;
+            overflow-y: auto;
+            padding: 5px;
+            background: #eeeeee;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" href="#"><i class="fa fa-chalkboard"></i> COVID-19 Term Detector</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="http://ohnlp.org/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+
+                <div class="my-2 my-lg-0">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://github.com/OHNLP/MedTagger"><i class="fa fa-github"></i> GitHub</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid" style="margin-top: 70px; height: calc(100% - 70px);">
+
+        <div class="row">
+
+            <div class="col-md-5">
+                <h5>Input Text <small>Maximum length: 3,000 characters</small></h5>
+                <div class="form-group">
+                    <textarea id="text" maxlength="3000" width="100%" class="form-control"
+                        rows="10">The patient had a dry cough and fever or chills. And the following:
+Shortness of breath or difficulty breathing.
+Fatigue, Muscle or body aches, diarrhea
+Headache, new loss of taste. </textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-sm" onclick="jarvis.parse();">
+                        <i class="fa fa-pencil-alt"></i>
+                        Run MedTagger
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="col-md-7">
+                <h5>Output</h5>
+                <p id="output-msg">The server response:</p>
+                <div id="output" style="width: 100%;">
+                    <pre id="output-json"></pre>
+
+                    <p> Visualization by <a href="https://brat.nlplab.org/embed.html">BRAT</a>: </p>
+                    <div id="fig_bratvis">
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-8">
+                <h4>Concept/Term List</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul>
+                            <li>Dry cough</li>
+                            <li>Fever</li>
+                            <li>Lymphopenia</li>
+                            <li>Sore Throat</li>
+                            <li>Ground Flass Infiltrates</li>
+                            <li>Elevated LDH</li>
+                            <li>Diarrhea</li>
+                            <li>Nasal Congestion</li>
+                            <li>Loss of Appetite</li>
+                        </ul>
+                        <a class="btn btn-secondary"
+                           href="https://github.com/OHNLP/MedTagger/tree/master/src/main/resources/medtaggerieresources/covid19"
+                           target="_blank" role="button">Ruleset »</a>
+                    </div>
+                    <div class="col-md-4">
+                        <ul>
+                            <li>Fatigue</li>
+                            <li>Dyspnea</li>
+                            <li>Headache</li>
+                            <li>Myalgia</li>
+                            <li>Abdominal Pain</li>
+                            <li>Patchy Infiltrates</li>
+                            <li>Elevated PT Time</li>
+                            <li>Influenza</li>
+                        </ul>
+    
+                    </div>
+                </div>
+    
+            </div>
+            <div class="col-md-4">
+                <h4>COVID-19 Severe Case </h4>
+                <p>To identify people at higher risk for severe illness using structured
+                    and unstructured data according to the
+                    <a href="https://www.cdc.gov/coronavirus/2019-ncov/need-extra-precautions/people-at-higher-risk.html"
+                       target="_blank">CDC guideline</a>.</p>
+                <p><a class="btn btn-secondary"
+                      href="https://github.com/OHNLP/MedTagger/wiki/Risk-for-Severe-Illness-of-COVID-19" role="button">Wiki
+                    »</a></p>
+            </div>
+        </div>
+    
+    
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+            <p class="mb-1">&copy; 2020 Open Health Natural Language Processing (OHNLP) Consortium</p>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="http://184.73.168.219/index.php/OHNLP:Privacy_policy">Privacy</a></li>
+                <li class="list-inline-item"><a
+                        href="http://184.73.168.219/index.php/OHNLP:General_disclaimer">Disclaimers</a></li>
+                <li class="list-inline-item"><a href="https://github.com/OHNLP/MedTagger/issues">Support</a></li>
+                <li class="list-inline-item"><a href="http://ohnlp.org/">About</a></li>
+            </ul>
+        </footer>
+
+    </div>
+
+
+
+    <div id="toastmsg" class="toast" data-delay="8000" style="position: absolute; top: 20px; right: 20px;">
+        <div class="toast-header">
+            <i class="fa fa-info-circle"></i>&nbsp;&nbsp;
+            <strong class="mr-auto">System Message</strong>
+            <!-- <small>11 mins ago</small> -->
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div id="toastmsg-body" class="toast-body">
+            &nbsp;
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+        integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./static/lib/brat/lib/head.load.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+        var collData = {
+            entity_types: [{
+                type: 'Condition',
+                labels: ['Condition'],
+                bgColor: '#7fa2ff',
+                borderColor: 'darken'
+            }],
+            entity_attribute_types: [{
+                type: 'norm',
+                /* brat supports multi-valued attributes, but in our case we will only
+                    use a single value and add a glyph to the visualisation to indicate
+                    that the entity carries that attribute */
+                values: {
+                    'DRY_COUGH': { "glyph": "[DRY_COUGH]", },
+                    'FEVER': { "glyph": "[FEVER]", },
+                    'LYMPHOPENIA': { "glyph": "[LYMPHOPENIA]", },
+                    'SORE_THROAT': { "glyph": "[SORE_THROAT]", },
+                    'GROUND_GLASS_INFILTRATES': { "glyph": "[GROUND_GLASS_INFILTRATES]", },
+                    'ELEVATED_LDH': { "glyph": "[ELEVATED_LDH]", },
+                    'DIARRHEA': { "glyph": "[DIARRHEA]", },
+                    'NASAL_CONGESTION': { "glyph": "[NASAL_CONGESTION]", },
+                    'FATIGUE': { "glyph": "[FATIGUE]", },
+                    'DYSPNEA': { "glyph": "[DYSPNEA]", },
+                    'HEADACHE': { "glyph": "[HEADACHE]", },
+                    'MYALGIA': { "glyph": "[MYALGIA]", },
+                    'ABDOMINAL_PAIN': { "glyph": "[ABDOMINAL_PAIN]", },
+                    'PATCHY_INFILTRATES': { "glyph": "[PATCHY_INFILTRATES]", },
+                    'ELEVATED_PT_TIME': { "glyph": "[ELEVATED_PT_TIME]", },
+                    'INFLUENZA_EXPL': { "glyph": "[INFLUENZA_EXPL]", },
+                    'LOSS_OF_APPETITE': { "glyph": "[LOSS_OF_APPETITE]", },
+                    'REMOVE': { "glyph": "[FLU_SHOT]", },
+                }
+            },
+            {
+                "values": {
+                    "Positive": {
+                        // "box": "none",
+                        "glyph": "[Positive]",
+                        // "dashArray": "1,2" //Incertitude
+                    },
+                    "Negated": {
+                        // "box": "crossed",
+                        "glyph": "[Negated]",
+                        // "dashArray": "3,4" //Incertitude
+                    }
+                },
+                "type": "certainty",
+                "name": "certainty"
+            },
+            {
+                "values": {
+                    "Present": {
+                        "glyph": "[Present]",
+                    },
+                    "HistoryOf": {
+                        "glyph": "[HistoryOf]",
+                    }
+                },
+                "type": "status",
+                "name": "status"
+            },
+            {
+                "values": {
+                    "Patient": {
+                        "glyph": "[Patient]",
+                    },
+                    "Others": {
+                        "glyph": "[Others]",
+                    }
+                },
+                "type": "experiencer",
+                "name": "experiencer"
+            },
+            ]
+        };
+
+        var fig_bratvis = {
+            plot_id: 'fig_bratvis',
+            bratLocation: '/static/lib/brat',
+
+            init: function() {
+
+                head.js(
+                    // External libraries
+                    this.bratLocation + '/lib/jquery.min.js',
+                    this.bratLocation + '/lib/jquery.svg.min.js',
+                    this.bratLocation + '/lib/jquery.svgdom.min.js',
+
+                    // brat helper modules
+                    this.bratLocation + '/src/configuration.js',
+                    this.bratLocation + '/src/util.js',
+                    this.bratLocation + '/src/annotation_log.js',
+                    this.bratLocation + '/lib/webfont.js',
+
+                    // brat modules
+                    this.bratLocation + '/src/dispatcher.js',
+                    this.bratLocation + '/src/url_monitor.js',
+                    this.bratLocation + '/src/visualizer.js'
+                );
+
+                head.ready(function() {
+                    // bind to local variable
+                    fig_bratvis.Util = Util;
+
+                    //
+                    jarvis.msg('inited Brat lib');
+                });
+            },
+
+            draw: function(data) {
+                // $('#' + this.plot_id).html('');
+                // create a new div
+                var new_div_id = this.plot_id + '_' + (Math.random()*100000).toFixed(0);
+                
+                $('#' + this.plot_id).html(`
+                <div id="${new_div_id}" style="width:100%;">
+                </div>
+                `);
+
+                this.Util.embed(
+                    new_div_id,
+                    $.extend({}, collData),
+                    $.extend({}, data),
+                    webFontURLs
+                )
+            }
+        };
+
+
+        var webFontURLs = [
+            fig_bratvis.bratLocation + '/css/fonts/Astloch-Bold.ttf',
+            fig_bratvis.bratLocation + '/css/fonts/PT_Sans-Caption-Web-Regular.ttf',
+            fig_bratvis.bratLocation + '/css/fonts/Liberation_Sans-Regular.ttf'
+        ];
+
+
+
+        var jarvis = {
+            url: {
+                parse: '/parse'
+            },
+
+            init: function () {
+                fig_bratvis.init();
+            },
+
+            parse: function () {
+                var text = $('#text').val().trim();
+                if (text == '') { return }
+
+                // clear the output
+                $('#output-json').html('');
+
+                // send to backend
+                $.post(
+                    this.url.parse,
+                    { doc_text: text },
+                    function (data) {
+                        console.log(data);
+                        jarvis.msg('Parse result: ' + data.success);
+                        if (data.success) {
+                            jarvis.show(data);
+                        } else {
+                            $('#output').html(data.msg);
+                        }
+                    }, 'json'
+                )
+            },
+
+            show: function (data) {
+                // show text
+                $('#output-json').html(JSON.stringify(data.data, null, 2));
+
+                // draw plot
+                fig_bratvis.draw(data.data);
+            },
+
+            msg: function (s) {
+                console.log('* ' + s);
+                toast(s);
+            }
+        };
+
+        function toast(msg) {
+            // $('#toastmsg-body').html(msg);
+            // $('#toastmsg').toast('show');
+        }
+
+        $(document).ready(function () {
+            jarvis.init();
+        });
+    </script>
+</body>
+
+</html>

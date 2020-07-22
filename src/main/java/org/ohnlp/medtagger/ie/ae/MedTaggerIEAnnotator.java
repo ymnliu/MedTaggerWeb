@@ -152,7 +152,7 @@ public class MedTaggerIEAnnotator extends JCasAnnotator_ImplBase {
 				matchNorm = applyRuleFunctions(hmNormalization.get(matchRule),
 						mr);
 
-				Match Annot = null;
+				Match matchAnnot = null;
 
 				//if (matchStart >= 0 && !matchNorm.equals("REMOVE")) {
 				if (matchStart >= 0) { //Sunghwan's change, Feb-22-2013
@@ -171,12 +171,12 @@ public class MedTaggerIEAnnotator extends JCasAnnotator_ImplBase {
 						neAnnot.setSentence(sen);
 						neAnnot.addToIndexes();
 					} else {
-						Annot = new Match(jcas, matchStart + sen.getBegin(),
+						matchAnnot = new Match(jcas, matchStart + sen.getBegin(),
 								matchEnd + sen.getBegin());
-						Annot.setFoundByRule(matchRule);
-						Annot.setValue(matchNorm);
-						Annot.setSentence(sen);
-						Annot.addToIndexes();
+						matchAnnot.setFoundByRule(matchRule);
+						matchAnnot.setValue(matchNorm);
+						matchAnnot.setSentence(sen);
+						matchAnnot.addToIndexes();
 					}
 				}
 			}
