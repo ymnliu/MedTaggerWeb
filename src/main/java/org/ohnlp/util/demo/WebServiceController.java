@@ -179,6 +179,7 @@ public class WebServiceController {
 
             cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
 
+            assert(cmAae != null);
         } catch (InvalidXMLException e) {
             e.printStackTrace();
         } catch (IOException e) {

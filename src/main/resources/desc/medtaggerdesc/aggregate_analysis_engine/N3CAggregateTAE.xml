@@ -63,7 +63,6 @@
                 <node>RuleSectionAE</node>
                 <node>MedTaggerLookupAE</node>
                 <node>MedTaggerIEAnnotatorAE</node>
-                <node>ACLookupDrugAE</node>
                 <node>RuleContextAE</node>
             </fixedFlow>
         </flowConstraints>
