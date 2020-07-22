@@ -179,6 +179,7 @@ public class WebServiceController {
 
             cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
 
+            assert(cmAae != null);
         } catch (InvalidXMLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -187,13 +188,6 @@ public class WebServiceController {
             e.printStackTrace();
         }
 
-        // init the CollectionProcessingEngine
-        // CpeDescription cpeDesc = UIMAFramework.getXMLParser()
-        //     .parseCpeDescription(
-        //         new XMLInputSource(
-        //             cpeFilePath.toAbsolutePath().toString()
-        //         )
-        //     );
     }
 
     /**

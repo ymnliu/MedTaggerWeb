@@ -84,11 +84,10 @@
                 <h5>Input Text <small>Maximum length: 3,000 characters</small></h5>
                 <div class="form-group">
                     <textarea id="text" maxlength="3000" width="100%" class="form-control"
-                        rows="10">I have a dry cough and fever or chills. And the following:
+                        rows="10">The patient had a dry cough and fever or chills. And the following:
 Shortness of breath or difficulty breathing.
 Fatigue, Muscle or body aches, diarrhea
-Headache, new loss of taste or smell
-Sore throat, congestion or runny nose, nausea or vomiting</textarea>
+Headache, new loss of taste. </textarea>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary btn-sm" onclick="jarvis.parse();">
@@ -105,7 +104,7 @@ Sore throat, congestion or runny nose, nausea or vomiting</textarea>
                 <div id="output" style="width: 100%;">
                     <pre id="output-json"></pre>
 
-                    <p>The BRAT visualization</p>
+                    <p> Visualization by <a href="https://brat.nlplab.org/embed.html" target="_blank">brat</a>: </p>
                     <div id="fig_bratvis">
                         
                     </div>
