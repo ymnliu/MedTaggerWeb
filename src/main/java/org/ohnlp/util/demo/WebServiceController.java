@@ -262,6 +262,7 @@ public class WebServiceController {
         JSONObject data = new JSONObject();
         data.put("attributes", jsAnnot.getAttribList());
         data.put("entities", jsAnnot.getCmList());
+        data.put("text", doc_text);
 
         // build the output json
         JSONObject ret = new JSONObject();
