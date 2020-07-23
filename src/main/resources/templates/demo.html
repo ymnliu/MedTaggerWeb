@@ -205,9 +205,19 @@ Headache, new loss of taste. </textarea>
     <script>
         var collData = {
             entity_types: [{
-                type: 'Condition',
-                labels: ['Condition'],
+                type: 'Regex',
+                labels: ['Regex'],
                 bgColor: '#7fa2ff',
+                borderColor: 'darken'
+            }, {
+                type: "Dict",
+                labels: ['Dict'],
+                bgColor: '#5ea015',
+                borderColor: 'darken'
+            }, {
+                type: "Other",
+                labels: ['Other'],
+                bgColor: '#6251f3',
                 borderColor: 'darken'
             }],
             entity_attribute_types: [{
@@ -216,24 +226,24 @@ Headache, new loss of taste. </textarea>
                     use a single value and add a glyph to the visualisation to indicate
                     that the entity carries that attribute */
                 values: {
-                    'DRY_COUGH': { "glyph": "[DRY_COUGH]", },
-                    'FEVER': { "glyph": "[FEVER]", },
-                    'LYMPHOPENIA': { "glyph": "[LYMPHOPENIA]", },
-                    'SORE_THROAT': { "glyph": "[SORE_THROAT]", },
-                    'GROUND_GLASS_INFILTRATES': { "glyph": "[GROUND_GLASS_INFILTRATES]", },
-                    'ELEVATED_LDH': { "glyph": "[ELEVATED_LDH]", },
-                    'DIARRHEA': { "glyph": "[DIARRHEA]", },
-                    'NASAL_CONGESTION': { "glyph": "[NASAL_CONGESTION]", },
-                    'FATIGUE': { "glyph": "[FATIGUE]", },
-                    'DYSPNEA': { "glyph": "[DYSPNEA]", },
-                    'HEADACHE': { "glyph": "[HEADACHE]", },
-                    'MYALGIA': { "glyph": "[MYALGIA]", },
-                    'ABDOMINAL_PAIN': { "glyph": "[ABDOMINAL_PAIN]", },
-                    'PATCHY_INFILTRATES': { "glyph": "[PATCHY_INFILTRATES]", },
-                    'ELEVATED_PT_TIME': { "glyph": "[ELEVATED_PT_TIME]", },
-                    'INFLUENZA_EXPL': { "glyph": "[INFLUENZA_EXPL]", },
-                    'LOSS_OF_APPETITE': { "glyph": "[LOSS_OF_APPETITE]", },
-                    'REMOVE': { "glyph": "[FLU_SHOT]", },
+                    // 'DRY_COUGH': { "glyph": "[DRY_COUGH]", },
+                    // 'FEVER': { "glyph": "[FEVER]", },
+                    // 'LYMPHOPENIA': { "glyph": "[LYMPHOPENIA]", },
+                    // 'SORE_THROAT': { "glyph": "[SORE_THROAT]", },
+                    // 'GROUND_GLASS_INFILTRATES': { "glyph": "[GROUND_GLASS_INFILTRATES]", },
+                    // 'ELEVATED_LDH': { "glyph": "[ELEVATED_LDH]", },
+                    // 'DIARRHEA': { "glyph": "[DIARRHEA]", },
+                    // 'NASAL_CONGESTION': { "glyph": "[NASAL_CONGESTION]", },
+                    // 'FATIGUE': { "glyph": "[FATIGUE]", },
+                    // 'DYSPNEA': { "glyph": "[DYSPNEA]", },
+                    // 'HEADACHE': { "glyph": "[HEADACHE]", },
+                    // 'MYALGIA': { "glyph": "[MYALGIA]", },
+                    // 'ABDOMINAL_PAIN': { "glyph": "[ABDOMINAL_PAIN]", },
+                    // 'PATCHY_INFILTRATES': { "glyph": "[PATCHY_INFILTRATES]", },
+                    // 'ELEVATED_PT_TIME': { "glyph": "[ELEVATED_PT_TIME]", },
+                    // 'INFLUENZA_EXPL': { "glyph": "[INFLUENZA_EXPL]", },
+                    // 'LOSS_OF_APPETITE': { "glyph": "[LOSS_OF_APPETITE]", },
+                    // 'REMOVE': { "glyph": "[FLU_SHOT]", },
                 }
             },
             {
@@ -313,6 +323,7 @@ Headache, new loss of taste. </textarea>
             },
 
             draw: function(data) {
+                this.data = data;
                 // $('#' + this.plot_id).html('');
                 // create a new div
                 var new_div_id = this.plot_id + '_' + (Math.random()*100000).toFixed(0);
@@ -321,6 +332,20 @@ Headache, new loss of taste. </textarea>
                 <div id="${new_div_id}" style="width:100%;">
                 </div>
                 `);
+
+                // update the collData according to data
+                for (let i = 0; i < data.attributes.length; i++) {
+                    const attr = data.attributes[i];
+                    var t = attr[1];
+                    var v = attr[3];
+                    if (collData.entity_attribute_types[0].values.hasOwnProperty(v)) {
+
+                    } else {
+                        collData.entity_attribute_types[0].values[v] = {
+                            glyph: "[" + v + "]"
+                        };
+                    }
+                }
 
                 this.Util.embed(
                     new_div_id,
@@ -373,6 +398,7 @@ Headache, new loss of taste. </textarea>
             },
 
             show: function (data) {
+                this.data = data;
                 // show text
                 $('#output-json').html(JSON.stringify(data.data, null, 2));
 

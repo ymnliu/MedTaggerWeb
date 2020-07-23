@@ -105,8 +105,18 @@ public class WebServiceController {
 
             JSONArray entityProperties = new JSONArray();
             String bratEntityId = String.format("T%d", entityIdInt++);
+
             entityProperties.add(bratEntityId);
-            entityProperties.add("Condition");
+
+            // detectionMethod: "DictionaryLookup"
+            // detectionMethod: "Matched"
+            if (cm.getDetectionMethod().equals("Matched")) {
+                entityProperties.add("Regex");
+            } else if (cm.getDetectionMethod().equals("DictionaryLookup")) {
+                entityProperties.add("Dict");
+            } else {
+                entityProperties.add("Other");
+            }
             JSONArray spans = new JSONArray();
             JSONArray tokenBeginEnd = new JSONArray();
             tokenBeginEnd.add(cm.getBegin());
