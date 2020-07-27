@@ -47,7 +47,6 @@ pipeline {
                        "BUILD_VERSION=" + (params.BUILD_VERSION ?: env.BUILD_VERSION)
                    ]) {
                         checkout scm
-                          // sh 'mvn clean install'
                            script {
                               
                            // See: https://jenkins.io/doc/book/pipeline/docker/#building-containers
