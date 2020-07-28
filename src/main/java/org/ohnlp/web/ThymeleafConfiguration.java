@@ -1,4 +1,4 @@
-package org.ohnlp.util.demo;
+package org.ohnlp.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

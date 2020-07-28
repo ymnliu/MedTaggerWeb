@@ -1,4 +1,4 @@
-package org.ohnlp.util.demo;
+package org.ohnlp.web;
 
 /**
  * An almost dummy class for the view

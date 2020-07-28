@@ -1,4 +1,4 @@
-package org.ohnlp.util.demo;
+package org.ohnlp.web;
 
 import org.apache.uima.UIMAException;
 import org.apache.uima.UIMAFramework;

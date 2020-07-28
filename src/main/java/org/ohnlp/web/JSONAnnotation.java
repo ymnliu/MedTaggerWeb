@@ -1,4 +1,4 @@
-package org.ohnlp.util.demo;
+package org.ohnlp.web;
 
 import org.json.simple.JSONArray;
 
