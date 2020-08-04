@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.com/OHNLP/MedTagger.svg?branch=master)](https://travis-ci.com/OHNLP/MedTagger)
 
 # MedTagger Web
 
@@ -21,17 +20,8 @@ Then, the web app can be accessed via web on localhost (i.e. `127.0.0.1`).
 
 # Custom Ruleset Use Case - COVID 19 
 MedTagger IE Pipelines use a custom ruleset format. An example ruleset of Coronavirus Diseases 19 (COVID 19) related symptoms (e.g. dry cough, fever, fatigue) 
-can be found under the `/src/main/resources/medtaggerieresources/covid19` directory. These resources are what tells MedTagger
+can be found under the `./covid19` directory. These resources are what tells MedTagger
 what to do/extract, and this directory is expected as input for the RULEDIR parameter.  
-
-
-# How to build locally
-1. Clone this repository
-2. You will need JDK8 or above, Apache Maven, and Apache Ant installed
-3. When your modifications are complete, from the project root directory:
-    - Run `mvn clean install`
-    - Run `ant dist`
-    - A distribution zip will be created at `MedTagger.zip` in the root directory
     
    
 # Reference
