@@ -1,1 +1,1 @@
-sample.txt|Aspirin::635::642|1191|81mg::643::647||tab::648::651|mouth::655::660|twice a day::661::672|a week::677::683|Aspirin 81 MG Oral Tablet|243670|She takes an Aspirin 81mg tab by mouth twice a day for a week for knee pain
+sample.txt|Aspirin::6[48::655|1191|81mg::656::660||tab::661::664|mouth::668::673|twice a day::674::685|a week::690::696]|Aspirin 81 MG Oral Tablet|243670|She takes an Aspirin 81mg tab by mouth twice a day for a week for knee pain
