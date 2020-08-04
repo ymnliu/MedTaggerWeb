@@ -51,6 +51,14 @@ public class WebServiceController {
         return indexView;
     }
 
+    @GetMapping("/about")
+    public ModelAndView about() {
+        ModelAndView aboutView = new ModelAndView();
+        aboutView.setViewName("about");
+        return aboutView;
+    }
+
+
 
     /**
      * How to display NLP results .
