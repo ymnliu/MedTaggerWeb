@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
     <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
-    <title>IE Engine Editor | MedTagger Web</title>
+    <title>Rule Editor - N3C NLP </title>
     <link href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <style>
         .flex-container {
@@ -223,6 +226,46 @@
 </head>
 
 <body>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container">
+
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">N3C NLP Engine Demo</a>
+        </div>
+
+        <div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item "><a class="nav-link" href="/">
+                    <i class="fa fa-head-side-mask"></i>
+                    COVID-19 Demo
+                </a></li>
+                <li class="nav-item"><a class="nav-link" href="/dict_builder" >
+                    <i class="fa fa-book-medical"></i>
+                    Dictionary Builder
+                </a></li>
+                <li class="nav-item active"><a class="nav-link" href="#" >
+                    <i class="fa fa-edit"></i>
+                    Rule Editor <span class="sr-only">(current)</span>
+                </a></li>
+                <li class="nav-item"><a class="nav-link" href="https://github.com/OHNLP/N3C-NLP-Documentation/wiki" target="_blank">
+                    <i class="fa fa-book"></i>
+                    Wiki
+                </a></li>
+            </ul>
+        </div>
+
+        <div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/OHNLP/MedTagger" target="_blank"><i class="fa fa-github"></i> GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</nav>
+
 <div id="fm_chfila">
     <div class="container-fluid bg-cyan fg-white mb-1">
         <div class="row">
@@ -434,6 +477,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
         integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
         crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+        integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
+        crossorigin="anonymous"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 
 <script src="/static/lib/jszip/jszip-3.1.5.min.js"></script>
@@ -609,7 +659,7 @@
 
         open_sample: function () {
             $.get(
-                './static/data/sample_pack.json',
+                './static/data/covid19.json',
                 {},
                 function (data) {
                     fm_chfila.vpp.rulepack = data;
