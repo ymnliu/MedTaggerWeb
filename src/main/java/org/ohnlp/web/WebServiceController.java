@@ -38,8 +38,6 @@ public class WebServiceController {
     public ModelAndView index() {
         ModelAndView indexView = new ModelAndView();
         indexView.setViewName("demo");
-        // indexView.addObject("input_text", "The patient had dry cough and took Aspirin
-        // yesterday.");
         return indexView;
     }
 
@@ -57,8 +55,6 @@ public class WebServiceController {
         aboutView.setViewName("about");
         return aboutView;
     }
-
-
 
     /**
      * How to display NLP results .
