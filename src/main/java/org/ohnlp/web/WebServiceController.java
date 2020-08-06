@@ -4,12 +4,15 @@ import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.type.ConceptMention;
 import org.ohnlp.n3c.N3CNLPEngine;
 import org.ohnlp.util.BioPortalAPI;
+import org.ohnlp.util.IEEditorHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -86,15 +89,15 @@ public class WebServiceController {
 
     }
 
-
     /**
      * Parse the input text
+     * 
      * @param doc_text
      * @return attributes and concepts
      */
     @PostMapping("/parse")
     public JSONObject parse(@RequestParam(name = "doc_text") String doc_text) {
-        // TODO: check the input 
+        // TODO: check the input
 
         // get the list of concept metions
         HashMap<String, Collection<ConceptMention>> annotMap = n3CNLPEngine.runPipeline(doc_text);
@@ -141,6 +144,7 @@ public class WebServiceController {
 
     /**
      * Get the ontology root from BioPortal
+     * 
      * @param acronym
      * @return
      * @throws Exception
@@ -154,6 +158,7 @@ public class WebServiceController {
 
     /**
      * Get the ontology children of a class from BioPortal
+     * 
      * @param acronym
      * @param classid
      * @return
@@ -191,5 +196,48 @@ public class WebServiceController {
         final ModelAndView indexView = new ModelAndView();
         indexView.setViewName("ie_editor");
         return indexView;
+    }
+
+    /**
+     * The IE rule test
+     * 
+     * @throws IOException
+     */
+    @PostMapping("/ie_editor_test")
+    public JSONObject ie_editor_test(@RequestParam(name = "rulepack") String rulepack,
+            @RequestParam(name = "doc_text") String doc_text) {
+
+        // save the rulepack to guest temp folder
+        try {
+            Path user_temp_path = IEEditorHelper.saveIERulePack(rulepack);
+
+            // get the list of concept metions
+            N3CNLPEngine testN3CNLPEngine = new N3CNLPEngine(user_temp_path.toAbsolutePath().toString());
+            HashMap<String, Collection<ConceptMention>> annotMap = testN3CNLPEngine.runPipeline(doc_text);
+            JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(annotMap.get("cm"));
+
+            // build the output data
+            JSONObject data = new JSONObject();
+            data.put("path", user_temp_path.toString());
+            data.put("attributes", jsAnnot.getAttribList());
+            data.put("entities", jsAnnot.getCmList());
+            data.put("text", doc_text);
+
+            // build the output json
+            JSONObject ret = new JSONObject();
+            ret.put("data", data);
+            ret.put("success", true);
+            ret.put("msg", "text is parsed.");
+
+            return ret;
+            
+        } catch (Exception e) {
+            //TODO: handle exception
+            JSONObject ret = new JSONObject();
+            ret.put("success", false);
+            ret.put("msg", e.getMessage());
+            
+            return ret;
+        }
     }
 }

@@ -43,12 +43,16 @@ public class N3CNLPEngine {
     private AnalysisEngine cmAae;
 
     public N3CNLPEngine(){
-        initUIMAModel();
+        initUIMAModel("covid19");
     }
 
-    private void initUIMAModel(){
+    public N3CNLPEngine(String ruleDir) {
+        initUIMAModel(ruleDir);
+    }
+
+    private void initUIMAModel(String ruleDir){
         // TODO: Change hard code path from the file system into resource reference
-        Path ruleDirPath = Paths.get("covid19");
+        Path ruleDirPath = Paths.get(ruleDir);
         logger.info("IE Rules:\t" + ruleDirPath.toAbsolutePath());
 
         try {
