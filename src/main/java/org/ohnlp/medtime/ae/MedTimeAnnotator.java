@@ -726,7 +726,7 @@ public class MedTimeAnnotator extends JCasAnnotator_ImplBase {
                     else {
                         System.err.println("Incorrect PLUS/MINUS i ADMDATE in:"
                                 + valueNew);
-                        System.exit(1);
+//                        System.exit(1);
                     }
                     if (valueNew.startsWith("ADMDATE")) {
                         valueNew = DateCalculator.getXNextDay(admdate.getTimexValue(), addDay);
@@ -797,7 +797,7 @@ public class MedTimeAnnotator extends JCasAnnotator_ImplBase {
                     else {
                         System.err.println("Incorrect PLUS/MINUS i ADMDATE in:"
                                 + value_i);
-                        System.exit(1);
+//                        System.exit(1);
                     }
                     if (valueNew.startsWith("ADMDATE")) {
                         valueNew = DateCalculator.getXNextDay(admdate

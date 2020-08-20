@@ -89,7 +89,6 @@ public class WebServiceController {
         indexView.addObject("isResult", true);
 
         return indexView;
-
     }
 
     /**
