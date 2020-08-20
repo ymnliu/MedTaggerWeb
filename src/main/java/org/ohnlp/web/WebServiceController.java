@@ -1,5 +1,6 @@
 package org.ohnlp.web;
 
+import org.apache.uima.jcas.tcas.Annotation;
 import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.type.ConceptMention;
 import org.ohnlp.n3c.N3CNLPEngine;
@@ -68,7 +69,7 @@ public class WebServiceController {
     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
         // To get a list of concept mentions
 
-        HashMap<String, Collection<ConceptMention>> annotMap = n3CNLPEngine.getResultMap(webInputText.getDocText());
+        HashMap<String, Collection> annotMap = n3CNLPEngine.getResultMap(webInputText.getDocText());
 
         // render template for the fields in index-template
         ModelAndView indexView = new ModelAndView();

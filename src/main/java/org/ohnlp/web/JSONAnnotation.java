@@ -1,8 +1,9 @@
 package org.ohnlp.web;
 
+import org.apache.uima.jcas.tcas.Annotation;
 import org.json.simple.JSONArray;
 import org.ohnlp.medtagger.type.ConceptMention;
-
+import org.ohnlp.medtime.type.MedTimex3;
 import java.util.Collection;
 
 public class JSONAnnotation {
@@ -34,7 +35,7 @@ public class JSONAnnotation {
      * @param cms List of Annotation from UIMA
      * @return list of JSON array for Brat to display in the html template
      */
-    public static JSONAnnotation generateConceptMentionBratJson(final Collection<ConceptMention> cms) {
+    public static JSONAnnotation generateConceptMentionBratJson(final Collection<Annotation> cms) {
         JSONArray cmList = new JSONArray();
         JSONArray attribList = new JSONArray();
 
@@ -46,8 +47,8 @@ public class JSONAnnotation {
             return new JSONAnnotation(cmList, attribList);
         }
 
-        for (ConceptMention cm: cms) {
-
+        for (Annotation annot: cms) {
+            ConceptMention cm = (ConceptMention) annot;
             // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]
             // note that range of the offsets are [${START},${END})
             // ref:
@@ -110,7 +111,58 @@ public class JSONAnnotation {
             attribList.add(experiencerProperties);
         }
 
+
+
         return new JSONAnnotation(cmList, attribList);
     }
+
+    /**
+     * Wrap list of concept mentions into json list to feed into the "entity" js
+     * field.
+     *
+     * @param timex3s List of Annotation from UIMA
+     * @return list of JSON array for Brat to display in the html template
+     */
+    public static JSONAnnotation generateTimex3BratJson(final Collection<org.apache.uima.jcas.tcas.Annotation> timex3s) {
+        JSONArray timex3List = new JSONArray();
+        JSONArray attribList = new JSONArray();
+
+        int entityIdInt = 1;
+        int attribIdInt = 1;
+
+        if (timex3s == null) {
+            // Return empty lists
+            return new JSONAnnotation(timex3List, attribList);
+        }
+
+        for (Annotation annot: timex3s) {
+
+            // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]
+            // note that range of the offsets are [${START},${END})
+            // ref:
+            // https://github.com/arne-cl/brat-embedded-visualization-examples/blob/master/minimal-brat-embedded.htm
+
+            MedTimex3 timex3 = (MedTimex3) annot;
+            JSONArray entityProperties = new JSONArray();
+            String bratEntityId = String.format("T%d", entityIdInt++);
+
+            entityProperties.add(bratEntityId);
+
+            // detectionMethod: "DictionaryLookup"
+            // detectionMethod: "Matched"
+            entityProperties.add("Regex");
+            JSONArray spans = new JSONArray();
+            JSONArray tokenBeginEnd = new JSONArray();
+            tokenBeginEnd.add(timex3.getBegin());
+            tokenBeginEnd.add(timex3.getEnd());
+            spans.add(tokenBeginEnd);
+            entityProperties.add(spans);
+            timex3List.add(entityProperties);
+
+        }
+
+        return new JSONAnnotation(timex3List, attribList);
+    }
+
 
 }

@@ -15,6 +15,7 @@ import org.apache.uima.fit.factory.TypeSystemDescriptionFactory;
 import org.apache.uima.fit.internal.ResourceManagerFactory;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
@@ -24,6 +25,7 @@ import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.cr.FileSystemReader;
 import org.ohnlp.medtagger.ie.cc.IETabDelimitedWriter;
 import org.ohnlp.medtagger.type.ConceptMention;
+import org.ohnlp.medtime.type.MedTimex3;
 import org.ohnlp.medxn.cc.MedXNCC;
 import org.ohnlp.util.SimpleCliPipeline;
 import org.ohnlp.web.JSONAnnotation;
@@ -91,17 +93,15 @@ public class N3CNLPEngine {
      * @param docText
      * @return
      */
-    public HashMap<String, Collection<ConceptMention>> getResultMap(String docText) {
+    public HashMap<String, Collection> getResultMap(String docText) {
 
-        HashMap<String, Collection<ConceptMention>> annotMap = new HashMap<String, Collection<ConceptMention>>();
-        Collection<ConceptMention> cms;
+        HashMap<String, Collection> annotMap = new HashMap();
         try {
             JCas cmCas = createJCas(tsd);
             cmCas.setDocumentText(docText);
             cmAae.process(cmCas);
-            cms = JCasUtil.select(cmCas, ConceptMention.class);
-
-            annotMap.put("cm", cms);
+            annotMap.put("cm", JCasUtil.select(cmCas, ConceptMention.class));
+            annotMap.put("timex3", JCasUtil.select(cmCas, MedTimex3.class));
 
             cmAae.collectionProcessComplete();
 
@@ -113,7 +113,11 @@ public class N3CNLPEngine {
     }
 
     public JSONObject getResultJSON(String docText) {
-        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(getResultMap(docText).get("cm"));
+
+        HashMap<String, Collection> resultMap = getResultMap(docText);
+        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(resultMap.get("cm"));
+
+        jsAnnot.add(JSONAnnotation.generateTimex3BratJson(resultMap.get("timex3")));
 
         // build the output data
         JSONObject data = new JSONObject();
