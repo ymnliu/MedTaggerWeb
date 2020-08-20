@@ -33,6 +33,9 @@
         <delegateAnalysisEngine key="LineSentenceDetectorAE">
             <import name="org.ohnlp.medtagger.aes.LineSentenceDetectorAE"/>
         </delegateAnalysisEngine>
+        <delegateAnalysisEngine key="MedTimeAE">
+            <import name="org.ohnlp.medtime.aes.MedTimeAE"/>
+        </delegateAnalysisEngine>
     </delegateAnalysisEngineSpecifiers>
 
     <analysisEngineMetaData>
@@ -51,7 +54,100 @@
                     <parameter>MedTaggerIEAnnotatorAE/Resource_dir</parameter>
                 </overrides>
             </configurationParameter>
+            <configurationParameter>
+                <name>Date</name>
+                <type>Boolean</type>
+                <multiValued>false</multiValued>
+                <mandatory>true</mandatory>
+                <overrides>
+                    <parameter>MedTimeAE/Date</parameter>
+                </overrides>
+            </configurationParameter>
+            <configurationParameter>
+                <name>Time</name>
+                <type>Boolean</type>
+                <multiValued>false</multiValued>
+                <mandatory>true</mandatory>
+                <overrides>
+                    <parameter>MedTimeAE/Time</parameter>
+                </overrides>
+            </configurationParameter>
+            <configurationParameter>
+                <name>Duration</name>
+                <type>Boolean</type>
+                <multiValued>false</multiValued>
+                <mandatory>true</mandatory>
+                <overrides>
+                    <parameter>MedTimeAE/Duration</parameter>
+                </overrides>
+            </configurationParameter>
+            <configurationParameter>
+                <name>Set</name>
+                <type>Boolean</type>
+                <multiValued>false</multiValued>
+                <mandatory>true</mandatory>
+                <overrides>
+                    <parameter>MedTimeAE/Set</parameter>
+                </overrides>
+            </configurationParameter>
+            <configurationParameter>
+                <name>reportFormat</name>
+                <type>String</type>
+                <multiValued>false</multiValued>
+                <mandatory>true</mandatory>
+                <overrides>
+                    <parameter>MedTimeAE/reportFormat</parameter>
+                </overrides>
+            </configurationParameter>
+            <configurationParameter>
+                <name>MedTime_Resource_Dir</name>
+                <type>String</type>
+                <multiValued>false</multiValued>
+                <mandatory>false</mandatory>
+                <overrides>
+                    <parameter>MedTimeAE/Resource_dir</parameter>
+                </overrides>
+            </configurationParameter>
         </configurationParameters>
+
+        <configurationParameterSettings>
+            <nameValuePair>
+                <name>Date</name>
+                <value>
+                    <boolean>true</boolean>
+                </value>
+            </nameValuePair>
+            <nameValuePair>
+                <name>Time</name>
+                <value>
+                    <boolean>true</boolean>
+                </value>
+            </nameValuePair>
+            <nameValuePair>
+                <name>Duration</name>
+                <value>
+                    <boolean>true</boolean>
+                </value>
+            </nameValuePair>
+            <nameValuePair>
+                <name>Set</name>
+                <value>
+                    <boolean>true</boolean>
+                </value>
+            </nameValuePair>
+            <nameValuePair>
+                <name>reportFormat</name>
+                <value>
+                    <string>i2b2</string>
+                </value>
+            </nameValuePair>
+            <nameValuePair>
+                <name>MedTime_Resource_Dir</name>
+                <value>
+                    <string>resources/medtimeresources</string>
+                </value>
+            </nameValuePair>
+        </configurationParameterSettings>
 
         <flowConstraints>
             <fixedFlow>
@@ -64,6 +160,7 @@
                 <node>MedTaggerLookupAE</node>
                 <node>MedTaggerIEAnnotatorAE</node>
                 <node>RuleContextAE</node>
+                <node>MedTimeAE</node>
             </fixedFlow>
         </flowConstraints>
         <typePriorities>
@@ -98,20 +195,20 @@
                 </fileResourceSpecifier>
             </externalResource>
 
-            <externalResource>
-                <name>regExPatterns</name>
-                <description>regular expressions of drug attributes</description>
-                <fileResourceSpecifier>
-                    <fileUrl>file:medxnresources/regExPatterns.txt</fileUrl>
-                </fileResourceSpecifier>
-            </externalResource>
-            <externalResource>
-                <name>falseMedDict</name>
-                <description>list of potentially false drugs</description>
-                <fileResourceSpecifier>
-                    <fileUrl>file:medxnresources/lookup/falseMedDict.txt</fileUrl>
-                </fileResourceSpecifier>
-            </externalResource>
+<!--            <externalResource>-->
+<!--                <name>regExPatterns</name>-->
+<!--                <description>regular expressions of drug attributes</description>-->
+<!--                <fileResourceSpecifier>-->
+<!--                    <fileUrl>file:medxnresources/regExPatterns.txt</fileUrl>-->
+<!--                </fileResourceSpecifier>-->
+<!--            </externalResource>-->
+<!--            <externalResource>-->
+<!--                <name>falseMedDict</name>-->
+<!--                <description>list of potentially false drugs</description>-->
+<!--                <fileResourceSpecifier>-->
+<!--                    <fileUrl>file:medxnresources/lookup/falseMedDict.txt</fileUrl>-->
+<!--                </fileResourceSpecifier>-->
+<!--            </externalResource>-->
 
 
             <externalResource>

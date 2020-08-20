@@ -2,8 +2,10 @@ package org.ohnlp.n3c;
 
 import org.apache.uima.UIMAException;
 import org.apache.uima.UIMAFramework;
+import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AggregateBuilder;
@@ -18,11 +20,13 @@ import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
 import org.apache.uima.resource.metadata.TypeSystemDescription;
 import org.apache.uima.util.InvalidXMLException;
+import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.cr.FileSystemReader;
 import org.ohnlp.medtagger.ie.cc.IETabDelimitedWriter;
 import org.ohnlp.medtagger.type.ConceptMention;
 import org.ohnlp.medxn.cc.MedXNCC;
 import org.ohnlp.util.SimpleCliPipeline;
+import org.ohnlp.web.JSONAnnotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +55,6 @@ public class N3CNLPEngine {
     }
 
     private void initUIMAModel(String ruleDir){
-        // TODO: Change hard code path from the file system into resource reference
         Path ruleDirPath = Paths.get(ruleDir);
         logger.info("IE Rules:\t" + ruleDirPath.toAbsolutePath());
 
@@ -66,7 +69,7 @@ public class N3CNLPEngine {
             metadata.setConfigurationParameterSettings(settings);
 
             // modified MedXNTypes now importing MedTaggerIE types
-            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription("org.ohnlp.medxn.types.MedXNTypes");
+            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription("org.ohnlp.medtime.types.MedTimeTypes");
             tsd.resolveImports(resMgr);
 
             cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
@@ -88,10 +91,10 @@ public class N3CNLPEngine {
      * @param docText
      * @return
      */
-    public HashMap<String, Collection<ConceptMention>> runPipeline(String docText) {
+    public HashMap<String, Collection<ConceptMention>> getResultMap(String docText) {
 
         HashMap<String, Collection<ConceptMention>> annotMap = new HashMap<String, Collection<ConceptMention>>();
-        Collection<ConceptMention> cms = null;
+        Collection<ConceptMention> cms;
         try {
             JCas cmCas = createJCas(tsd);
             cmCas.setDocumentText(docText);
@@ -109,5 +112,21 @@ public class N3CNLPEngine {
         return annotMap;
     }
 
+    public JSONObject getResultJSON(String docText) {
+        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(getResultMap(docText).get("cm"));
 
+        // build the output data
+        JSONObject data = new JSONObject();
+        data.put("attributes", jsAnnot.getAttribList());
+        data.put("entities", jsAnnot.getCmList());
+        data.put("text", docText);
+
+        // build the output json
+        JSONObject ret = new JSONObject();
+        ret.put("data", data);
+        ret.put("success", true);
+        ret.put("msg", "text is parsed.");
+
+        return ret;
+    }
 }

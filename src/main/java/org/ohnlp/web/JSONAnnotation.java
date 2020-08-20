@@ -34,7 +34,7 @@ public class JSONAnnotation {
      * @param cms List of Annotation from UIMA
      * @return list of JSON array for Brat to display in the html template
      */
-    static JSONAnnotation generateConceptMentionBratJson(final Collection<ConceptMention> cms) {
+    public static JSONAnnotation generateConceptMentionBratJson(final Collection<ConceptMention> cms) {
         JSONArray cmList = new JSONArray();
         JSONArray attribList = new JSONArray();
 

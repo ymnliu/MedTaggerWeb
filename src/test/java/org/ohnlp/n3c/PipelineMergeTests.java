@@ -19,6 +19,7 @@ import org.apache.uima.util.InvalidXMLException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.ohnlp.medtagger.type.ConceptMention;
+import org.ohnlp.medtime.type.MedTimex3;
 import org.ohnlp.medxn.MedXNStringBuildTests;
 
 import java.io.IOException;
@@ -51,8 +52,10 @@ public class PipelineMergeTests {
         System.out.println("IE Rules:\t" + ruleDirPath.toAbsolutePath().toString());
 
         settings.setParameterValue("Resource_dir", ruleDirPath.toString());
-        metadata.setConfigurationParameterSettings(settings);
+//        metadata.setConfigurationParameterSettings(settings);
 
+        settings.setParameterValue("MedTime_Resource_Dir", "medtimeresources");
+        metadata.setConfigurationParameterSettings(settings);
 
         cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
 
@@ -67,6 +70,10 @@ public class PipelineMergeTests {
         cmAae.process(cas);
         Collection<ConceptMention> results = JCasUtil.select(cas.getJCas(), ConceptMention.class);
         System.out.println(results);
+
+        Collection<MedTimex3> times = JCasUtil.select(cas.getJCas(), MedTimex3.class);
+        System.out.println(times);
+
         assertNotEquals(0, results.size());
     }
 }

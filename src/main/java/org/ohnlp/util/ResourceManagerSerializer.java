@@ -260,7 +260,6 @@ public class ResourceManagerSerializer implements Serializable {
         return hmNormEntries.get(key);
     }
 
-
     private void reformatRegExp() {
         for (Object lkey : hmRegExpEntries.keySet()) {
             String key = (String) lkey;

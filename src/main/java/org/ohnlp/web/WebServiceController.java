@@ -68,7 +68,7 @@ public class WebServiceController {
     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
         // To get a list of concept mentions
 
-        HashMap<String, Collection<ConceptMention>> annotMap = n3CNLPEngine.runPipeline(webInputText.getDocText());
+        HashMap<String, Collection<ConceptMention>> annotMap = n3CNLPEngine.getResultMap(webInputText.getDocText());
 
         // render template for the fields in index-template
         ModelAndView indexView = new ModelAndView();
@@ -97,25 +97,7 @@ public class WebServiceController {
      */
     @PostMapping("/parse")
     public JSONObject parse(@RequestParam(name = "doc_text") String doc_text) {
-        // TODO: check the input
-
-        // get the list of concept metions
-        HashMap<String, Collection<ConceptMention>> annotMap = n3CNLPEngine.runPipeline(doc_text);
-        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(annotMap.get("cm"));
-
-        // build the output data
-        JSONObject data = new JSONObject();
-        data.put("attributes", jsAnnot.getAttribList());
-        data.put("entities", jsAnnot.getCmList());
-        data.put("text", doc_text);
-
-        // build the output json
-        JSONObject ret = new JSONObject();
-        ret.put("data", data);
-        ret.put("success", true);
-        ret.put("msg", "text is parsed.");
-
-        return ret;
+        return n3CNLPEngine.getResultJSON(doc_text);
     }
 
     /**
@@ -205,39 +187,23 @@ public class WebServiceController {
      */
     @PostMapping("/ie_editor_test")
     public JSONObject ie_editor_test(@RequestParam(name = "rulepack") String rulepack,
-            @RequestParam(name = "doc_text") String doc_text) {
+            @RequestParam(name = "doc_text") String docText) {
 
         // save the rulepack to guest temp folder
         try {
-            Path user_temp_path = IEEditorHelper.saveIERulePack(rulepack);
-
-            // get the list of concept metions
-            N3CNLPEngine testN3CNLPEngine = new N3CNLPEngine(user_temp_path.toAbsolutePath().toString());
-            HashMap<String, Collection<ConceptMention>> annotMap = testN3CNLPEngine.runPipeline(doc_text);
-            JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(annotMap.get("cm"));
-
-            // build the output data
-            JSONObject data = new JSONObject();
-            data.put("path", user_temp_path.toString());
-            data.put("attributes", jsAnnot.getAttribList());
-            data.put("entities", jsAnnot.getCmList());
-            data.put("text", doc_text);
-
-            // build the output json
-            JSONObject ret = new JSONObject();
-            ret.put("data", data);
-            ret.put("success", true);
-            ret.put("msg", "text is parsed.");
-
+            Path userTempPath = IEEditorHelper.saveIERulePack(rulepack);
+            N3CNLPEngine userEngine = new N3CNLPEngine(userTempPath.toAbsolutePath().toString());
+            JSONObject ret = userEngine.getResultJSON(docText);
             return ret;
             
         } catch (Exception e) {
             //TODO: handle exception
-            JSONObject ret = new JSONObject();
-            ret.put("success", false);
-            ret.put("msg", e.getMessage());
-            
-            return ret;
+            JSONObject failRet = new JSONObject();
+            failRet.put("success", false);
+            failRet.put("msg", e.getMessage());
+            logger.error(e.getMessage());
+
+            return failRet;
         }
     }
 }

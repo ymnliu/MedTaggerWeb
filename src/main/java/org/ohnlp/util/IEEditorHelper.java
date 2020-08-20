@@ -1,27 +1,33 @@
 package org.ohnlp.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IEEditorHelper {
+
+    private static Logger logger = LoggerFactory.getLogger(IEEditorHelper.class);
 
     public static JSONObject getIERulePackJSON(String rulesetPath) {
         return null;
     }
 
-    public static Path saveIERulePack(String rulepack) throws Exception {
+    public static Path saveIERulePack(String rulepack) throws IOException, ParseException {
         // Unpack the rule package
         JSONParser jsonParser = new JSONParser();
         JSONObject jRulePack = (JSONObject) jsonParser.parse(rulepack);
 
         // create temp folder for the rule pack
         Path user_temp_path = Files.createTempDirectory("guest-");
-        System.out.println("* created temp folder: " + user_temp_path.toAbsolutePath().toString());
+        logger.info("* created temp folder: " + user_temp_path.toAbsolutePath().toString());
 
         // create the used_resources.txt
         File file_used_resources_txt = new File(user_temp_path.toAbsolutePath().toString(), "used_resources.txt");
