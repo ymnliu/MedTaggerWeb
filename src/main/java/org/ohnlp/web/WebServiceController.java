@@ -16,6 +16,8 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 public class WebServiceController {
 
@@ -192,7 +194,10 @@ public class WebServiceController {
      * @return the dictionary builder view
      */
     @GetMapping("/ie_editor")
-    public ModelAndView ie_editor() {
+    public ModelAndView ie_editor(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+
+        System.out.println("* username: " + username);
         final ModelAndView indexView = new ModelAndView();
         indexView.setViewName("ie_editor");
         return indexView;
@@ -239,5 +244,30 @@ public class WebServiceController {
             
             return ret;
         }
+    }
+
+    /**
+     * Login (fake)
+     * @return the dictionary builder view
+     */
+    @GetMapping("/login")
+    public String fake_login(@RequestParam(name = "username") String username, HttpSession session) {
+        // set user name
+        session.setAttribute("username", username);
+        System.out.println("* set username: " + username);
+        return "Set username: " + username;
+    }
+
+
+    /**
+     * Logout (fake)
+     * @return the dictionary builder view
+     */
+    @GetMapping("/fake_logout")
+    public String fake_logout(HttpSession session) {
+        // set user name
+        session.setAttribute("username", null);
+        System.out.println("* Logged out username.");
+        return "Logged out";
     }
 }
