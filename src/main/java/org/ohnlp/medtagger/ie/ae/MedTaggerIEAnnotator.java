@@ -458,4 +458,11 @@ public class MedTaggerIEAnnotator extends JCasAnnotator_ImplBase {
 		for(ConceptMention cm : cmToRemove)
 			cm.removeFromIndexes();
 	}
+
+	@Override
+	public void destroy() {
+		super.destroy();
+		rum = null;
+		iv_logger.info("IE annotator destroyed");
+	}
 }
