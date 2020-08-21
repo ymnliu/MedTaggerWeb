@@ -273,6 +273,18 @@
             <version>13.0</version>
             <scope>compile</scope>
         </dependency>
-    </dependencies>
+
+        <!-- SSO Support Start -->
+        <dependency>
+            <groupId>com.onelogin</groupId>
+            <artifactId>java-saml</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+</dependencies>
 
 </project>

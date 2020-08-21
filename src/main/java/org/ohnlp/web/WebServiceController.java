@@ -17,7 +17,14 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.onelogin.saml2.Auth;
+import com.onelogin.saml2.exception.Error;
+import com.onelogin.saml2.exception.SettingsException;
+
 
 @RestController
 public class WebServiceController {
@@ -222,6 +229,17 @@ public class WebServiceController {
         session.setAttribute("username", username);
         System.out.println("* set username: " + username);
         return "Set username: " + username;
+    }
+
+
+    // Login form
+    @RequestMapping("/dologin")
+    public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Auth auth = new Auth(request, response);
+        auth.login();
+//        auth.processResponse();
+        System.out.println(auth.isAuthenticated());
+        return "login.html";
     }
 
 
