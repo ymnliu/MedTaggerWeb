@@ -2,8 +2,10 @@ package org.ohnlp.n3c;
 
 import org.apache.uima.UIMAException;
 import org.apache.uima.UIMAFramework;
+import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
 import org.apache.uima.collection.CollectionReaderDescription;
 import org.apache.uima.fit.factory.AggregateBuilder;
@@ -13,16 +15,20 @@ import org.apache.uima.fit.factory.TypeSystemDescriptionFactory;
 import org.apache.uima.fit.internal.ResourceManagerFactory;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
 import org.apache.uima.resource.metadata.TypeSystemDescription;
 import org.apache.uima.util.InvalidXMLException;
+import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.cr.FileSystemReader;
 import org.ohnlp.medtagger.ie.cc.IETabDelimitedWriter;
 import org.ohnlp.medtagger.type.ConceptMention;
+import org.ohnlp.medtime.type.MedTimex3;
 import org.ohnlp.medxn.cc.MedXNCC;
 import org.ohnlp.util.SimpleCliPipeline;
+import org.ohnlp.web.JSONAnnotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,12 +49,15 @@ public class N3CNLPEngine {
     private AnalysisEngine cmAae;
 
     public N3CNLPEngine(){
-        initUIMAModel();
+        initUIMAModel("covid19");
     }
 
-    private void initUIMAModel(){
-        // TODO: Change hard code path from the file system into resource reference
-        Path ruleDirPath = Paths.get("covid19");
+    public N3CNLPEngine(String ruleDir) {
+        initUIMAModel(ruleDir);
+    }
+
+    private void initUIMAModel(String ruleDir){
+        Path ruleDirPath = Paths.get(ruleDir);
         logger.info("IE Rules:\t" + ruleDirPath.toAbsolutePath());
 
         try {
@@ -62,7 +71,7 @@ public class N3CNLPEngine {
             metadata.setConfigurationParameterSettings(settings);
 
             // modified MedXNTypes now importing MedTaggerIE types
-            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription("org.ohnlp.medxn.types.MedXNTypes");
+            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription("org.ohnlp.medtime.types.MedTimeTypes");
             tsd.resolveImports(resMgr);
 
             cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
@@ -84,17 +93,15 @@ public class N3CNLPEngine {
      * @param docText
      * @return
      */
-    public HashMap<String, Collection<ConceptMention>> runPipeline(String docText) {
+    public HashMap<String, Collection> getResultMap(String docText) {
 
-        HashMap<String, Collection<ConceptMention>> annotMap = new HashMap<String, Collection<ConceptMention>>();
-        Collection<ConceptMention> cms = null;
+        HashMap<String, Collection> annotMap = new HashMap();
         try {
             JCas cmCas = createJCas(tsd);
             cmCas.setDocumentText(docText);
             cmAae.process(cmCas);
-            cms = JCasUtil.select(cmCas, ConceptMention.class);
-
-            annotMap.put("cm", cms);
+            annotMap.put("cm", JCasUtil.select(cmCas, ConceptMention.class));
+            annotMap.put("timex3", JCasUtil.select(cmCas, MedTimex3.class));
 
             cmAae.collectionProcessComplete();
 
@@ -105,5 +112,25 @@ public class N3CNLPEngine {
         return annotMap;
     }
 
+    public JSONObject getResultJSON(String docText) {
 
+        HashMap<String, Collection> resultMap = getResultMap(docText);
+        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(resultMap.get("cm"));
+
+        jsAnnot.add(JSONAnnotation.generateTimex3BratJson(resultMap.get("timex3")));
+
+        // build the output data
+        JSONObject data = new JSONObject();
+        data.put("attributes", jsAnnot.getAttribList());
+        data.put("entities", jsAnnot.getCmList());
+        data.put("text", docText);
+
+        // build the output json
+        JSONObject ret = new JSONObject();
+        ret.put("data", data);
+        ret.put("success", true);
+        ret.put("msg", "text is parsed.");
+
+        return ret;
+    }
 }

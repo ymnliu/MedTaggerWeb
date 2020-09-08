@@ -25,6 +25,7 @@ package org.ohnlp.medtagger.lvg;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class LvgLookup extends JCasAnnotator_ImplBase {
 
 	// LOG4J logger based on class name
 	private Logger logger = Logger.getLogger("LvgLookup");
-     HashMap<String, String> lvgMap;
+    HashMap<String, String> lvgMap;
     HashSet<String> openclass; 
     //private static OpenClassWords pds = new OpenClassWords();
     
@@ -68,7 +69,7 @@ public class LvgLookup extends JCasAnnotator_ImplBase {
 	
     
 	@Override
-	public void process(JCas aJCas) throws AnalysisEngineProcessException {
+	public void process(JCas aJCas) {
 		JFSIndexRepository indexes = aJCas.getJFSIndexRepository();
 		Iterator<?> tokenItr = indexes.getAnnotationIndex(WordToken.type).iterator();
 		while (tokenItr.hasNext())
@@ -87,16 +88,17 @@ public class LvgLookup extends JCasAnnotator_ImplBase {
         }
 
 	}
-	
-	public LvgLookup() {
 
-	}
-	
-	
 //	//for the stand alone version
 	public LvgLookup(UimaContext aContext) throws ResourceAccessException {
 		localInitialize(aContext.getResourceAsStream("lvg_dict"), aContext.getResourceAsStream("openclass"));
 	}
+
+	/**
+	 * Dummy zero-argument constructor required by UIMA
+	 */
+	public LvgLookup() {}
+
 
 //	public void localInitialize(String dict, String openclassFile) {
 //		try {
@@ -187,9 +189,20 @@ public class LvgLookup extends JCasAnnotator_ImplBase {
 
 			localInitialize(dictInStream, openclassFileStream);
 
+			dictInStream.close();
+			openclassFileStream.close();
 		} catch (ResourceAccessException e) {
 			e.printStackTrace();
-		} 
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
+	@Override
+	public void destroy() {
+		super.destroy();
+		lvgMap.clear();
+		openclass.clear();
+		logger.info("LVG annotator destroyed");
+	}
 }

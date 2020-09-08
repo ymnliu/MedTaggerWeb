@@ -1,17 +1,30 @@
 package org.ohnlp.web;
 
+import org.apache.uima.jcas.tcas.Annotation;
 import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.type.ConceptMention;
 import org.ohnlp.n3c.N3CNLPEngine;
 import org.ohnlp.util.BioPortalAPI;
+import org.ohnlp.util.IEEditorHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.onelogin.saml2.Auth;
+import com.onelogin.saml2.exception.Error;
+import com.onelogin.saml2.exception.SettingsException;
+
 
 @RestController
 public class WebServiceController {
@@ -65,7 +78,7 @@ public class WebServiceController {
     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
         // To get a list of concept mentions
 
-        HashMap<String, Collection<ConceptMention>> annotMap = n3CNLPEngine.runPipeline(webInputText.getDocText());
+        HashMap<String, Collection> annotMap = n3CNLPEngine.getResultMap(webInputText.getDocText());
 
         // render template for the fields in index-template
         ModelAndView indexView = new ModelAndView();
@@ -83,36 +96,17 @@ public class WebServiceController {
         indexView.addObject("isResult", true);
 
         return indexView;
-
     }
-
 
     /**
      * Parse the input text
+     * 
      * @param doc_text
      * @return attributes and concepts
      */
     @PostMapping("/parse")
     public JSONObject parse(@RequestParam(name = "doc_text") String doc_text) {
-        // TODO: check the input 
-
-        // get the list of concept metions
-        HashMap<String, Collection<ConceptMention>> annotMap = n3CNLPEngine.runPipeline(doc_text);
-        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(annotMap.get("cm"));
-
-        // build the output data
-        JSONObject data = new JSONObject();
-        data.put("attributes", jsAnnot.getAttribList());
-        data.put("entities", jsAnnot.getCmList());
-        data.put("text", doc_text);
-
-        // build the output json
-        JSONObject ret = new JSONObject();
-        ret.put("data", data);
-        ret.put("success", true);
-        ret.put("msg", "text is parsed.");
-
-        return ret;
+        return n3CNLPEngine.getResultJSON(doc_text);
     }
 
     /**
@@ -141,6 +135,7 @@ public class WebServiceController {
 
     /**
      * Get the ontology root from BioPortal
+     * 
      * @param acronym
      * @return
      * @throws Exception
@@ -154,6 +149,7 @@ public class WebServiceController {
 
     /**
      * Get the ontology children of a class from BioPortal
+     * 
      * @param acronym
      * @param classid
      * @return
@@ -187,9 +183,75 @@ public class WebServiceController {
      * @return the dictionary builder view
      */
     @GetMapping("/ie_editor")
-    public ModelAndView ie_editor() {
+    public ModelAndView ie_editor(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+
+        System.out.println("* username: " + username);
         final ModelAndView indexView = new ModelAndView();
         indexView.setViewName("ie_editor");
         return indexView;
+    }
+
+    /**
+     * The IE rule test
+     * 
+     * @throws IOException
+     */
+    @PostMapping("/ie_editor_test")
+    public JSONObject ie_editor_test(@RequestParam(name = "rulepack") String rulepack,
+            @RequestParam(name = "doc_text") String docText) {
+
+        // save the rulepack to guest temp folder
+        try {
+            Path userTempPath = IEEditorHelper.saveIERulePack(rulepack);
+            N3CNLPEngine userEngine = new N3CNLPEngine(userTempPath.toAbsolutePath().toString());
+            JSONObject ret = userEngine.getResultJSON(docText);
+            return ret;
+            
+        } catch (Exception e) {
+            //TODO: handle exception
+            JSONObject failRet = new JSONObject();
+            failRet.put("success", false);
+            failRet.put("msg", e.getMessage());
+            logger.error(e.getMessage());
+
+            return failRet;
+        }
+    }
+
+    /**
+     * Login (fake)
+     * @return the dictionary builder view
+     */
+    @GetMapping("/login")
+    public String fake_login(@RequestParam(name = "username") String username, HttpSession session) {
+        // set user name
+        session.setAttribute("username", username);
+        System.out.println("* set username: " + username);
+        return "Set username: " + username;
+    }
+
+
+    // Login form
+    @RequestMapping("/dologin")
+    public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Auth auth = new Auth(request, response);
+        auth.login();
+//        auth.processResponse();
+        System.out.println(auth.isAuthenticated());
+        return "login.html";
+    }
+
+
+    /**
+     * Logout (fake)
+     * @return the dictionary builder view
+     */
+    @GetMapping("/fake_logout")
+    public String fake_logout(HttpSession session) {
+        // set user name
+        session.setAttribute("username", null);
+        System.out.println("* Logged out username.");
+        return "Logged out";
     }
 }

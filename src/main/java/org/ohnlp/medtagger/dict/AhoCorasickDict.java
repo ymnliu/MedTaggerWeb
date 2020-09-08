@@ -58,7 +58,7 @@ public class AhoCorasickDict {
 	public static final String LINEDELIM="\\n";
 	public Node root;
 
-	AhoCorasickDict(){
+	public AhoCorasickDict(){
 		root=new Node(null);
 		root.addChild(FAILLINK, root);
 	}

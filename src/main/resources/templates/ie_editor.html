@@ -9,6 +9,7 @@
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="./static/lib/brat/css/style.css"/>
     <title>Rule Editor - N3C NLP </title>
     <link href="/static/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <style>
@@ -55,10 +56,11 @@
 
         .box-header input,
         .box-body input {
-            height: 1em;
-            line-height: 1em;
+            height: 1.2em;
+            line-height: 1.2em;
             font-size: 1em;
             margin: 4px 4px 0 4px;
+            padding-bottom: 2px;
         }
 
         .box-header select {
@@ -145,10 +147,18 @@
 
         /* this page  */
 
+        #fm_chfila {
+            margin-top: 70px;
+        }
+
         #rule-editor {
             font-size: 12px;
             height: 100%;
             font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #infobox-upload-and-test {
+            width: 800px !important;
         }
 
         #navi {
@@ -269,14 +279,37 @@
 
 </nav>
 
+<div id="infobox-upload-and-test" class="info-box" data-role="infobox">
+    <span class="button square closer"></span>
+    <div class="info-box-content">
+        <h3>Rule Pack Test</h3>
+        <div class="row">
+            <div class="cell-9">
+                <textarea id="text-for-test" rows="3" style="width: 100%;">I have a dry cough and fever. No sore throat</textarea>
+            </div>
+            <div class="cell-3">
+                <button id="btn-upload-and-test" class="button primary" onclick="fm_chfila.upload_and_test();">Test Rule Pack</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="cell">
+                <div id="fig_bratvis">
+
+                </div>
+                <p style="margin-top: 1em; font-size: .8em; text-align: right;"> 
+                    Powered by <a href="https://brat.nlplab.org/embed.html" target="_blank">brat</a>. 
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="fm_chfila">
     <div class="container-fluid bg-cyan fg-white mb-1">
         <div class="row">
             <div class="cell">
-                <p>
-                    <i class="fa fa-edit"></i>
-                    Rule Editor
-                </p>
+                <i class="fa fa-edit"></i>
+                Rule Editor
             </div>
         </div>
     </div>
@@ -353,11 +386,11 @@
 
                 <div class="group">
 
-                    <button class="ribbon-button">
+                    <button class="ribbon-button" v-on:click="show_upload_and_test">
                             <span class="icon">
                                 <i class="fa fa-upload"></i>
                             </span>
-                        <span class="caption">Upload to Server</span>
+                        <span class="caption">Upload and Test</span>
                     </button>
 
                     <span class="title">Deployment</span>
@@ -487,315 +520,472 @@
         integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
         crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script type="text/javascript" src="./static/lib/brat/lib/head.load.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
 <script src="/static/lib/jszip/jszip-3.1.5.min.js"></script>
 <script src="/static/lib/jszip/FileSaver.js"></script>
 
 <script>
-    var fm_chfila = {
-        vpp: null,
-        vpp_id: '#fm_chfila',
-
-        pack_blank: {
-            name: 'Pack_Name',
-            matchrules: [],
-            rsregexps: [],
-            fns: {
-                used_resources: 'used_resources.txt',
-                resources_rules_matchrules: 'resources_rules_matchrules.txt'
-            }
-        },
-
-        pack_sample: {
-            name: 'Rule_Pack_Name',
-            matchrules: [{
-                rule_name: 'rule_r1a',
-                regexp: '\\b(rule|pack|name)\\b',
-                location: 'NA',
-                norm: 'ANT:group(1)'
-            }, {
-                rule_name: 'rule_r2a',
-                regexp: '\\b(rule|pack|name)\\b',
-                location: 'UC',
-                norm: 'NAT:group(1)'
-            }],
-            rsregexps: [{
-                name: 'reBURG',
-                text: 'pattern(s)?\nnextline\n3rd line'
-            }, {
-                name: 'reBURGAlone',
-                text: 'pattern(s)?\nnextline\n3rd line'
-            }],
-            fns: {
-                used_resources: 'used_resources.txt',
-                resources_rules_matchrules: 'resources_rules_matchrules.txt'
-            }
-        },
-
-        init: function () {
-            this.vpp = new Vue({
-                el: this.vpp_id,
-                data: {
-                    rulepack: Object.assign({}, this.sample),
-                    ui: {
-                        locations: ['NA', 'UC']
-                    }
-                },
-                methods: {
-                    open_sample: function () {
-                        fm_chfila.open_sample();
-                    },
-
-                    create_pack: function () {
-                        this.rulepack = Object.assign({}, fm_chfila.pack_blank);
-                    },
-
-                    download_pack: function () {
-                        fm_chfila.download_pack();
-                    },
-
-                    download_mtrs: function () {
-                        fm_chfila.download_mtrs();
-                    },
-
-                    add_rule: function () {
-                        rulepack.matchrules.push(fm_chfila.create_new_matchrule());
-                    },
-
-                    del_rule: function (rule_name) {
-                        var ret = window.confirm('Are you sure?');
-                        if (ret) {
-                            fm_chfila.del_rule(rule_name);
-                            console.log('* deleted match rule' + rule_name);
-                        } else {
-                        }
-                    },
-
-                    add_rsregexp: function () {
-                        rulepack.rsregexps.push(fm_chfila.create_new_rsregexp());
-                    },
-
-                    del_rsregexp: function (name) {
-                        var ret = window.confirm('Are you sure?');
-                        if (ret) {
-                            fm_chfila.del_rsregexp(name);
-                            console.log('* deleted rsregexp' + name);
-                        } else {
-                        }
-                    },
-
-                    count_lines: function (text) {
-                        return text.split('\n').length;
-                    },
-
-                    valid_pack_name: function (name) {
-                        var re = /^[a-zA-z0-9_]+$/;
-                        return re.test(name);
-                    }
-                },
-
-                mounted: function () {
-                    Metro.init();
-                }
-            });
-        },
-
-        show: function (pack) {
-            this.vpp.rulepack = pack;
-            rulepack = pack;
-        },
-
-        create_new_pack: function () {
-            return {
-                name: 'Pack_Name',
-                matchrules: [],
-                rsregexps: [],
-                fns: {
-                    used_resources: 'used_resources.txt',
-                    resources_rules_matchrules: 'resources_rules_matchrules.txt'
-                }
-            };
-        },
-
-        create_new_matchrule: function () {
-            return {
-                rule_name: 'cm_r00',
-                regexp: '\\b(%reNAME )\\b',
-                location: 'NA',
-                norm: 'NAME:group(1)'
-            };
-        },
-
-        create_new_rsregexp: function () {
-            return {
-                name: 'reNAME',
-                text: ''
-            };
-        },
-
-        del_rule: function (rule_name) {
-            var new_matchrules = [];
-            for (let i = 0; i < rulepack.matchrules.length; i++) {
-                const matchrule = rulepack.matchrules[i];
-                if (matchrule.rule_name == rule_name) {
-
-                } else {
-                    new_matchrules.push(matchrule);
-                }
-            }
-            rulepack.matchrules = new_matchrules;
-        },
-
-        del_rsregexp: function (name) {
-            var new_rsregexps = [];
-            for (let i = 0; i < rulepack.rsregexps.length; i++) {
-                const rsregexp = rulepack.rsregexps[i];
-                if (rsregexp.name == name) {
-
-                } else {
-                    new_rsregexps.push(rsregexp);
-                }
-            }
-            rulepack.rsregexps = new_rsregexps;
-        },
-
-        open_sample: function () {
-            $.get(
-                './static/data/covid19.json',
-                {},
-                function (data) {
-                    fm_chfila.vpp.rulepack = data;
-                    rulepack = data;
-                }, 'json'
-            )
-        },
-
-        save_pack: function () {
-            $.post(
-                './save_rulepack',
-                { rulepack: rulepack },
-                function (data) {
-
-                }, 'json'
-            );
-        },
-
-        download_pack: function () {
-            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(rulepack, null, 2));
-            var dlAnchorElem = document.getElementById('downloadAnchorElem');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", rulepack.name + ".json");
-            dlAnchorElem.click();
-        },
-
-        download_mtrs: function () {
-            var zip = new JSZip();
-
-            // create the file list of regexp
-            var txt_fns = '';
-            for (let i = 0; i < rulepack.rsregexps.length; i++) {
-                const rsregexp = rulepack.rsregexps[i];
-                var ffn = 'regexp/resources_regexp_' + rsregexp.name + '.txt';
-                var txt = rsregexp.text;
-                txt_fns += './' + ffn + '\n';
-
-                zip.file(ffn, txt);
-                console.log('* add ' + ffn);
-            }
-
-            // create the rule file
-            var rules = '// ' + rulepack.name + '\n';
-            for (let i = 0; i < rulepack.matchrules.length; i++) {
-                const matchrule = rulepack.matchrules[i];
-                rules += 'RULENAME="' + matchrule.rule_name + '",';
-                rules += 'REGEXP="' + matchrule.regexp + '",';
-                rules += 'LOCATION="' + matchrule.location + '",';
-                rules += 'NORM="' + matchrule.norm + '"\n';
-            }
-            var rule_fn = 'rules/' + rulepack.fns.resources_rules_matchrules;
-            txt_fns += './' + rule_fn + '\n';
-
-            zip.file(rule_fn, rules);
-            console.log('* add ' + rule_fn);
-
-            // create the used_resources.txt
-            txt_fns += './' + rulepack.fns.used_resources + '\n';
-            zip.file(rulepack.fns.used_resources, txt_fns)
-
-            // download this zip
-            zip.generateAsync({ type: "blob" }).then(function (content) {
-                saveAs(content, rulepack.name + ".zip");
-            });
+var collData = {
+    entity_types: [{
+        type: 'Regex',
+        labels: ['Regex'],
+        bgColor: '#7fa2ff',
+        borderColor: 'darken'
+    }, {
+        type: "Dict",
+        labels: ['Dict'],
+        bgColor: '#5ea015',
+        borderColor: 'darken'
+    }, {
+        type: "Other",
+        labels: ['Other'],
+        bgColor: '#6251f3',
+        borderColor: 'darken'
+    }],
+    entity_attribute_types: [{
+        type: 'norm',
+        /* brat supports multi-valued attributes, but in our case we will only
+            use a single value and add a glyph to the visualisation to indicate
+            that the entity carries that attribute */
+        values: {
         }
-    };
+    },
+        {
+            "values": {
+                "Positive": {
+                    // "box": "none",
+                    "glyph": "[Positive]",
+                    // "dashArray": "1,2" //Incertitude
+                },
+                "Negated": {
+                    // "box": "crossed",
+                    "glyph": "[Negated]",
+                    // "dashArray": "3,4" //Incertitude
+                }
+            },
+            "type": "certainty",
+            "name": "certainty"
+        },
+        {
+            "values": {
+                "Present": {
+                    "glyph": "[Present]",
+                },
+                "HistoryOf": {
+                    "glyph": "[HistoryOf]",
+                }
+            },
+            "type": "status",
+            "name": "status"
+        },
+        {
+            "values": {
+                "Patient": {
+                    "glyph": "[Patient]",
+                },
+                "Others": {
+                    "glyph": "[Others]",
+                }
+            },
+            "type": "experiencer",
+            "name": "experiencer"
+        },
+    ]
+};
 
-    // var fm_dropzn = {
-    //     dropzone: null,
-    //     dropzone_id: 'drop_zone',
+var fig_bratvis = {
+    plot_id: 'fig_bratvis',
+    bratLocation: '/static/lib/brat',
 
-    //     fileinput: null,
-    //     fileinput_id: 'drop_file',
+    init: function () {
 
-    //     init: function() {
-    //         this.dropzone = document.getElementById(this.dropzone_id);
-    //         this.dropzone.addEventListener('drop', this.handleFileSelect, false);
-    //         this.dropzone.addEventListener('dragover', this.handleDragOver, false);
+        head.js(
+            // External libraries
+            this.bratLocation + '/lib/jquery.min.js',
+            this.bratLocation + '/lib/jquery.svg.min.js',
+            this.bratLocation + '/lib/jquery.svgdom.min.js',
 
-    //         this.fileinput = document.getElementById(this.fileinput_id);
-    //         this.fileinput.addEventListener('change', this.handleFileSelect, false);
-    //     },
+            // brat helper modules
+            this.bratLocation + '/src/configuration.js',
+            this.bratLocation + '/src/util.js',
+            this.bratLocation + '/src/annotation_log.js',
+            this.bratLocation + '/lib/webfont.js',
 
-    //     handleFileSelect: function(evt) {
-    //         evt.stopPropagation();
-    //         evt.preventDefault();
+            // brat modules
+            this.bratLocation + '/src/dispatcher.js',
+            this.bratLocation + '/src/url_monitor.js',
+            this.bratLocation + '/src/visualizer.js'
+        );
 
-    //         // FileList object.
-    //         var files = evt.target.files || evt.dataTransfer.files;
+        head.ready(function () {
+            // bind to local variable
+            fig_bratvis.Util = Util;
+        });
+    },
 
-    //         // files is a FileList of File objects. List some properties.
-    //         var output = [];
-    //         for (var i = 0, f; f = files[i]; i++) {
-    //             output.push(
-    //                 '<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-    //                 f.size, ' bytes, last modified: ',
-    //                 f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-    //                 '</li>'
-    //             );
-    //             console.log('* found ' + f.name);
+    draw: function (data) {
+        this.data = data;
+        // $('#' + this.plot_id).html('');
+        // create a new div
+        var new_div_id = this.plot_id + '_' + (Math.random() * 100000).toFixed(0);
 
-    //             fm_dropzn.read_json(f);
-    //         }
-    //     },
+        $('#' + this.plot_id).html(`
+        <div id="${new_div_id}" style="width:100%;">
+        </div>
+        `);
 
-    //     handleDragOver: function(evt) {
-    //         evt.stopPropagation();
-    //         evt.preventDefault();
-    //         // Explicitly show this is a copy.
-    //         evt.dataTransfer.dropEffect = 'copy';
-    //     },
+        // update the collData according to data
+        for (let i = 0; i < data.attributes.length; i++) {
+            const attr = data.attributes[i];
+            var t = attr[1];
+            var v = attr[3];
+            if (collData.entity_attribute_types[0].values.hasOwnProperty(v)) {
 
-    //     read_json: function(f) {
-    //         var reader = new FileReader();
-    //         reader.onload = function(e) {
-    //             var text = e.target.result;
-    //             var j = JSON.parse(text);
-    //             console.log(j);
-    //             fm_chfila.show(j);
-    //         };
-    //         reader.readAsText(f);
-    //     }
-    // }
+            } else {
+                collData.entity_attribute_types[0].values[v] = {
+                    glyph: "[" + v + "]"
+                };
+            }
+        }
 
-
-    function init() {
-        fm_chfila.init();
-        // fm_dropzn.init();
+        this.Util.embed(
+            new_div_id,
+            $.extend({}, collData),
+            $.extend({}, data),
+            webFontURLs
+        )
     }
+};
 
-    $(document).ready(function () {
-        init();
-    })
+
+var webFontURLs = [
+    fig_bratvis.bratLocation + '/css/fonts/Astloch-Bold.ttf',
+    fig_bratvis.bratLocation + '/css/fonts/PT_Sans-Caption-Web-Regular.ttf',
+    fig_bratvis.bratLocation + '/css/fonts/Liberation_Sans-Regular.ttf'
+];
+
+
+var fm_chfila = {
+    vpp: null,
+    vpp_id: '#fm_chfila',
+    rulepack: null,
+
+    pack_sample: {
+        name: 'rule_pack_name',
+        matchrules: [{
+            rule_name: 'rule_r1a',
+            regexp: '\\b(rule|pack|name)\\b',
+            location: 'NA',
+            norm: 'ANT:group(1)'
+        }, {
+            rule_name: 'rule_r2a',
+            regexp: '\\b(rule|pack|name)\\b',
+            location: 'UC',
+            norm: 'NAT:group(1)'
+        }],
+        rsregexps: [{
+            name: 'resources_regexp_reBURG',
+            text: 'pattern(s)?\nnextline\n3rd line'
+        }, {
+            name: 'resources_regexp_reBURGAlone',
+            text: 'pattern(s)?\nnextline\n3rd line'
+        }],
+        fns: {
+            used_resources: 'used_resources.txt',
+            resources_rules_matchrules: 'resources_rules_matchrules.txt'
+        }
+    },
+
+    init: function () {
+        this.vpp = new Vue({
+            el: this.vpp_id,
+            data: {
+                rulepack: Object.assign({}, fm_chfila.sample),
+                ui: {
+                    locations: ['NA', 'UC']
+                }
+            },
+            methods: {
+                open_sample: function () {
+                    fm_chfila.open_sample();
+                },
+
+                create_pack: function () {
+                    this.rulepack = fm_chfila.create_new_pack();
+                    fm_chfila.rulepack = this.rulepack;
+                },
+
+                download_pack: function () {
+                    fm_chfila.download_pack();
+                },
+
+                download_mtrs: function () {
+                    fm_chfila.download_mtrs();
+                },
+
+                add_rule: function () {
+                    this.rulepack.matchrules.push(fm_chfila.create_new_matchrule());
+                },
+
+                del_rule: function (rule_name) {
+                    var ret = window.confirm('Are you sure?');
+                    if (ret) {
+                        fm_chfila.del_rule(rule_name);
+                        console.log('* deleted match rule' + rule_name);
+                    } else {
+                    }
+                },
+
+                add_rsregexp: function () {
+                    this.rulepack.rsregexps.push(fm_chfila.create_new_rsregexp());
+                },
+
+                del_rsregexp: function (name) {
+                    var ret = window.confirm('Are you sure?');
+                    if (ret) {
+                        fm_chfila.del_rsregexp(name);
+                        console.log('* deleted rsregexp' + name);
+                    } else {
+                    }
+                },
+
+                count_lines: function (text) {
+                    return text.split('\n').length;
+                },
+
+                valid_pack_name: function (name) {
+                    var re = /^[a-zA-z0-9_]+$/;
+                    return re.test(name);
+                },
+
+                show_upload_and_test: function() {
+                    Metro.infobox.open('#infobox-upload-and-test');
+                }
+            },
+
+            mounted: function () {
+                Metro.init();
+            }
+        });
+    },
+
+    show: function (pack) {
+        this.vpp.rulepack = pack;
+        this.rulepack = pack;
+    },
+
+    create_new_pack: function () {
+        return {
+            name: 'rule_pack_name',
+            matchrules: [ this.create_new_matchrule() ],
+            rsregexps: [ this.create_new_rsregexp() ],
+            fns: {
+                used_resources: 'used_resources.txt',
+                resources_rules_matchrules: 'resources_rules_matchrules.txt'
+            }
+        };
+    },
+
+    create_new_matchrule: function () {
+        return {
+            rule_name: 'cm_r00',
+            regexp: '\\b(?:%reNAME)\\b',
+            location: 'NA',
+            norm: 'NAME'
+        };
+    },
+
+    create_new_rsregexp: function () {
+        return {
+            name: 'resources_regexp_reNAME',
+            text: 'myname\nyourname\nothername'
+        };
+    },
+
+    del_rule: function (rule_name) {
+        var new_matchrules = [];
+        for (let i = 0; i < this.rulepack.matchrules.length; i++) {
+            const matchrule = this.rulepack.matchrules[i];
+            if (matchrule.rule_name == rule_name) {
+
+            } else {
+                new_matchrules.push(matchrule);
+            }
+        }
+        this.rulepack.matchrules = new_matchrules;
+    },
+
+    del_rsregexp: function (name) {
+        var new_rsregexps = [];
+        for (let i = 0; i < this.rulepack.rsregexps.length; i++) {
+            const rsregexp = this.rulepack.rsregexps[i];
+            if (rsregexp.name == name) {
+
+            } else {
+                new_rsregexps.push(rsregexp);
+            }
+        }
+        this.rulepack.rsregexps = new_rsregexps;
+    },
+
+    open_sample: function () {
+        $.get(
+            './static/data/covid19.json',
+            {},
+            function (data) {
+                fm_chfila.vpp.rulepack = data;
+                fm_chfila.rulepack = data;
+            }, 'json'
+        )
+    },
+
+    save_pack: function () {
+        $.post(
+            './save_rulepack',
+            { rulepack: this.rulepack },
+            function (data) {
+
+            }, 'json'
+        );
+    },
+
+    download_pack: function () {
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.rulepack, null, 2));
+        var dlAnchorElem = document.getElementById('downloadAnchorElem');
+        dlAnchorElem.setAttribute("href", dataStr);
+        dlAnchorElem.setAttribute("download", this.rulepack.name + ".json");
+        dlAnchorElem.click();
+    },
+
+    download_mtrs: function () {
+        var zip = new JSZip();
+
+        // create the file list of regexp
+        var txt_fns = '';
+        for (var i = 0; i < this.rulepack.rsregexps.length; i++) {
+            var rsregexp = this.rulepack.rsregexps[i];
+            var ffn = 'regexp/' + rsregexp.name + '.txt';
+            var txt = rsregexp.text;
+            txt_fns += './' + ffn + '\n';
+
+            zip.file(ffn, txt);
+            console.log('* add ' + ffn);
+        }
+
+        // create the rule file
+        var rules = '// ' + this.rulepack.name + '\n';
+        for (let i = 0; i < this.rulepack.matchrules.length; i++) {
+            const matchrule = this.rulepack.matchrules[i];
+            rules += 'RULENAME="' + matchrule.rule_name + '",';
+            rules += 'REGEXP="' + matchrule.regexp + '",';
+            rules += 'LOCATION="' + matchrule.location + '",';
+            rules += 'NORM="' + matchrule.norm + '"\n';
+        }
+        var rule_fn = 'rules/' + this.rulepack.fns.resources_rules_matchrules;
+        txt_fns += './' + rule_fn + '\n';
+
+        zip.file(rule_fn, rules);
+        console.log('* add ' + rule_fn);
+
+        // create the used_resources.txt
+        txt_fns += './' + this.rulepack.fns.used_resources + '\n';
+        zip.file(this.rulepack.fns.used_resources, txt_fns)
+
+        // download this zip
+        zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, this.rulepack.name + ".zip");
+        });
+    },
+
+    upload_and_test: function() {
+        $('#btn-upload-and-test').attr('disabled', 'disabled');
+        // var doc_text = window.prompt('doc_text:', 'I have a dry cough and fever. No sore throat');
+        var doc_text = $('#text-for-test').val();
+        $.post(
+            '/ie_editor_test',
+            {rulepack: JSON.stringify(this.rulepack), doc_text: doc_text},
+            function(data) {
+                $('#btn-upload-and-test').attr('disabled', null);
+                console.log(data);
+                if (data.success) {
+                    fig_bratvis.draw(data.data);
+                } else {
+                    $('#fig_bratvis').html('<p>' + data.msg + '<p>');
+                }
+            }, 'json'
+        )
+    }
+};
+
+// var fm_dropzn = {
+//     dropzone: null,
+//     dropzone_id: 'drop_zone',
+
+//     fileinput: null,
+//     fileinput_id: 'drop_file',
+
+//     init: function() {
+//         this.dropzone = document.getElementById(this.dropzone_id);
+//         this.dropzone.addEventListener('drop', this.handleFileSelect, false);
+//         this.dropzone.addEventListener('dragover', this.handleDragOver, false);
+
+//         this.fileinput = document.getElementById(this.fileinput_id);
+//         this.fileinput.addEventListener('change', this.handleFileSelect, false);
+//     },
+
+//     handleFileSelect: function(evt) {
+//         evt.stopPropagation();
+//         evt.preventDefault();
+
+//         // FileList object.
+//         var files = evt.target.files || evt.dataTransfer.files;
+
+//         // files is a FileList of File objects. List some properties.
+//         var output = [];
+//         for (var i = 0, f; f = files[i]; i++) {
+//             output.push(
+//                 '<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+//                 f.size, ' bytes, last modified: ',
+//                 f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+//                 '</li>'
+//             );
+//             console.log('* found ' + f.name);
+
+//             fm_dropzn.read_json(f);
+//         }
+//     },
+
+//     handleDragOver: function(evt) {
+//         evt.stopPropagation();
+//         evt.preventDefault();
+//         // Explicitly show this is a copy.
+//         evt.dataTransfer.dropEffect = 'copy';
+//     },
+
+//     read_json: function(f) {
+//         var reader = new FileReader();
+//         reader.onload = function(e) {
+//             var text = e.target.result;
+//             var j = JSON.parse(text);
+//             console.log(j);
+//             fm_chfila.show(j);
+//         };
+//         reader.readAsText(f);
+//     }
+// }
+
+
+function init() {
+    fm_chfila.init();
+    fig_bratvis.init();
+    // fm_dropzn.init();
+}
+
+$(document).ready(function () {
+    init();
+})
 
 </script>
 </body>
