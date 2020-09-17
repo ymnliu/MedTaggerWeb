@@ -116,6 +116,11 @@ public class JSONAnnotation {
         return new JSONAnnotation(cmList, attribList);
     }
 
+
+    public static JSONAnnotation generateTimex3BratJson(final Collection<org.apache.uima.jcas.tcas.Annotation> timex3s) {
+        return generateTimex3BratJson(timex3s, 1, 1);
+    }
+
     /**
      * Wrap list of concept mentions into json list to feed into the "entity" js
      * field.
@@ -123,12 +128,10 @@ public class JSONAnnotation {
      * @param timex3s List of Annotation from UIMA
      * @return list of JSON array for Brat to display in the html template
      */
-    public static JSONAnnotation generateTimex3BratJson(final Collection<org.apache.uima.jcas.tcas.Annotation> timex3s) {
+    public static JSONAnnotation generateTimex3BratJson(final Collection<org.apache.uima.jcas.tcas.Annotation> timex3s,
+                                                        int entityIdInt, int attribIdInt) {
         JSONArray timex3List = new JSONArray();
         JSONArray attribList = new JSONArray();
-
-        int entityIdInt = 1;
-        int attribIdInt = 1;
 
         if (timex3s == null) {
             // Return empty lists
@@ -158,6 +161,20 @@ public class JSONAnnotation {
             spans.add(tokenBeginEnd);
             entityProperties.add(spans);
             timex3List.add(entityProperties);
+
+            JSONArray typeProperties = new JSONArray();
+            typeProperties.add(String.format("A%d", attribIdInt++));
+            typeProperties.add("TimexType");
+            typeProperties.add(bratEntityId);
+            typeProperties.add(timex3.getTimexType());
+            attribList.add(typeProperties);
+
+            JSONArray valProperties = new JSONArray();
+            valProperties.add(String.format("A%d", attribIdInt++));
+            valProperties.add("val");
+            valProperties.add(bratEntityId);
+            valProperties.add(timex3.getTimexValue());
+            attribList.add(valProperties);
 
         }
 
