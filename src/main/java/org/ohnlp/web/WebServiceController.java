@@ -236,7 +236,7 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-        auth.login();
+        auth.login("https://ohnlp4covid-dev.n3c.ncats.io/");
 //        auth.processResponse();
         System.out.println(auth.isAuthenticated());
         return "login.html";

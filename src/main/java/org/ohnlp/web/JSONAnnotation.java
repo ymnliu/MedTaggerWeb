@@ -150,7 +150,7 @@ public class JSONAnnotation {
 
             // detectionMethod: "DictionaryLookup"
             // detectionMethod: "Matched"
-            entityProperties.add("Regex");
+            entityProperties.add("Timex3");
             JSONArray spans = new JSONArray();
             JSONArray tokenBeginEnd = new JSONArray();
             tokenBeginEnd.add(timex3.getBegin());
