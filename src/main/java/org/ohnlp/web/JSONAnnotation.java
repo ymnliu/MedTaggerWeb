@@ -28,6 +28,15 @@ public class JSONAnnotation {
         this.attribList.addAll(toAdd.getAttribList());
     }
 
+    public int getAnnotMentionSize(){
+        return this.cmList.size();
+    }
+
+    public int getAnnotAttribSize(){
+        return this.attribList.size();
+    }
+
+
     /**
      * Wrap list of concept mentions into json list to feed into the "entity" js
      * field.

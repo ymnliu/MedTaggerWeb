@@ -117,7 +117,8 @@ public class N3CNLPEngine {
         HashMap<String, Collection> resultMap = getResultMap(docText);
         JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(resultMap.get("cm"));
 
-        jsAnnot.add(JSONAnnotation.generateTimex3BratJson(resultMap.get("timex3")));
+        jsAnnot.add(JSONAnnotation.generateTimex3BratJson(resultMap.get("timex3"), jsAnnot.getAnnotMentionSize() + 1,
+                jsAnnot.getAnnotAttribSize() + 1));
 
         // build the output data
         JSONObject data = new JSONObject();
