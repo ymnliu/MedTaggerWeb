@@ -307,7 +307,7 @@ public class WebServiceController {
         return "login.html";
     }
 
-    @PostMapping("/logged_in")
+    @RequestMapping("/logged_in")
     public String testLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
         return dummy(request,  response,  session);
     }
