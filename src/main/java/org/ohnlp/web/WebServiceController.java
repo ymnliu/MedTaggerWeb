@@ -71,8 +71,18 @@ public class WebServiceController {
 
 
     @PostMapping("/")
-    public String dummy() {
-        return "dummy";
+    public ModelAndView dummy(HttpServletRequest request, HttpServletResponse response) {
+
+        logger.debug("Successful Login");
+        logger.info("Request Body: "+ request.toString());
+        logger.info("Response Body: "+ response.toString());
+
+
+        ModelAndView indexView = new ModelAndView();
+        WebInputText webInputText = new WebInputText(request.toString() + response.toString());
+        indexView.addObject("input_text", webInputText);
+        indexView.setViewName("demo");
+        return indexView;
     }
 
         /**
@@ -246,11 +256,8 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-//        auth.login("http://localhost/demo");
+        auth.login("http://localhost/demo");
 
-        auth.login("http://localhost/demo", false, false, true, false);
-
-//        auth.processResponse();
         System.out.println(auth.isAuthenticated());
         return "login.html";
     }
