@@ -71,18 +71,14 @@ public class WebServiceController {
 
 
     @PostMapping("/")
-    public ModelAndView dummy(HttpServletRequest request, HttpServletResponse response) {
+    public String dummy(HttpServletRequest request, HttpServletResponse response) throws SettingsException, Error, IOException {
+        Auth auth = new Auth(request, response);
 
         logger.debug("Successful Login");
         logger.info("Request Body: "+ request.toString());
         logger.info("Response Body: "+ response.toString());
 
-
-        ModelAndView indexView = new ModelAndView();
-        WebInputText webInputText = new WebInputText(request.toString() + response.toString());
-        indexView.addObject("input_text", webInputText);
-        indexView.setViewName("demo");
-        return indexView;
+        return request.toString() + "\n" + response.toString() + "\n" + auth.isAuthenticated();
     }
 
         /**
