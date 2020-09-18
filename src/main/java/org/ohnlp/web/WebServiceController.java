@@ -301,11 +301,17 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-        auth.login("http://localhost/demo");
+        auth.login("http://localhost/logged_in");
 
         System.out.println(auth.isAuthenticated());
         return "login.html";
     }
+
+    @PostMapping("/logged_in")
+    public String testLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
+        return dummy(request,  response,  session);
+    }
+
 
     /**
      * Logout (fake)
