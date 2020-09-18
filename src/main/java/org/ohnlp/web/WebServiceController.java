@@ -1,5 +1,7 @@
 package org.ohnlp.web;
 
+import com.onelogin.saml2.servlet.ServletUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.type.ConceptMention;
@@ -16,6 +18,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,14 +75,59 @@ public class WebServiceController {
 
 
     @PostMapping("/")
-    public String dummy(HttpServletRequest request, HttpServletResponse response) throws SettingsException, Error, IOException {
+    public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
         Auth auth = new Auth(request, response);
+        StringBuilder sb = new StringBuilder();
+        if (!auth.isAuthenticated()) {
+            sb.append("<div class=\"alert alert-danger\" role=\"alert\">Not authenticated</div>");
+        }
+        List<String> errors = auth.getErrors();
+        if (!errors.isEmpty()) {
+            sb.append("<p>" + StringUtils.join(errors, ", ") + "</p>");
+            if (auth.isDebugActive()) {
+                String errorReason = auth.getLastErrorReason();
+                if (errorReason != null && !errorReason.isEmpty()) {
+                    sb.append("<p>" + auth.getLastErrorReason() + "</p>");
+                }
+            }
+            sb.append("<a href=\"dologin.jsp\" class=\"btn btn-primary\">Login</a>");
+        } else {
+            Map<String, List<String>> attributes = auth.getAttributes();
+            String nameId = auth.getNameId();
+            String nameIdFormat = auth.getNameIdFormat();
+            String sessionIndex = auth.getSessionIndex();
+            String nameidNameQualifier = auth.getNameIdNameQualifier();
+            String nameidSPNameQualifier = auth.getNameIdSPNameQualifier();
+            session.setAttribute("attributes", attributes);
+            session.setAttribute("nameId", nameId);
+            session.setAttribute("nameIdFormat", nameIdFormat);
+            session.setAttribute("sessionIndex", sessionIndex);
+            session.setAttribute("nameidNameQualifier", nameidNameQualifier);
+            session.setAttribute("nameidSPNameQualifier", nameidSPNameQualifier);
 
-        logger.debug("Successful Login");
-        logger.info("Request Body: "+ request.toString());
-        logger.info("Response Body: "+ response.toString());
+            String relayState = request.getParameter("RelayState");
+            if (relayState != null && !relayState.isEmpty() && !relayState.equals(ServletUtils.getSelfRoutedURLNoQuery(request)) &&
+                    !relayState.contains("/dologin.jsp")) { // We don't want to be redirected to login.jsp neither
+                response.sendRedirect(request.getParameter("RelayState"));
+            } else {
 
-        return request.toString() + "\n" + response.toString() + "\n" + auth.isAuthenticated();
+                if (attributes.isEmpty()) {
+                } else {
+                    Collection<String> keys = attributes.keySet();
+                    for (String name : keys) {
+                        sb.append("<tr><td>" + name + "</td><td>");
+                        List<String> values = attributes.get(name);
+                        for (String value : values) {
+                            sb.append("<li>" + value + "</li>");
+                        }
+
+                        sb.append("</td></tr>");
+                    }
+                }
+            }
+        }
+
+        return sb.toString();
     }
 
         /**
