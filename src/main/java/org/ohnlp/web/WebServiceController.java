@@ -69,12 +69,18 @@ public class WebServiceController {
         return aboutView;
     }
 
-    /**
-     * How to display NLP results .
-     *
-     * @return the updated view out of index-template
-     */
+
     @PostMapping("/")
+    public String dummy() {
+        return "dummy";
+    }
+
+        /**
+         * How to display NLP results .
+         *
+         * @return the updated view out of index-template
+         */
+    @PostMapping("/submit")
     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
         // To get a list of concept mentions
 
