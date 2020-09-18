@@ -1,6 +1,7 @@
 package org.ohnlp.web;
 
 import com.onelogin.saml2.servlet.ServletUtils;
+import com.onelogin.saml2.settings.Saml2Settings;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.json.simple.JSONObject;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.security.cert.CertificateEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +76,7 @@ public class WebServiceController {
     }
 
 
-    @PostMapping("/")
+    @GetMapping("/acs")
     public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
         Auth auth = new Auth(request, response);
         StringBuilder sb = new StringBuilder();
@@ -129,6 +131,25 @@ public class WebServiceController {
 
         return sb.toString();
     }
+
+    @GetMapping("/metadata")
+    public String displayMetaData(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        Auth auth = new Auth();
+        Saml2Settings settings = auth.getSettings();
+        String metadata = settings.getSPMetadata();
+        List<String> errors = Saml2Settings.validateMetadata(metadata);
+        if (errors.isEmpty()) {
+            sb.append(metadata);
+        } else {
+            response.setContentType("text/html; charset=UTF-8");
+            for (String error : errors) {
+                sb.append("<p>"+error+"</p>");
+            }
+        }
+        return sb.toString();
+    }
+
 
         /**
          * How to display NLP results .
@@ -301,17 +322,11 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-        auth.login("http://localhost/logged_in");
+        auth.login("http://localhost/acs");
 
         System.out.println(auth.isAuthenticated());
         return "login.html";
     }
-
-    @RequestMapping("/logged_in")
-    public String testLogin(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
-        return dummy(request,  response,  session);
-    }
-
 
     /**
      * Logout (fake)
