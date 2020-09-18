@@ -78,6 +78,10 @@ public class WebServiceController {
     public ModelAndView submit(@ModelAttribute WebInputText webInputText) {
         // To get a list of concept mentions
 
+        if(webInputText == null){
+            webInputText = new WebInputText("test post login");
+        }
+
         HashMap<String, Collection> annotMap = n3CNLPEngine.getResultMap(webInputText.getDocText());
 
         // render template for the fields in index-template
@@ -236,12 +240,14 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-        auth.login("https://ohnlp4covid-dev.n3c.ncats.io/");
+//        auth.login("http://localhost/demo");
+
+        auth.login("http://localhost/demo", false, false, true, false);
+
 //        auth.processResponse();
         System.out.println(auth.isAuthenticated());
         return "login.html";
     }
-
 
     /**
      * Logout (fake)
