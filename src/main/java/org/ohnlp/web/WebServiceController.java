@@ -76,7 +76,7 @@ public class WebServiceController {
     }
 
 
-    @PostMapping("/acs")
+    @GetMapping("/acs")
     public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
         Auth auth = new Auth(request, response);
         StringBuilder sb = new StringBuilder();
@@ -322,7 +322,7 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-        auth.login("https://localhost/acs");
+        auth.login("https://ohnlp4covid-dev.n3c.ncats.io/acs");
 
         System.out.println(auth.isAuthenticated());
         return "login.html";
