@@ -76,7 +76,7 @@ public class WebServiceController {
     }
 
 
-    @PostMapping("/acs")
+    @PostMapping("/")
     public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
         Auth auth = new Auth(request, response);
         StringBuilder sb = new StringBuilder();
