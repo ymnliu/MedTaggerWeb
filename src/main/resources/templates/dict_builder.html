@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
@@ -21,6 +19,17 @@
         /* fix vuetify.js default style */
         .v-treeview--dense .v-treeview-node__root {
             min-height: 24px;
+        }
+        .container {
+            padding: 0 15px;
+        }
+        #fm_dtbder {
+            margin-top: 70px;
+        }
+        @media (min-width: 960px) {
+            .container {
+                max-width: 100%;
+            }
         }
     </style>
     </head>
@@ -68,13 +77,12 @@
 
 </nav>
 
+<div id="fm_dtbder">
     <div class="container-fluid bg-darkCyan fg-white mb-1">
         <div class="row">
             <div class="cell">
-                <p>
-                    <i class="fa fa-book-medical"></i>
-                    Dictionary Builder
-                </p>
+                <i class="fa fa-book-medical"></i>
+                Dictionary Builder
             </div>
         </div>
     </div>
@@ -190,7 +198,7 @@
 
     
     </div>
-    
+</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
         integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
