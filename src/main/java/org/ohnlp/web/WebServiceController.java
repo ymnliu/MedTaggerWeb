@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -290,9 +292,11 @@ public class WebServiceController {
 
         // save the rulepack to guest temp folder
         try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String doc_date = sdf.format(new Date());
             Path userTempPath = IEEditorHelper.saveIERulePack(rulepack);
             N3CNLPEngine userEngine = new N3CNLPEngine(userTempPath.toAbsolutePath().toString());
-            JSONObject ret = userEngine.getResultJSON(docText);
+            JSONObject ret = userEngine.getResultJSON(docText, doc_date);
             return ret;
             
         } catch (Exception e) {

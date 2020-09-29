@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="./static/lib/brat/css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
     <title>COVID-19 Term Detector</title>
     <link href="./static/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
@@ -34,12 +34,27 @@
             padding: 0;
         }
 
+        /* for brat visualization */
+        #fig_bratvis {
+            width: 100%;
+            min-width: 500px;
+            min-height: 280px;
+        }
+        .brat-vis {
+            width: 100%;
+            min-width: 500px;
+            min-height: 280px;
+        }
+        #fig_bratvis svg {
+            border: 1px solid #efefef;
+        }
+
         /* for this page */
-        #output-json {
+        .pre-output {
             font-size: 10px;
             line-height: 12px;
             max-height: 200px;
-            height: 200px;
+            height: 280px;
             border: 1px solid #dddddd;
             overflow-y: auto;
             padding: 5px;
@@ -100,14 +115,14 @@
             <div class="row">
 
                 <div class="col-md-5">
-                    <h5>Input Text
+                    <h5 class="mt-2">Input Text
                         <small>Maximum length: 3,000 characters</small>
                     </h5>
                     <div class="form-group">
-                        <textarea id="text" maxlength="3000" width="100%" class="form-control"
-                                  rows="10">The patient had a dry cough and fever or chills yesterday. He is also experiencing new loss of taste today. </textarea>
+                        <textarea id="text" maxlength="3000" width="100%" class="form-control" rows="10">The patient had a dry cough and fever or chills yesterday. He is also experiencing new loss of taste today and three days ago.</textarea>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group form-inline">
+                        <p>Document Date: <input class="form-control" type="text" id="datepicker" size="30"></p>
                         <button class="btn btn-primary btn-sm" onclick="jarvis.parse();">
                             <i class="fa fa-pencil-alt"></i>
                             Run MedTagger
@@ -117,16 +132,40 @@
 
 
                 <div class="col-md-7">
-                    <h5>Visualization</h5>
-                    <!--                <p id="output-msg">JSON response for <a href="https://brat.nlplab.org/embed.html" target="_blank">brat</a>:</p>-->
-                    <div id="output" style="width: 100%;">
-                        <!--                    <pre id="output-json"></pre>-->
-                        <div id="fig_bratvis">
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="vis-tab" data-toggle="tab" href="#output_tab_vis" role="tab" aria-controls="output_tab_vis" aria-selected="true">Visualization</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="func1-tab" data-toggle="tab" href="#output_tab_func1" role="tab" aria-controls="output_tab_func1" aria-selected="false">Funtion X</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="raw-tab" data-toggle="tab" href="#output_tab_rawoutput" role="tab" aria-controls="output_tab_rawoutput" aria-selected="false">Raw Output</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="output_tab_vis" role="tabpanel" aria-labelledby="vis-tab">
+                            <p class="mt-2">Brat visualization</p>
+                            <div id="fig_bratvis">
+    
+                            </div>
+                            <p class="mt-2"> Powered by <a href="https://brat.nlplab.org/embed.html" target="_blank">brat</a>. </p>
 
                         </div>
-                        <p> Powered by <a href="https://brat.nlplab.org/embed.html" target="_blank">brat</a>. </p>
+                        
+                        <div class="tab-pane fade" id="output_tab_func1" role="tabpanel" aria-labelledby="func1-tab">
+                            <p class="mt-2">Other output content</p>
+                            <pre id="output_func1" class="pre-output"></pre>
+                        </div>
 
+                        <div class="tab-pane fade" id="output_tab_rawoutput" role="tabpanel" aria-labelledby="raw-tab">
+                            <p id="output-msg" class="mt-2">JSON response:</p>
+                            <pre id="output_json" class="pre-output"></pre>
+                        </div>
                     </div>
+                    
                 </div>
 
             </div>
@@ -210,15 +249,15 @@
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-                integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-                crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
-                integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"
-                crossorigin="anonymous"></script>
-        <script type="text/javascript" src="./static/lib/brat/lib/head.load.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+        <script src="./static/lib/brat/lib/head.load.min.js"></script>
         <script src="https://www.google.com/recaptcha/api.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.36/dayjs.min.js"></script>
+        
         <script>
             var collData = {
                 entity_types: [{
@@ -232,19 +271,44 @@
                     bgColor: '#5ea015',
                     borderColor: 'darken'
                 }, {
-                    type: "Other",
-                    labels: ['Other'],
-                    bgColor: '#6251f3',
+                    type: "Timex3",
+                    labels: ['Timex3'],
+                    bgColor: '#8f84ec',
                     borderColor: 'darken'
                 }],
-                entity_attribute_types: [{
-                    type: 'norm',
-                    /* brat supports multi-valued attributes, but in our case we will only
-                        use a single value and add a glyph to the visualisation to indicate
-                        that the entity carries that attribute */
-                    values: {
-                    }
-                },
+                entity_attribute_types: [
+                    {
+                        'type': 'norm',
+                        /* brat supports multi-valued attributes, but in our case we will only
+                            use a single value and add a glyph to the visualisation to indicate
+                            that the entity carries that attribute */
+                        'values': {
+                        }
+                    },
+                    {
+                        "type": "val",
+                        "name": "TimexVal",
+                        "values": {
+                        }
+                    },
+                    {
+                        "type": "TimexType",
+                        "name": "TimexType",
+                        "values": {
+                            "DATE": {
+                                "glyph": "[DATE]",
+                            },
+                            "TIME": {
+                                "glyph": "[TIME]",
+                            },
+                            "DATETIME": {
+                                "glyph": "[DATETIME]",
+                            },
+                            "DURATION": {
+                                "glyph": "[DURATION]",
+                            }
+                        }
+                    },
                     {
                         "values": {
                             "Positive": {
@@ -284,13 +348,41 @@
                         },
                         "type": "experiencer",
                         "name": "experiencer"
-                    },
+                    }
                 ]
             };
 
             var fig_bratvis = {
                 plot_id: 'fig_bratvis',
                 bratLocation: '/static/lib/brat',
+
+                timex2date: function(v, d) {
+                    // v is the TPZ#YYYY-MM-DD format date string from result
+                    // d is the YYYY-MM-DD format date string of baseline date
+                    var date = v;
+                    if (v.substring(0, 3) == 'TPZ') {
+                        var sign = v.substring(3, 4);
+                        var dnum = v.substring(4, 10).split('-');
+
+                        var d_year = parseInt(dnum[0]);
+                        var d_month = parseInt(dnum[1]);
+                        var d_day = parseInt(dnum[2]);
+
+                        date = dayjs(d);
+                        if (sign == '-') {
+                            date = date.subtract(d_day, 'day');
+                            date = date.subtract(d_month, 'month');
+                            date = date.subtract(d_year, 'year');
+                        } else {
+                            date = date.add(d_day, 'day');
+                            date = date.add(d_month, 'month');
+                            date = date.add(d_year, 'year');
+                        }
+                    } else {
+                        date = dayjs(v);
+                    }
+                    return date;
+                },
 
                 init: function () {
 
@@ -321,28 +413,43 @@
                     });
                 },
 
-                draw: function (data) {
+                draw: function (data, doc_date) {
+                    // update data
                     this.data = data;
+                    this.doc_data = doc_date;
+
                     // $('#' + this.plot_id).html('');
                     // create a new div
                     var new_div_id = this.plot_id + '_' + (Math.random() * 100000).toFixed(0);
 
                     $('#' + this.plot_id).html(`
-                    <div id="${new_div_id}" style="width:100%;">
+                    <div id="${new_div_id}" class="brat-vis" style="width:100%;">
                     </div>
                     `);
 
                     // update the collData according to data
-                    for (let i = 0; i < data.attributes.length; i++) {
-                        const attr = data.attributes[i];
-                        var t = attr[1];
+                    for (var i = 0; i < data.attributes.length; i++) {
+                        var attr = data.attributes[i];
+                        var t = attr[1]; // attr type
                         var v = attr[3];
-                        if (collData.entity_attribute_types[0].values.hasOwnProperty(v)) {
-
-                        } else {
-                            collData.entity_attribute_types[0].values[v] = {
-                                glyph: "[" + v + "]"
-                            };
+                        if (t == 'norm') {
+                            if (collData.entity_attribute_types[0].values.hasOwnProperty(v)) {
+                                
+                            } else {
+                                collData.entity_attribute_types[0].values[v] = {
+                                    glyph: "[" + v + "]"
+                                };
+                            }
+                        } else if (t == 'val') {
+                            var dt = this.timex2date(v, doc_date);
+                            var dt_str = dt.format('YYYY-MM-DD');
+                            if (collData.entity_attribute_types[1].values.hasOwnProperty(dt_str)) {
+                                
+                            } else {
+                                collData.entity_attribute_types[1].values[v] = {
+                                    glyph: "[" + dt_str + "]"
+                                };
+                            }
                         }
                     }
 
@@ -370,13 +477,21 @@
 
                 init: function () {
                     fig_bratvis.init();
+
+                    $( "#datepicker" ).datepicker({
+                        dateFormat: 'yy-mm-dd'
+                    }).datepicker('setDate', new Date());
                 },
 
                 parse: function () {
-                    var text = $('#text').val().trim();
-                    if (text == '') {
+                    // get the text of the doc
+                    var doc_text = $('#text').val().trim();
+                    if (doc_text == '') {
                         return
                     }
+
+                    // get the date of the doc
+                    var doc_date = $('#datepicker').val().trim();
 
                     // clear the output
                     $('#output-json').html('');
@@ -384,14 +499,14 @@
                     // send to backend
                     $.post(
                         this.url.parse,
-                        {doc_text: text},
+                        {doc_text: doc_text, doc_date: doc_date},
                         function (data) {
                             console.log(data);
                             jarvis.msg('Parse result: ' + data.success);
                             if (data.success) {
                                 jarvis.show(data);
                             } else {
-                                $('#output').html(data.msg);
+                                $('#output_json').html(data.msg);
                             }
                         }, 'json'
                     )
@@ -399,11 +514,18 @@
 
                 show: function (data) {
                     this.data = data;
-                    // show text
-                    $('#output-json').html(JSON.stringify(data.data, null, 2));
 
-                    // draw plot
-                    fig_bratvis.draw(data.data);
+                    // show return json
+                    $('#output_json').html(JSON.stringify(data, null, 2));
+
+                    // show the Brat visualization
+                    var doc_date = $('#datepicker').val();
+                    if (data.data.hasOwnProperty('doc_date')) {
+                        doc_date = data.data.doc_date;
+                    }
+                    fig_bratvis.draw(data.data, doc_date);
+
+                    // show other things
                 },
 
                 msg: function (s) {
