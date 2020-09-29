@@ -191,8 +191,9 @@ public class WebServiceController {
      * @return attributes and concepts
      */
     @PostMapping("/parse")
-    public JSONObject parse(@RequestParam(name = "doc_text") String doc_text) {
-        return n3CNLPEngine.getResultJSON(doc_text);
+    public JSONObject parse(@RequestParam(name = "doc_text") String doc_text, 
+        @RequestParam(name = "doc_date") String doc_date) {
+        return n3CNLPEngine.getResultJSON(doc_text, doc_date);
     }
 
     /**

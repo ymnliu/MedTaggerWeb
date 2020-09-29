@@ -112,7 +112,7 @@ public class N3CNLPEngine {
         return annotMap;
     }
 
-    public JSONObject getResultJSON(String docText) {
+    public JSONObject getResultJSON(String docText, String docDate) {
 
         HashMap<String, Collection> resultMap = getResultMap(docText);
         JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(resultMap.get("cm"));
@@ -125,6 +125,8 @@ public class N3CNLPEngine {
         data.put("attributes", jsAnnot.getAttribList());
         data.put("entities", jsAnnot.getCmList());
         data.put("text", docText);
+        data.put("date", docDate);
+        data.put("uima_output", "");
 
         // build the output json
         JSONObject ret = new JSONObject();
