@@ -359,10 +359,10 @@
                 timex2date: function(v, d) {
                     // v is the TPZ#YYYY-MM-DD format date string from result
                     // d is the YYYY-MM-DD format date string of baseline date
-                    var date = v;
+                    var date = d;
                     if (v.substring(0, 3) == 'TPZ') {
                         var sign = v.substring(3, 4);
-                        var dnum = v.substring(4, 10).split('-');
+                        var dnum = v.substring(4, 14).split('-');
 
                         var d_year = parseInt(dnum[0]);
                         var d_month = parseInt(dnum[1]);
