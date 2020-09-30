@@ -4,7 +4,6 @@ import com.onelogin.saml2.Auth;
 import com.onelogin.saml2.exception.Error;
 import com.onelogin.saml2.exception.SettingsException;
 import com.onelogin.saml2.servlet.ServletUtils;
-import com.onelogin.saml2.settings.Saml2Settings;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.ohnlp.n3c.N3CNLPEngine;
@@ -128,29 +127,6 @@ public class WebServiceController {
         return "Logont.html";
     }
 
-    @GetMapping("/metadata")
-    public String displayMetaData(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
-        StringBuilder sb = new StringBuilder();
-        Auth auth = new Auth();
-        Saml2Settings settings = auth.getSettings();
-        String metadata = settings.getSPMetadata();
-        List<String> errors = Saml2Settings.validateMetadata(metadata);
-        if (errors.isEmpty()) {
-            sb.append(metadata);
-        } else {
-            response.setContentType("text/html; charset=UTF-8");
-            for (String error : errors) {
-                sb.append("<p>"+error+"</p>");
-            }
-        }
-
-        sb.append(session.getAttribute("attributes") + "<br>");
-        sb.append(session.getAttribute("nameId") + "<br>");
-        sb.append(session.getAttribute("nameIdFormat") + "<br>");
-
-        return sb.toString();
-    }
-
     @GetMapping("/attrs")
     public String showAttrs(HttpServletRequest request, HttpServletResponse response, HttpSession session){
         Boolean found = false;
@@ -188,10 +164,8 @@ public class WebServiceController {
 
                 }
             }
-            sb.append("<a href=\"dologout.jsp\" class=\"btn btn-primary\">Logout</a>");
         } else {
             sb.append("<div class=\"alert alert-danger\" role=\"alert\">Not authenticated</div>");
-            sb.append("<a href=\"dologin.jsp\" class=\"btn btn-primary\">Login</a>");
         }
 
         return sb.toString();
@@ -369,7 +343,7 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-        auth.login("https://ohnlp4covid-dev.n3c.ncats.io/attrs");
+        auth.login("http://localhost/attrs");
 
         System.out.println(auth.isAuthenticated());
         return "login.html";
