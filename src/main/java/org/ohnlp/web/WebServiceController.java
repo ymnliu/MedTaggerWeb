@@ -147,6 +147,11 @@ public class WebServiceController {
                 sb.append("<p>"+error+"</p>");
             }
         }
+
+        sb.append(session.getAttribute("attributes") + "<br>");
+        sb.append(session.getAttribute("nameId") + "<br>");
+        sb.append(session.getAttribute("nameIdFormat") + "<br>");
+
         return sb.toString();
     }
 
@@ -322,7 +327,7 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-        auth.login("https://ohnlp4covid-dev.n3c.ncats.io/acs");
+        auth.login("https://ohnlp4covid-dev.n3c.ncats.io/about");
 
         System.out.println(auth.isAuthenticated());
         return "login.html";
