@@ -1,11 +1,12 @@
 package org.ohnlp.web;
 
+import com.onelogin.saml2.Auth;
+import com.onelogin.saml2.exception.Error;
+import com.onelogin.saml2.exception.SettingsException;
 import com.onelogin.saml2.servlet.ServletUtils;
 import com.onelogin.saml2.settings.Saml2Settings;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.uima.jcas.tcas.Annotation;
 import org.json.simple.JSONObject;
-import org.ohnlp.medtagger.type.ConceptMention;
 import org.ohnlp.n3c.N3CNLPEngine;
 import org.ohnlp.util.BioPortalAPI;
 import org.ohnlp.util.IEEditorHelper;
@@ -15,21 +16,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.security.cert.CertificateEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.onelogin.saml2.Auth;
-import com.onelogin.saml2.exception.Error;
-import com.onelogin.saml2.exception.SettingsException;
 
 
 @RestController
@@ -76,7 +71,7 @@ public class WebServiceController {
     }
 
 
-    @GetMapping("/acs")
+    @PostMapping("/acs")
     public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
         Auth auth = new Auth(request, response);
         StringBuilder sb = new StringBuilder();
@@ -130,6 +125,11 @@ public class WebServiceController {
         }
 
         return sb.toString();
+    }
+
+    @GetMapping("/sls")
+    public String sls(HttpServletRequest request, HttpServletResponse response, HttpSession session){
+        return "Logont.html";
     }
 
     @GetMapping("/metadata")
