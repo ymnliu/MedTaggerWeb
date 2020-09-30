@@ -9,7 +9,7 @@ pipeline {
         label 'medtag-dev-ec2-02'
     }
     triggers {
-        pollSCM('H/5 * * * *')
+        pollSCM('H/2 * * * *')
     }  
   environment {
         PROJECT_NAME = "medtagger_web"
