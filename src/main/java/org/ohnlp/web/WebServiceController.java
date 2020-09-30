@@ -21,10 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -69,7 +66,6 @@ public class WebServiceController {
         aboutView.setViewName("about");
         return aboutView;
     }
-
 
     @PostMapping("/acs")
     public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
@@ -151,6 +147,52 @@ public class WebServiceController {
         sb.append(session.getAttribute("attributes") + "<br>");
         sb.append(session.getAttribute("nameId") + "<br>");
         sb.append(session.getAttribute("nameIdFormat") + "<br>");
+
+        return sb.toString();
+    }
+
+    @GetMapping("/attrs")
+    public String showAttrs(HttpServletRequest request, HttpServletResponse response, HttpSession session){
+        Boolean found = false;
+        @SuppressWarnings("unchecked")
+        Enumeration<String> elems = (Enumeration<String>) session.getAttributeNames();
+
+        while (elems.hasMoreElements() && !found) {
+            String value = (String) elems.nextElement();
+            if (value.equals("attributes") || value.equals("nameId")) {
+                found = true;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (found) {
+            String nameId = (String) session.getAttribute("nameId");
+            @SuppressWarnings("unchecked")
+            Map<String, List<String>> attributes = (Map<String, List<String>>) session.getAttribute("attributes");
+            if (!nameId.isEmpty()) {
+                sb.append("<div><b> NameId:</b> " + nameId + "</div>");
+            }
+
+            if (attributes.isEmpty()) {
+                sb.append("No attributes");
+            }
+            else {
+                Collection<String> keys = attributes.keySet();
+                for(String name :keys){
+                    sb.append(name + "<br>");
+                    List<String> values = attributes.get(name);
+                    for(String value :values) {
+                        sb.append(value + "<br>");
+
+                    }
+
+                }
+            }
+            sb.append("<a href=\"dologout.jsp\" class=\"btn btn-primary\">Logout</a>");
+        } else {
+            sb.append("<div class=\"alert alert-danger\" role=\"alert\">Not authenticated</div>");
+            sb.append("<a href=\"dologin.jsp\" class=\"btn btn-primary\">Login</a>");
+        }
 
         return sb.toString();
     }
@@ -327,7 +369,7 @@ public class WebServiceController {
     @RequestMapping("/dologin")
     public String login(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Auth auth = new Auth(request, response);
-        auth.login("https://ohnlp4covid-dev.n3c.ncats.io/metadata");
+        auth.login("https://ohnlp4covid-dev.n3c.ncats.io/attrs");
 
         System.out.println(auth.isAuthenticated());
         return "login.html";
