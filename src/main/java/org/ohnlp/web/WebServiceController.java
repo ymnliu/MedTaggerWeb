@@ -1,8 +1,6 @@
 package org.ohnlp.web;
 
 import com.onelogin.saml2.Auth;
-import com.onelogin.saml2.exception.Error;
-import com.onelogin.saml2.exception.SettingsException;
 import com.onelogin.saml2.servlet.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
@@ -67,9 +65,11 @@ public class WebServiceController {
     }
 
     @PostMapping("/acs")
-    public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws SettingsException, Error, IOException {
+    public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         Auth auth = new Auth(request, response);
         StringBuilder sb = new StringBuilder();
+        auth.processResponse();
+
         if (!auth.isAuthenticated()) {
             sb.append("<div class=\"alert alert-danger\" role=\"alert\">Not authenticated</div>");
         }
