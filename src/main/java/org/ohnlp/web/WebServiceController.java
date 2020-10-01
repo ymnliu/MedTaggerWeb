@@ -68,7 +68,7 @@ public class WebServiceController {
     public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         Auth auth = new Auth(request, response);
         StringBuilder sb = new StringBuilder();
-        auth.processResponse();
+        auth.processResponse(request.getRequestedSessionId());
 
         if (!auth.isAuthenticated()) {
             sb.append("<div class=\"alert alert-danger\" role=\"alert\">Not authenticated</div>");
@@ -124,7 +124,7 @@ public class WebServiceController {
 
     @GetMapping("/sls")
     public String sls(HttpServletRequest request, HttpServletResponse response, HttpSession session){
-        return "Logont.html";
+        return "Logout.html";
     }
 
     @GetMapping("/attrs")
