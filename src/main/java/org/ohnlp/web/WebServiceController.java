@@ -1,6 +1,9 @@
 package org.ohnlp.web;
 
 import com.onelogin.saml2.Auth;
+import com.onelogin.saml2.exception.Error;
+import com.onelogin.saml2.exception.SettingsException;
+import com.onelogin.saml2.exception.XMLEntityException;
 import com.onelogin.saml2.servlet.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
@@ -123,8 +126,25 @@ public class WebServiceController {
     }
 
     @GetMapping("/sls")
-    public String sls(HttpServletRequest request, HttpServletResponse response, HttpSession session){
-        return "Logout.html";
+    public String sls(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+
+        Auth auth = new Auth(request, response);
+        auth.processSLO();
+
+        List<String> errors = auth.getErrors();
+        StringBuilder sb = new StringBuilder();
+        if (errors.isEmpty()) {
+            sb.append("<p>Sucessfully logged out</p>");
+            sb.append("<a href=\"dologin.jsp\" class=\"btn btn-primary\">Login</a>");
+        } else {
+            sb.append("<p>");
+            for(String error : errors) {
+                sb.append(" " + error + ".");
+            }
+            sb.append("</p>");
+        }
+
+        return sb.toString();
     }
 
     @GetMapping("/attrs")
@@ -347,6 +367,47 @@ public class WebServiceController {
 
         System.out.println(auth.isAuthenticated());
         return "login.html";
+    }
+
+
+    /**
+     * SAML SLO following: https://github.com/onelogin/java-saml/tree/master/samples/java-saml-tookit-jspsample/src/main/webapp
+     * @param request
+     * @param response
+     * @param session
+     * @return
+     * @throws SettingsException
+     * @throws Error
+     * @throws IOException
+     * @throws XMLEntityException
+     */
+    @RequestMapping("/dologout")
+    public String doLogout(HttpServletRequest request, HttpServletResponse response, HttpSession session)
+            throws SettingsException, Error, IOException, XMLEntityException {
+        Auth auth = new Auth(request, response);
+        String nameId = null;
+        if (session.getAttribute("nameId") != null) {
+            nameId = session.getAttribute("nameId").toString();
+        }
+        String nameIdFormat = null;
+        if (session.getAttribute("nameIdFormat") != null) {
+            nameIdFormat = session.getAttribute("nameIdFormat").toString();
+        }
+        String nameidNameQualifier = null;
+        if (session.getAttribute("nameidNameQualifier") != null) {
+            nameidNameQualifier = session.getAttribute("nameidNameQualifier").toString();
+        }
+        String nameidSPNameQualifier = null;
+        if (session.getAttribute("nameidSPNameQualifier") != null) {
+            nameidSPNameQualifier = session.getAttribute("nameidSPNameQualifier").toString();
+        }
+        String sessionIndex = null;
+        if (session.getAttribute("sessionIndex") != null) {
+            sessionIndex = session.getAttribute("sessionIndex").toString();
+        }
+        auth.logout(null, nameId, sessionIndex, nameIdFormat, nameidNameQualifier, nameidSPNameQualifier);
+
+        return nameId + " has been logged out";
     }
 
     /**
