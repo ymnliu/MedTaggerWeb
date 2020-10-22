@@ -135,8 +135,7 @@ public class WebServiceController {
         StringBuilder sb = new StringBuilder();
         if (errors.isEmpty()) {
             sb.append("<p>Sucessfully logged out</p>");
-            sb.append("<a href=\"dologin.jsp\" class=\"btn btn-primary\">Login</a>");
-        } else {
+         } else {
             sb.append("<p>");
             for(String error : errors) {
                 sb.append(" " + error + ".");
