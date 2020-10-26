@@ -14,28 +14,9 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.cas.TOP_Type;
 
 /** Extend from Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.DocumentID, but its supertype changed to uima.cas.TOP
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
  * @generated */
 public class Document_Type extends TOP_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (Document_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = Document_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new Document(addr, Document_Type.this);
-  			   Document_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new Document(addr, Document_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = Document.typeIndexID;

@@ -13,8 +13,8 @@ import org.apache.uima.jcas.cas.StringArray;
 
 
 /** A Penn Treebank-style tree node.  Conforms to PTB 2.0 guidelines.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class TreebankNode extends Annotation {
   /** @generated
@@ -56,10 +56,13 @@ public class TreebankNode extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -68,14 +71,18 @@ public class TreebankNode extends Annotation {
   //* Feature: nodeType
 
   /** getter for nodeType - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getNodeType() {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_nodeType == null)
       jcasType.jcas.throwFeatMissing("nodeType", "org.ohnlp.typesystem.type.syntax.TreebankNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((TreebankNode_Type)jcasType).casFeatCode_nodeType);}
     
   /** setter for nodeType - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNodeType(String v) {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_nodeType == null)
       jcasType.jcas.throwFeatMissing("nodeType", "org.ohnlp.typesystem.type.syntax.TreebankNode");
@@ -86,14 +93,18 @@ public class TreebankNode extends Annotation {
   //* Feature: nodeValue
 
   /** getter for nodeValue - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getNodeValue() {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_nodeValue == null)
       jcasType.jcas.throwFeatMissing("nodeValue", "org.ohnlp.typesystem.type.syntax.TreebankNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((TreebankNode_Type)jcasType).casFeatCode_nodeValue);}
     
   /** setter for nodeValue - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNodeValue(String v) {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_nodeValue == null)
       jcasType.jcas.throwFeatMissing("nodeValue", "org.ohnlp.typesystem.type.syntax.TreebankNode");
@@ -104,14 +115,18 @@ public class TreebankNode extends Annotation {
   //* Feature: leaf
 
   /** getter for leaf - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public boolean getLeaf() {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_leaf == null)
       jcasType.jcas.throwFeatMissing("leaf", "org.ohnlp.typesystem.type.syntax.TreebankNode");
     return jcasType.ll_cas.ll_getBooleanValue(addr, ((TreebankNode_Type)jcasType).casFeatCode_leaf);}
     
   /** setter for leaf - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setLeaf(boolean v) {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_leaf == null)
       jcasType.jcas.throwFeatMissing("leaf", "org.ohnlp.typesystem.type.syntax.TreebankNode");
@@ -122,14 +137,18 @@ public class TreebankNode extends Annotation {
   //* Feature: parent
 
   /** getter for parent - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public TreebankNode getParent() {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_parent == null)
       jcasType.jcas.throwFeatMissing("parent", "org.ohnlp.typesystem.type.syntax.TreebankNode");
     return (TreebankNode)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((TreebankNode_Type)jcasType).casFeatCode_parent)));}
     
   /** setter for parent - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setParent(TreebankNode v) {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_parent == null)
       jcasType.jcas.throwFeatMissing("parent", "org.ohnlp.typesystem.type.syntax.TreebankNode");
@@ -140,14 +159,18 @@ public class TreebankNode extends Annotation {
   //* Feature: children
 
   /** getter for children - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public FSArray getChildren() {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_children == null)
       jcasType.jcas.throwFeatMissing("children", "org.ohnlp.typesystem.type.syntax.TreebankNode");
     return (FSArray)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((TreebankNode_Type)jcasType).casFeatCode_children)));}
     
   /** setter for children - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setChildren(FSArray v) {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_children == null)
       jcasType.jcas.throwFeatMissing("children", "org.ohnlp.typesystem.type.syntax.TreebankNode");
@@ -174,14 +197,18 @@ public class TreebankNode extends Annotation {
   //* Feature: nodeTags
 
   /** getter for nodeTags - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public StringArray getNodeTags() {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_nodeTags == null)
       jcasType.jcas.throwFeatMissing("nodeTags", "org.ohnlp.typesystem.type.syntax.TreebankNode");
     return (StringArray)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((TreebankNode_Type)jcasType).casFeatCode_nodeTags)));}
     
   /** setter for nodeTags - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNodeTags(StringArray v) {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_nodeTags == null)
       jcasType.jcas.throwFeatMissing("nodeTags", "org.ohnlp.typesystem.type.syntax.TreebankNode");
@@ -208,14 +235,18 @@ public class TreebankNode extends Annotation {
   //* Feature: headIndex
 
   /** getter for headIndex - gets The head index tracks the index into the word tokens which is the syntactic head of a phrase.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getHeadIndex() {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_headIndex == null)
       jcasType.jcas.throwFeatMissing("headIndex", "org.ohnlp.typesystem.type.syntax.TreebankNode");
     return jcasType.ll_cas.ll_getIntValue(addr, ((TreebankNode_Type)jcasType).casFeatCode_headIndex);}
     
   /** setter for headIndex - sets The head index tracks the index into the word tokens which is the syntactic head of a phrase. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setHeadIndex(int v) {
     if (TreebankNode_Type.featOkTst && ((TreebankNode_Type)jcasType).casFeat_headIndex == null)
       jcasType.jcas.throwFeatMissing("headIndex", "org.ohnlp.typesystem.type.syntax.TreebankNode");

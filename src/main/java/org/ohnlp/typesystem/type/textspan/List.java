@@ -12,8 +12,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** A semi-structured text span, containing other Annotations (typically Sentences, other Lists, etc).
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class List extends Annotation {
   /** @generated
@@ -55,10 +55,13 @@ public class List extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -67,14 +70,18 @@ public class List extends Annotation {
   //* Feature: id
 
   /** getter for id - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getId() {
     if (List_Type.featOkTst && ((List_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.textspan.List");
     return jcasType.ll_cas.ll_getStringValue(addr, ((List_Type)jcasType).casFeatCode_id);}
     
   /** setter for id - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setId(String v) {
     if (List_Type.featOkTst && ((List_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.textspan.List");
@@ -85,14 +92,18 @@ public class List extends Annotation {
   //* Feature: items
 
   /** getter for items - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public FSList getItems() {
     if (List_Type.featOkTst && ((List_Type)jcasType).casFeat_items == null)
       jcasType.jcas.throwFeatMissing("items", "org.ohnlp.typesystem.type.textspan.List");
     return (FSList)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((List_Type)jcasType).casFeatCode_items)));}
     
   /** setter for items - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setItems(FSList v) {
     if (List_Type.featOkTst && ((List_Type)jcasType).casFeat_items == null)
       jcasType.jcas.throwFeatMissing("items", "org.ohnlp.typesystem.type.textspan.List");

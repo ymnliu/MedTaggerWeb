@@ -11,8 +11,8 @@ import org.ohnlp.typesystem.type.relation.BinaryTextRelation;
 
 
 /** Stanford dependencies provide a representation of grammatical relations between words in a sentence. Stanford dependencies are triplets: name of the relation, governor and dependent.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class StanfordDependency extends BinaryTextRelation {
   /** @generated
@@ -46,10 +46,13 @@ public class StanfordDependency extends BinaryTextRelation {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
 }

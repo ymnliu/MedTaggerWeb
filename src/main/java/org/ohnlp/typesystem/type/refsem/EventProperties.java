@@ -11,8 +11,8 @@ import org.apache.uima.jcas.cas.TOP;
 
 
 /** A set of mostly temporal properties that are unique to Events.
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class EventProperties extends TOP {
   /** @generated
@@ -46,10 +46,13 @@ public class EventProperties extends TOP {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -58,14 +61,18 @@ public class EventProperties extends TOP {
   //* Feature: contextualModality
 
   /** getter for contextualModality - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getContextualModality() {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_contextualModality == null)
       jcasType.jcas.throwFeatMissing("contextualModality", "org.ohnlp.typesystem.type.refsem.EventProperties");
     return jcasType.ll_cas.ll_getStringValue(addr, ((EventProperties_Type)jcasType).casFeatCode_contextualModality);}
     
   /** setter for contextualModality - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setContextualModality(String v) {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_contextualModality == null)
       jcasType.jcas.throwFeatMissing("contextualModality", "org.ohnlp.typesystem.type.refsem.EventProperties");
@@ -76,14 +83,18 @@ public class EventProperties extends TOP {
   //* Feature: contextualAspect
 
   /** getter for contextualAspect - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getContextualAspect() {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_contextualAspect == null)
       jcasType.jcas.throwFeatMissing("contextualAspect", "org.ohnlp.typesystem.type.refsem.EventProperties");
     return jcasType.ll_cas.ll_getStringValue(addr, ((EventProperties_Type)jcasType).casFeatCode_contextualAspect);}
     
   /** setter for contextualAspect - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setContextualAspect(String v) {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_contextualAspect == null)
       jcasType.jcas.throwFeatMissing("contextualAspect", "org.ohnlp.typesystem.type.refsem.EventProperties");
@@ -94,14 +105,18 @@ public class EventProperties extends TOP {
   //* Feature: permanence
 
   /** getter for permanence - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getPermanence() {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_permanence == null)
       jcasType.jcas.throwFeatMissing("permanence", "org.ohnlp.typesystem.type.refsem.EventProperties");
     return jcasType.ll_cas.ll_getStringValue(addr, ((EventProperties_Type)jcasType).casFeatCode_permanence);}
     
   /** setter for permanence - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPermanence(String v) {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_permanence == null)
       jcasType.jcas.throwFeatMissing("permanence", "org.ohnlp.typesystem.type.refsem.EventProperties");
@@ -112,14 +127,18 @@ public class EventProperties extends TOP {
   //* Feature: category
 
   /** getter for category - gets Type of Event.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getCategory() {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_category == null)
       jcasType.jcas.throwFeatMissing("category", "org.ohnlp.typesystem.type.refsem.EventProperties");
     return jcasType.ll_cas.ll_getStringValue(addr, ((EventProperties_Type)jcasType).casFeatCode_category);}
     
   /** setter for category - sets Type of Event. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setCategory(String v) {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_category == null)
       jcasType.jcas.throwFeatMissing("category", "org.ohnlp.typesystem.type.refsem.EventProperties");
@@ -130,14 +149,18 @@ public class EventProperties extends TOP {
   //* Feature: aspect
 
   /** getter for aspect - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getAspect() {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_aspect == null)
       jcasType.jcas.throwFeatMissing("aspect", "org.ohnlp.typesystem.type.refsem.EventProperties");
     return jcasType.ll_cas.ll_getStringValue(addr, ((EventProperties_Type)jcasType).casFeatCode_aspect);}
     
   /** setter for aspect - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setAspect(String v) {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_aspect == null)
       jcasType.jcas.throwFeatMissing("aspect", "org.ohnlp.typesystem.type.refsem.EventProperties");
@@ -148,14 +171,18 @@ public class EventProperties extends TOP {
   //* Feature: docTimeRel
 
   /** getter for docTimeRel - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getDocTimeRel() {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_docTimeRel == null)
       jcasType.jcas.throwFeatMissing("docTimeRel", "org.ohnlp.typesystem.type.refsem.EventProperties");
     return jcasType.ll_cas.ll_getStringValue(addr, ((EventProperties_Type)jcasType).casFeatCode_docTimeRel);}
     
   /** setter for docTimeRel - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setDocTimeRel(String v) {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_docTimeRel == null)
       jcasType.jcas.throwFeatMissing("docTimeRel", "org.ohnlp.typesystem.type.refsem.EventProperties");
@@ -166,14 +193,18 @@ public class EventProperties extends TOP {
   //* Feature: degree
 
   /** getter for degree - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getDegree() {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_degree == null)
       jcasType.jcas.throwFeatMissing("degree", "org.ohnlp.typesystem.type.refsem.EventProperties");
     return jcasType.ll_cas.ll_getStringValue(addr, ((EventProperties_Type)jcasType).casFeatCode_degree);}
     
   /** setter for degree - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setDegree(String v) {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_degree == null)
       jcasType.jcas.throwFeatMissing("degree", "org.ohnlp.typesystem.type.refsem.EventProperties");
@@ -184,14 +215,18 @@ public class EventProperties extends TOP {
   //* Feature: polarity
 
   /** getter for polarity - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getPolarity() {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_polarity == null)
       jcasType.jcas.throwFeatMissing("polarity", "org.ohnlp.typesystem.type.refsem.EventProperties");
     return jcasType.ll_cas.ll_getIntValue(addr, ((EventProperties_Type)jcasType).casFeatCode_polarity);}
     
   /** setter for polarity - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPolarity(int v) {
     if (EventProperties_Type.featOkTst && ((EventProperties_Type)jcasType).casFeat_polarity == null)
       jcasType.jcas.throwFeatMissing("polarity", "org.ohnlp.typesystem.type.refsem.EventProperties");

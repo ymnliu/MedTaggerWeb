@@ -14,28 +14,9 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** Concept mention stands for concepts detected by the NLP system
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:16 CDT 2020
  * @generated */
 public class ConceptMention_Type extends Annotation_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (ConceptMention_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = ConceptMention_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new ConceptMention(addr, ConceptMention_Type.this);
-  			   ConceptMention_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new ConceptMention(addr, ConceptMention_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = ConceptMention.typeIndexID;

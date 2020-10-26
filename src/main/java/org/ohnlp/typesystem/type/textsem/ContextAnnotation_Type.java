@@ -13,28 +13,9 @@ import org.apache.uima.cas.impl.FeatureImpl;
 import org.apache.uima.cas.Feature;
 
 /** Contextual information of an entity. Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.context.type.ContextAnnotation
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
  * @generated */
 public class ContextAnnotation_Type extends IdentifiedAnnotation_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (ContextAnnotation_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = ContextAnnotation_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new ContextAnnotation(addr, ContextAnnotation_Type.this);
-  			   ContextAnnotation_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new ContextAnnotation(addr, ContextAnnotation_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = ContextAnnotation.typeIndexID;

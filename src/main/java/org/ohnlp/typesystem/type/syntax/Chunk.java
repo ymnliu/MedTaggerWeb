@@ -12,8 +12,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 /** Chunks are syntactic groupings of tokens, and are the results of a shallow parser (chunker).  Possible chunkTypes follow Penn Treebank guidelines, e.g., noun phrase (NP) or prepositional phrase (PP) 
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.chunker.type.Chunk
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Chunk extends Annotation {
   /** @generated
@@ -55,10 +55,13 @@ public class Chunk extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -67,14 +70,18 @@ public class Chunk extends Annotation {
   //* Feature: chunkType
 
   /** getter for chunkType - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getChunkType() {
     if (Chunk_Type.featOkTst && ((Chunk_Type)jcasType).casFeat_chunkType == null)
       jcasType.jcas.throwFeatMissing("chunkType", "org.ohnlp.typesystem.type.syntax.Chunk");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Chunk_Type)jcasType).casFeatCode_chunkType);}
     
   /** setter for chunkType - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setChunkType(String v) {
     if (Chunk_Type.featOkTst && ((Chunk_Type)jcasType).casFeat_chunkType == null)
       jcasType.jcas.throwFeatMissing("chunkType", "org.ohnlp.typesystem.type.syntax.Chunk");

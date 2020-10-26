@@ -1,0 +1,66 @@
+//First degree relative
+RULENAME="cm_rFather",REGEXP="\b%reFather\b",LOCATION="NA",NORM="First_degree_relative-Father"
+RULENAME="cm_rMother",REGEXP="\b%reMother\b",LOCATION="NA",NORM="First_degree_relative-Mother"
+RULENAME="cm_rParent",REGEXP="\b%reParent\b",LOCATION="NA",NORM="First_degree_relative-Parent"
+RULENAME="cm_rBrother",REGEXP="\b%reBrother\b",LOCATION="NA",NORM="First_degree_relative-Brother"
+RULENAME="cm_rSister",REGEXP="\b%reSister\b",LOCATION="NA",NORM="First_degree_relative-Sister"
+RULENAME="cm_rSibling",REGEXP="\b%reSibling\b",LOCATION="NA",NORM="First_degree_relative-Sibling"
+RULENAME="cm_rChildren",REGEXP="\b%reChild\b",LOCATION="NA",NORM="First_degree_relative-Child"
+RULENAME="cm_rSon",REGEXP="\b%reSon\b",LOCATION="NA",NORM="First_degree_relative-Son"
+RULENAME="cm_rDaughter",REGEXP="\b%reDaughter\b",LOCATION="NA",NORM="First_degree_relative-Daughter"
+RULENAME="cm_rFDR",REGEXP="\b%reFDR\b",LOCATION="NA",NORM="First_degree_relative-Unknown"
+
+//Second degree relative
+RULENAME="cm_rGrandfather",REGEXP="\b%reGrandfather\b",LOCATION="NA",NORM="Second_degree_relative-Grandfather"
+RULENAME="cm_rGrandmother",REGEXP="\b%reGrandmother\b",LOCATION="NA",NORM="Second_degree_relative-Grandmother"
+RULENAME="cm_rGrandparent",REGEXP="\b%reGrandparent\b",LOCATION="NA",NORM="Second_degree_relative-Grandparent"
+RULENAME="cm_rGrandson",REGEXP="\b%reGrandson\b",LOCATION="NA",NORM="Second_degree_relative-Grandson"
+RULENAME="cm_rGranddaughter",REGEXP="\b%reGranddaughter\b",LOCATION="NA",NORM="Second_degree_relative-Granddaughter"
+RULENAME="cm_rGrandchildren",REGEXP="\b%reGrandchild\b",LOCATION="NA",NORM="Second_degree_relative-Grandchild"
+RULENAME="cm_rUncle",REGEXP="\b%reUncle\b",LOCATION="NA",NORM="Second_degree_relative-Uncle"
+RULENAME="cm_rAunt",REGEXP="\b%reAunt\b",LOCATION="NA",NORM="Second_degree_relative-Aunt"
+RULENAME="cm_rNephew",REGEXP="\b%reNephew\b",LOCATION="NA",NORM="Second_degree_relative-Nephew"
+RULENAME="cm_rNiece",REGEXP="\b%reNiece\b",LOCATION="NA",NORM="Second_degree_relative-Niece"
+RULENAME="cm_rHalfBrother",REGEXP="\b%reHalfBrother\b",LOCATION="NA",NORM="Second_degree_relative-Half_brother"
+RULENAME="cm_rHalfSister",REGEXP="\b%reHalfSister\b",LOCATION="NA",NORM="Second_degree_relative-Half_sister"
+RULENAME="cm_rHalfSibling",REGEXP="\b%reHalfSibling\b",LOCATION="NA",NORM="Second_degree_relative-Half_sibling"
+RULENAME="cm_rSDR",REGEXP="\b%reSDR\b",LOCATION="NA",NORM="Second_degree_relative-Unknown"
+
+//Third degree relative
+RULENAME="cm_rGreatgrandfather",REGEXP="\b%reGreatgrandfather\b",LOCATION="NA",NORM="Third_degree_relative-Great_Grandfather"
+RULENAME="cm_rGreatgrandmother",REGEXP="\b%reGreatgrandmother\b",LOCATION="NA",NORM="Third_degree_relative-Great_Grandmother"
+RULENAME="cm_rGreatgrandparent",REGEXP="\b%reGreatgrandparent\b",LOCATION="NA",NORM="Third_degree_relative-Great_Grandparent"
+RULENAME="cm_rGreatgrandson",REGEXP="\b%reGrandson\b",LOCATION="NA",NORM="Third_degree_relative-Great_Grandson"
+RULENAME="cm_rGreatgranddaughter",REGEXP="\b%reGreatgranddaughter\b",LOCATION="NA",NORM="Third_degree_relative-Great_Granddaughter"
+RULENAME="cm_rGreatgrandchildren",REGEXP="\b%reGreatgrandchild\b",LOCATION="NA",NORM="Third_degree_relative-Great_Grandchild"
+RULENAME="cm_rGreatuncle",REGEXP="\b%reGreatuncle\b",LOCATION="NA",NORM="Third_degree_relative-Great_Uncle"
+RULENAME="cm_rGreataunt",REGEXP="\b%reGreataunt\b",LOCATION="NA",NORM="Third_degree_relative-Great_Aunt"
+RULENAME="cm_rGrandnephew",REGEXP="\b%reGrandnephew\b",LOCATION="NA",NORM="Third_degree_relative-Grand_Nephew"
+RULENAME="cm_rGrandniece",REGEXP="\b%reGrandniece\b",LOCATION="NA",NORM="Third_degree_relative-Grand_Niece"
+RULENAME="cm_rCousin",REGEXP="\b%reCousin\b",LOCATION="NA",NORM="Third_degree_relative-Cousin"
+RULENAME="cm_rTDR",REGEXP="\b%reSDR\b",LOCATION="NA",NORM="Third_degree_relative-Unknown"
+ 
+//Family
+RULENAME="cm_rFamily",REGEXP="\b%reFamily\b",LOCATION="NA",NORM="Family"
+ 
+//pancreatic cancer
+RULENAME="cm_rPC",REGEXP="\b%rePancreaticCancer\b",LOCATION="NA",NORM="Pancreatic_cancer"
+	 		  				 
+//Exclusion
+RULENAME="Father_excl",REGEXP="\b((adoptive|foster|surrogate|step)(\s*|\-)father|father(\s*|\-)in(\s*|\-)law|father's)",LOCATION="NA",NORM="REMOVE"
+RULENAME="Mother_excl",REGEXP="\b((adoptive|foster|surrogate|step)(\s*|\-)mother|mother(\s*|\-)in(\s*|\-)law|mother's)",LOCATION="NA",NORM="REMOVE"
+RULENAME="Parent_excl",REGEXP="\b((adoptive|foster|surrogate|step)(\s*|\-)parent)",LOCATION="NA",NORM="REMOVE"
+RULENAME="Sibling_excl",REGEXP="\b((adoptive|foster|step)(\s*|\-)sibling\w{0,2})",LOCATION="NA",NORM="REMOVE"
+RULENAME="Brother_excl",REGEXP="\b((adoptive|foster|step)(\s*|\-)brother\w{0,2}|brother(\s*|\-)in(\s*|\-)law)",LOCATION="NA",NORM="REMOVE"
+RULENAME="Sister_excl",REGEXP="\b((adoptive|foster|step)(\s*|\-)sister\w{0,2}|sister(\s*|\-)in(\s*|\-)law)",LOCATION="NA",NORM="REMOVE"
+RULENAME="Child_excl",REGEXP="\b(grand(\s*|\-)child\w{0,5}|(adopted|foster|step)(\s*|\-)child\w{0,5})",LOCATION="NA",NORM="REMOVE"
+RULENAME="Son_excl",REGEXP="\b(grand son\w{0,2}|son(\s*|\-)in(\s*|\-)law|(adopted|foster|step)(\s*|\-)son)",LOCATION="NA",NORM="REMOVE"
+RULENAME="Daughter_excl",REGEXP="\b(grand(\s*|\-)daughter\w{0,2}|daughter(\s*|\-)in(\s*|\-)law|(adopted|foster|step)(\s*|\-)daughter)",LOCATION="NA",NORM="REMOVE"
+RULENAME="Aunt_excl",REGEXP="\b(great(\s*|\-)aunt\w{0,2})",LOCATION="NA",NORM="REMOVE"
+RULENAME="PC_excl",REGEXP="\b(risk(\s+\S+){0,2}%rePancreaticCancer)\b",LOCATION="NA",NORM="REMOVE"
+
+//may need post-processing
+RULENAME="Family_excl",REGEXP="\b(First_degree_relative|Second_degree_relative)",LOCATION="NA",NORM="REMOVE"
+
+
+ 

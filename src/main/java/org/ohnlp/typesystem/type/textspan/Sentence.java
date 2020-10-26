@@ -12,8 +12,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 /** Sentences may or may not be fully-formed and grammatical.  They form the unit of analysis for some downstream components (e.g., constituency parsers).
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.Sentence
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Sentence extends Annotation {
   /** @generated
@@ -55,10 +55,13 @@ public class Sentence extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -67,14 +70,18 @@ public class Sentence extends Annotation {
   //* Feature: id
 
   /** getter for id - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getId() {
     if (Sentence_Type.featOkTst && ((Sentence_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.textspan.Sentence");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Sentence_Type)jcasType).casFeatCode_id);}
     
   /** setter for id - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setId(String v) {
     if (Sentence_Type.featOkTst && ((Sentence_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.textspan.Sentence");
@@ -85,14 +92,18 @@ public class Sentence extends Annotation {
   //* Feature: segment
 
   /** getter for segment - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Segment getSegment() {
     if (Sentence_Type.featOkTst && ((Sentence_Type)jcasType).casFeat_segment == null)
       jcasType.jcas.throwFeatMissing("segment", "org.ohnlp.typesystem.type.textspan.Sentence");
     return (Segment)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Sentence_Type)jcasType).casFeatCode_segment)));}
     
   /** setter for segment - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setSegment(Segment v) {
     if (Sentence_Type.featOkTst && ((Sentence_Type)jcasType).casFeat_segment == null)
       jcasType.jcas.throwFeatMissing("segment", "org.ohnlp.typesystem.type.textspan.Sentence");

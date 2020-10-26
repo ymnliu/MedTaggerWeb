@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** A super-type for relationships between two spans of text.
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class BinaryTextRelation extends Relation {
   /** @generated
@@ -45,10 +45,13 @@ public class BinaryTextRelation extends Relation {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -57,14 +60,18 @@ public class BinaryTextRelation extends Relation {
   //* Feature: arg1
 
   /** getter for arg1 - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public RelationArgument getArg1() {
     if (BinaryTextRelation_Type.featOkTst && ((BinaryTextRelation_Type)jcasType).casFeat_arg1 == null)
       jcasType.jcas.throwFeatMissing("arg1", "org.ohnlp.typesystem.type.relation.BinaryTextRelation");
     return (RelationArgument)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((BinaryTextRelation_Type)jcasType).casFeatCode_arg1)));}
     
   /** setter for arg1 - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setArg1(RelationArgument v) {
     if (BinaryTextRelation_Type.featOkTst && ((BinaryTextRelation_Type)jcasType).casFeat_arg1 == null)
       jcasType.jcas.throwFeatMissing("arg1", "org.ohnlp.typesystem.type.relation.BinaryTextRelation");
@@ -75,14 +82,18 @@ public class BinaryTextRelation extends Relation {
   //* Feature: arg2
 
   /** getter for arg2 - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public RelationArgument getArg2() {
     if (BinaryTextRelation_Type.featOkTst && ((BinaryTextRelation_Type)jcasType).casFeat_arg2 == null)
       jcasType.jcas.throwFeatMissing("arg2", "org.ohnlp.typesystem.type.relation.BinaryTextRelation");
     return (RelationArgument)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((BinaryTextRelation_Type)jcasType).casFeatCode_arg2)));}
     
   /** setter for arg2 - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setArg2(RelationArgument v) {
     if (BinaryTextRelation_Type.featOkTst && ((BinaryTextRelation_Type)jcasType).casFeat_arg2 == null)
       jcasType.jcas.throwFeatMissing("arg2", "org.ohnlp.typesystem.type.relation.BinaryTextRelation");

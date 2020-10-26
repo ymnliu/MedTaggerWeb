@@ -13,8 +13,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 /** A supertype for tokens subsuming word, punctuation, symbol, newline, contraction, or number.  Includes parts of speech, which are grammatical categories, e.g., noun (NN) or preposition (IN) that use Penn Treebank tags with a few additions.
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.BaseToken
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class BaseToken extends Annotation {
   /** @generated
@@ -56,10 +56,13 @@ public class BaseToken extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -68,14 +71,18 @@ public class BaseToken extends Annotation {
   //* Feature: tokenNumber
 
   /** getter for tokenNumber - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getTokenNumber() {
     if (BaseToken_Type.featOkTst && ((BaseToken_Type)jcasType).casFeat_tokenNumber == null)
       jcasType.jcas.throwFeatMissing("tokenNumber", "org.ohnlp.typesystem.type.syntax.BaseToken");
     return jcasType.ll_cas.ll_getIntValue(addr, ((BaseToken_Type)jcasType).casFeatCode_tokenNumber);}
     
   /** setter for tokenNumber - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTokenNumber(int v) {
     if (BaseToken_Type.featOkTst && ((BaseToken_Type)jcasType).casFeat_tokenNumber == null)
       jcasType.jcas.throwFeatMissing("tokenNumber", "org.ohnlp.typesystem.type.syntax.BaseToken");
@@ -86,14 +93,18 @@ public class BaseToken extends Annotation {
   //* Feature: normalizedForm
 
   /** getter for normalizedForm - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getNormalizedForm() {
     if (BaseToken_Type.featOkTst && ((BaseToken_Type)jcasType).casFeat_normalizedForm == null)
       jcasType.jcas.throwFeatMissing("normalizedForm", "org.ohnlp.typesystem.type.syntax.BaseToken");
     return jcasType.ll_cas.ll_getStringValue(addr, ((BaseToken_Type)jcasType).casFeatCode_normalizedForm);}
     
   /** setter for normalizedForm - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNormalizedForm(String v) {
     if (BaseToken_Type.featOkTst && ((BaseToken_Type)jcasType).casFeat_normalizedForm == null)
       jcasType.jcas.throwFeatMissing("normalizedForm", "org.ohnlp.typesystem.type.syntax.BaseToken");
@@ -104,14 +115,18 @@ public class BaseToken extends Annotation {
   //* Feature: partOfSpeech
 
   /** getter for partOfSpeech - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getPartOfSpeech() {
     if (BaseToken_Type.featOkTst && ((BaseToken_Type)jcasType).casFeat_partOfSpeech == null)
       jcasType.jcas.throwFeatMissing("partOfSpeech", "org.ohnlp.typesystem.type.syntax.BaseToken");
     return jcasType.ll_cas.ll_getStringValue(addr, ((BaseToken_Type)jcasType).casFeatCode_partOfSpeech);}
     
   /** setter for partOfSpeech - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPartOfSpeech(String v) {
     if (BaseToken_Type.featOkTst && ((BaseToken_Type)jcasType).casFeat_partOfSpeech == null)
       jcasType.jcas.throwFeatMissing("partOfSpeech", "org.ohnlp.typesystem.type.syntax.BaseToken");
@@ -122,14 +137,18 @@ public class BaseToken extends Annotation {
   //* Feature: lemmaEntries
 
   /** getter for lemmaEntries - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public FSList getLemmaEntries() {
     if (BaseToken_Type.featOkTst && ((BaseToken_Type)jcasType).casFeat_lemmaEntries == null)
       jcasType.jcas.throwFeatMissing("lemmaEntries", "org.ohnlp.typesystem.type.syntax.BaseToken");
     return (FSList)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((BaseToken_Type)jcasType).casFeatCode_lemmaEntries)));}
     
   /** setter for lemmaEntries - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setLemmaEntries(FSList v) {
     if (BaseToken_Type.featOkTst && ((BaseToken_Type)jcasType).casFeat_lemmaEntries == null)
       jcasType.jcas.throwFeatMissing("lemmaEntries", "org.ohnlp.typesystem.type.syntax.BaseToken");

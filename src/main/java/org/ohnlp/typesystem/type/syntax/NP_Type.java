@@ -12,28 +12,9 @@ import org.apache.uima.cas.Type;
 
 /** A noun phrase
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.chunker.type.NP
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
  * @generated */
 public class NP_Type extends Chunk_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (NP_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = NP_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new NP(addr, NP_Type.this);
-  			   NP_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new NP(addr, NP_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = NP.typeIndexID;

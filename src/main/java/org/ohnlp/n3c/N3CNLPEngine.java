@@ -71,7 +71,7 @@ public class N3CNLPEngine {
             metadata.setConfigurationParameterSettings(settings);
 
             // modified MedXNTypes now importing MedTaggerIE types
-            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription("org.ohnlp.medtime.types.MedTimeTypes");
+            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription("org.ohnlp.n3c.types.N3cTypes");
             tsd.resolveImports(resMgr);
 
             cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);

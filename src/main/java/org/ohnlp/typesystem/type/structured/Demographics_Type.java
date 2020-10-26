@@ -14,28 +14,9 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.cas.TOP_Type;
 
 /** Demographic information about the patient in a clinical document.  Typically comes from structured metadata.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
  * @generated */
 public class Demographics_Type extends TOP_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (Demographics_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = Demographics_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new Demographics(addr, Demographics_Type.this);
-  			   Demographics_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new Demographics(addr, Demographics_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = Demographics.typeIndexID;

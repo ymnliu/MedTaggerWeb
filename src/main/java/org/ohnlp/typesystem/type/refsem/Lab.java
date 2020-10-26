@@ -11,8 +11,8 @@ import org.ohnlp.typesystem.type.relation.DegreeOf;
 
 
 /** This is an Event from the UMLS semantic group of Laboratory Procedures.  Based on generic Clinical Element Models (CEMs)
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Lab extends Event {
   /** @generated
@@ -46,10 +46,13 @@ public class Lab extends Event {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -58,14 +61,18 @@ public class Lab extends Event {
   //* Feature: abnormalInterpretation
 
   /** getter for abnormalInterpretation - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public DegreeOf getAbnormalInterpretation() {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_abnormalInterpretation == null)
       jcasType.jcas.throwFeatMissing("abnormalInterpretation", "org.ohnlp.typesystem.type.refsem.Lab");
     return (DegreeOf)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Lab_Type)jcasType).casFeatCode_abnormalInterpretation)));}
     
   /** setter for abnormalInterpretation - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setAbnormalInterpretation(DegreeOf v) {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_abnormalInterpretation == null)
       jcasType.jcas.throwFeatMissing("abnormalInterpretation", "org.ohnlp.typesystem.type.refsem.Lab");
@@ -76,14 +83,18 @@ public class Lab extends Event {
   //* Feature: deltaFlag
 
   /** getter for deltaFlag - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public LabDeltaFlag getDeltaFlag() {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_deltaFlag == null)
       jcasType.jcas.throwFeatMissing("deltaFlag", "org.ohnlp.typesystem.type.refsem.Lab");
     return (LabDeltaFlag)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Lab_Type)jcasType).casFeatCode_deltaFlag)));}
     
   /** setter for deltaFlag - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setDeltaFlag(LabDeltaFlag v) {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_deltaFlag == null)
       jcasType.jcas.throwFeatMissing("deltaFlag", "org.ohnlp.typesystem.type.refsem.Lab");
@@ -94,14 +105,18 @@ public class Lab extends Event {
   //* Feature: labValue
 
   /** getter for labValue - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public LabValue getLabValue() {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_labValue == null)
       jcasType.jcas.throwFeatMissing("labValue", "org.ohnlp.typesystem.type.refsem.Lab");
     return (LabValue)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Lab_Type)jcasType).casFeatCode_labValue)));}
     
   /** setter for labValue - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setLabValue(LabValue v) {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_labValue == null)
       jcasType.jcas.throwFeatMissing("labValue", "org.ohnlp.typesystem.type.refsem.Lab");
@@ -112,14 +127,18 @@ public class Lab extends Event {
   //* Feature: ordinalInterpretation
 
   /** getter for ordinalInterpretation - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public DegreeOf getOrdinalInterpretation() {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_ordinalInterpretation == null)
       jcasType.jcas.throwFeatMissing("ordinalInterpretation", "org.ohnlp.typesystem.type.refsem.Lab");
     return (DegreeOf)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Lab_Type)jcasType).casFeatCode_ordinalInterpretation)));}
     
   /** setter for ordinalInterpretation - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setOrdinalInterpretation(DegreeOf v) {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_ordinalInterpretation == null)
       jcasType.jcas.throwFeatMissing("ordinalInterpretation", "org.ohnlp.typesystem.type.refsem.Lab");
@@ -130,14 +149,18 @@ public class Lab extends Event {
   //* Feature: referenceRangeNarrative
 
   /** getter for referenceRangeNarrative - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public LabReferenceRange getReferenceRangeNarrative() {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_referenceRangeNarrative == null)
       jcasType.jcas.throwFeatMissing("referenceRangeNarrative", "org.ohnlp.typesystem.type.refsem.Lab");
     return (LabReferenceRange)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Lab_Type)jcasType).casFeatCode_referenceRangeNarrative)));}
     
   /** setter for referenceRangeNarrative - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setReferenceRangeNarrative(LabReferenceRange v) {
     if (Lab_Type.featOkTst && ((Lab_Type)jcasType).casFeat_referenceRangeNarrative == null)
       jcasType.jcas.throwFeatMissing("referenceRangeNarrative", "org.ohnlp.typesystem.type.refsem.Lab");

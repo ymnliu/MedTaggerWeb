@@ -13,8 +13,8 @@ import org.apache.uima.jcas.cas.TOP;
 
 /** A brute force "hash" that stores multiple Pairs in a list. 
 Equivalent toMayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.Properties
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Pairs extends TOP {
   /** @generated
@@ -48,10 +48,13 @@ public class Pairs extends TOP {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -60,14 +63,18 @@ public class Pairs extends TOP {
   //* Feature: pairs
 
   /** getter for pairs - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public FSArray getPairs() {
     if (Pairs_Type.featOkTst && ((Pairs_Type)jcasType).casFeat_pairs == null)
       jcasType.jcas.throwFeatMissing("pairs", "org.ohnlp.typesystem.type.util.Pairs");
     return (FSArray)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Pairs_Type)jcasType).casFeatCode_pairs)));}
     
   /** setter for pairs - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPairs(FSArray v) {
     if (Pairs_Type.featOkTst && ((Pairs_Type)jcasType).casFeat_pairs == null)
       jcasType.jcas.throwFeatMissing("pairs", "org.ohnlp.typesystem.type.util.Pairs");

@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** Stores the context matches
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:16 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Context extends Annotation {
   /** @generated
@@ -54,10 +54,13 @@ public class Context extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -66,14 +69,18 @@ public class Context extends Annotation {
   //* Feature: position
 
   /** getter for position - gets Locate before or after or a termination of a context or pseudo of the concept mention (POST, PRE, BOTH, TERMIN, PSEUDO)
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getPosition() {
     if (Context_Type.featOkTst && ((Context_Type)jcasType).casFeat_position == null)
       jcasType.jcas.throwFeatMissing("position", "org.ohnlp.medtagger.type.Context");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Context_Type)jcasType).casFeatCode_position);}
     
   /** setter for position - sets Locate before or after or a termination of a context or pseudo of the concept mention (POST, PRE, BOTH, TERMIN, PSEUDO) 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPosition(String v) {
     if (Context_Type.featOkTst && ((Context_Type)jcasType).casFeat_position == null)
       jcasType.jcas.throwFeatMissing("position", "org.ohnlp.medtagger.type.Context");
@@ -83,15 +90,19 @@ public class Context extends Annotation {
   //*--------------*
   //* Feature: contextType
 
-  /** getter for contextType - gets the type of the context words (neg, hist, poss, exp, hypoexp)
-   * @generated */
+  /** getter for contextType - gets the type of the context words (neg, hist, hypo, poss, exp, hypoexp)
+   * @generated
+   * @return value of the feature 
+   */
   public String getContextType() {
     if (Context_Type.featOkTst && ((Context_Type)jcasType).casFeat_contextType == null)
       jcasType.jcas.throwFeatMissing("contextType", "org.ohnlp.medtagger.type.Context");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Context_Type)jcasType).casFeatCode_contextType);}
     
-  /** setter for contextType - sets the type of the context words (neg, hist, poss, exp, hypoexp) 
-   * @generated */
+  /** setter for contextType - sets the type of the context words (neg, hist, hypo, poss, exp, hypoexp) 
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setContextType(String v) {
     if (Context_Type.featOkTst && ((Context_Type)jcasType).casFeat_contextType == null)
       jcasType.jcas.throwFeatMissing("contextType", "org.ohnlp.medtagger.type.Context");

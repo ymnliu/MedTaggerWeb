@@ -17,28 +17,9 @@ import org.apache.uima.jcas.tcas.Annotation_Type;
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.Segment 
    Adapted from the segment defined in SecTag. The definition is consistent with  
   SegTag: see http://knowledgemap.mc.vanderbilt.edu/research/content/sectag-tagging-clinical-note-section-headers
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
  * @generated */
 public class Segment_Type extends Annotation_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (Segment_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = Segment_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new Segment(addr, Segment_Type.this);
-  			   Segment_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new Segment(addr, Segment_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = Segment.typeIndexID;

@@ -14,28 +14,9 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.cas.TOP_Type;
 
 /** Structured data that captures information about the document, patient, or context of the clinical text.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
  * @generated */
 public class Metadata_Type extends TOP_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (Metadata_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = Metadata_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new Metadata(addr, Metadata_Type.this);
-  			   Metadata_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new Metadata(addr, Metadata_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = Metadata.typeIndexID;

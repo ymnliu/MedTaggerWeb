@@ -11,8 +11,8 @@ import org.ohnlp.typesystem.type.relation.Relation;
 
 
 /** Predicate-argument structure used for semantic role labeling output.
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class SemanticRoleRelation extends Relation {
   /** @generated
@@ -46,10 +46,13 @@ public class SemanticRoleRelation extends Relation {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -58,14 +61,18 @@ public class SemanticRoleRelation extends Relation {
   //* Feature: predicate
 
   /** getter for predicate - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Predicate getPredicate() {
     if (SemanticRoleRelation_Type.featOkTst && ((SemanticRoleRelation_Type)jcasType).casFeat_predicate == null)
       jcasType.jcas.throwFeatMissing("predicate", "org.ohnlp.typesystem.type.textsem.SemanticRoleRelation");
     return (Predicate)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((SemanticRoleRelation_Type)jcasType).casFeatCode_predicate)));}
     
   /** setter for predicate - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPredicate(Predicate v) {
     if (SemanticRoleRelation_Type.featOkTst && ((SemanticRoleRelation_Type)jcasType).casFeat_predicate == null)
       jcasType.jcas.throwFeatMissing("predicate", "org.ohnlp.typesystem.type.textsem.SemanticRoleRelation");
@@ -76,14 +83,18 @@ public class SemanticRoleRelation extends Relation {
   //* Feature: argument
 
   /** getter for argument - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public SemanticArgument getArgument() {
     if (SemanticRoleRelation_Type.featOkTst && ((SemanticRoleRelation_Type)jcasType).casFeat_argument == null)
       jcasType.jcas.throwFeatMissing("argument", "org.ohnlp.typesystem.type.textsem.SemanticRoleRelation");
     return (SemanticArgument)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((SemanticRoleRelation_Type)jcasType).casFeatCode_argument)));}
     
   /** setter for argument - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setArgument(SemanticArgument v) {
     if (SemanticRoleRelation_Type.featOkTst && ((SemanticRoleRelation_Type)jcasType).casFeat_argument == null)
       jcasType.jcas.throwFeatMissing("argument", "org.ohnlp.typesystem.type.textsem.SemanticRoleRelation");

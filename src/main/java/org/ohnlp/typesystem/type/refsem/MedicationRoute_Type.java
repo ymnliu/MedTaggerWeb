@@ -13,28 +13,9 @@ import org.apache.uima.cas.impl.FeatureImpl;
 import org.apache.uima.cas.Feature;
 
 /** Means by which the medication was taken or administered.  Value set includes Topical, Enteral_Oral, Parenteral_Intravenous, Other, undetermined, etc.
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
  * @generated */
 public class MedicationRoute_Type extends Attribute_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (MedicationRoute_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = MedicationRoute_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new MedicationRoute(addr, MedicationRoute_Type.this);
-  			   MedicationRoute_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new MedicationRoute(addr, MedicationRoute_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = MedicationRoute.typeIndexID;

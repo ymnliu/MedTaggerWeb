@@ -12,28 +12,9 @@ import org.apache.uima.cas.Type;
 
 /** A phrase-level conjunction
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.chunker.type.CONJP
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
  * @generated */
 public class CONJP_Type extends Chunk_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (CONJP_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = CONJP_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new CONJP(addr, CONJP_Type.this);
-  			   CONJP_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new CONJP(addr, CONJP_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = CONJP.typeIndexID;

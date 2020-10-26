@@ -35,8 +35,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sun Sep 29 06:07:11 CDT 2013
- * XML source: /MedTime-1.0/descsrc/org/ohnlp/medtime/types/MedTimeTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:16 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class MedTimex3 extends Annotation {
   /** @generated
@@ -78,10 +78,13 @@ public class MedTimex3 extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -90,14 +93,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: filename
 
   /** getter for filename - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getFilename() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_filename == null)
       jcasType.jcas.throwFeatMissing("filename", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_filename);}
     
   /** setter for filename - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setFilename(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_filename == null)
       jcasType.jcas.throwFeatMissing("filename", "org.ohnlp.medtime.type.MedTimex3");
@@ -108,14 +115,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: firstTokId
 
   /** getter for firstTokId - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getFirstTokId() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_firstTokId == null)
       jcasType.jcas.throwFeatMissing("firstTokId", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getIntValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_firstTokId);}
     
   /** setter for firstTokId - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setFirstTokId(int v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_firstTokId == null)
       jcasType.jcas.throwFeatMissing("firstTokId", "org.ohnlp.medtime.type.MedTimex3");
@@ -126,14 +137,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: allTokIds
 
   /** getter for allTokIds - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getAllTokIds() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_allTokIds == null)
       jcasType.jcas.throwFeatMissing("allTokIds", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_allTokIds);}
     
   /** setter for allTokIds - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setAllTokIds(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_allTokIds == null)
       jcasType.jcas.throwFeatMissing("allTokIds", "org.ohnlp.medtime.type.MedTimex3");
@@ -144,14 +159,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: timexId
 
   /** getter for timexId - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimexId() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexId == null)
       jcasType.jcas.throwFeatMissing("timexId", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_timexId);}
     
   /** setter for timexId - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexId(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexId == null)
       jcasType.jcas.throwFeatMissing("timexId", "org.ohnlp.medtime.type.MedTimex3");
@@ -162,14 +181,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: timexInstance
 
   /** getter for timexInstance - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getTimexInstance() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexInstance == null)
       jcasType.jcas.throwFeatMissing("timexInstance", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getIntValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_timexInstance);}
     
   /** setter for timexInstance - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexInstance(int v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexInstance == null)
       jcasType.jcas.throwFeatMissing("timexInstance", "org.ohnlp.medtime.type.MedTimex3");
@@ -180,14 +203,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: contextSentence
 
   /** getter for contextSentence - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Sentence getContextSentence() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_contextSentence == null)
       jcasType.jcas.throwFeatMissing("contextSentence", "org.ohnlp.medtime.type.MedTimex3");
     return (Sentence)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_contextSentence)));}
     
   /** setter for contextSentence - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setContextSentence(Sentence v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_contextSentence == null)
       jcasType.jcas.throwFeatMissing("contextSentence", "org.ohnlp.medtime.type.MedTimex3");
@@ -198,14 +225,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: timexType
 
   /** getter for timexType - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimexType() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexType == null)
       jcasType.jcas.throwFeatMissing("timexType", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_timexType);}
     
   /** setter for timexType - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexType(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexType == null)
       jcasType.jcas.throwFeatMissing("timexType", "org.ohnlp.medtime.type.MedTimex3");
@@ -216,14 +247,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: timexValue
 
   /** getter for timexValue - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimexValue() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexValue == null)
       jcasType.jcas.throwFeatMissing("timexValue", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_timexValue);}
     
   /** setter for timexValue - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexValue(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexValue == null)
       jcasType.jcas.throwFeatMissing("timexValue", "org.ohnlp.medtime.type.MedTimex3");
@@ -234,14 +269,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: foundByRule
 
   /** getter for foundByRule - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getFoundByRule() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_foundByRule == null)
       jcasType.jcas.throwFeatMissing("foundByRule", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_foundByRule);}
     
   /** setter for foundByRule - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setFoundByRule(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_foundByRule == null)
       jcasType.jcas.throwFeatMissing("foundByRule", "org.ohnlp.medtime.type.MedTimex3");
@@ -252,14 +291,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: timexQuant
 
   /** getter for timexQuant - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimexQuant() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexQuant == null)
       jcasType.jcas.throwFeatMissing("timexQuant", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_timexQuant);}
     
   /** setter for timexQuant - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexQuant(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexQuant == null)
       jcasType.jcas.throwFeatMissing("timexQuant", "org.ohnlp.medtime.type.MedTimex3");
@@ -270,14 +313,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: timexFreq
 
   /** getter for timexFreq - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimexFreq() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexFreq == null)
       jcasType.jcas.throwFeatMissing("timexFreq", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_timexFreq);}
     
   /** setter for timexFreq - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexFreq(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexFreq == null)
       jcasType.jcas.throwFeatMissing("timexFreq", "org.ohnlp.medtime.type.MedTimex3");
@@ -288,14 +335,18 @@ public class MedTimex3 extends Annotation {
   //* Feature: timexMod
 
   /** getter for timexMod - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimexMod() {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexMod == null)
       jcasType.jcas.throwFeatMissing("timexMod", "org.ohnlp.medtime.type.MedTimex3");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedTimex3_Type)jcasType).casFeatCode_timexMod);}
     
   /** setter for timexMod - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexMod(String v) {
     if (MedTimex3_Type.featOkTst && ((MedTimex3_Type)jcasType).casFeat_timexMod == null)
       jcasType.jcas.throwFeatMissing("timexMod", "org.ohnlp.medtime.type.MedTimex3");

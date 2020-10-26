@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** Strength indicates the strength number and unit of the prescribed drug.  E.g. "5 mg" in "one 5 mg tablet twice-a-day for 2 weeks"
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class MedicationStrength extends Attribute {
   /** @generated
@@ -45,10 +45,13 @@ public class MedicationStrength extends Attribute {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -57,14 +60,18 @@ public class MedicationStrength extends Attribute {
   //* Feature: number
 
   /** getter for number - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getNumber() {
     if (MedicationStrength_Type.featOkTst && ((MedicationStrength_Type)jcasType).casFeat_number == null)
       jcasType.jcas.throwFeatMissing("number", "org.ohnlp.typesystem.type.refsem.MedicationStrength");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedicationStrength_Type)jcasType).casFeatCode_number);}
     
   /** setter for number - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNumber(String v) {
     if (MedicationStrength_Type.featOkTst && ((MedicationStrength_Type)jcasType).casFeat_number == null)
       jcasType.jcas.throwFeatMissing("number", "org.ohnlp.typesystem.type.refsem.MedicationStrength");
@@ -75,14 +82,18 @@ public class MedicationStrength extends Attribute {
   //* Feature: unit
 
   /** getter for unit - gets the unit of measurement
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getUnit() {
     if (MedicationStrength_Type.featOkTst && ((MedicationStrength_Type)jcasType).casFeat_unit == null)
       jcasType.jcas.throwFeatMissing("unit", "org.ohnlp.typesystem.type.refsem.MedicationStrength");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedicationStrength_Type)jcasType).casFeatCode_unit);}
     
   /** setter for unit - sets the unit of measurement 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setUnit(String v) {
     if (MedicationStrength_Type.featOkTst && ((MedicationStrength_Type)jcasType).casFeat_unit == null)
       jcasType.jcas.throwFeatMissing("unit", "org.ohnlp.typesystem.type.refsem.MedicationStrength");
