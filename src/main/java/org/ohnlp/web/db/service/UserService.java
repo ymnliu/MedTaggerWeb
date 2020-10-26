@@ -26,6 +26,11 @@ public class UserService {
         return u;
     }
 
+    public User getUserByUsername(String username) {
+        User u = this.userRepository.findByUsername(username);
+        return u;
+    }
+
     public User getOrCreateUser(String username) {
         User u = this.userRepository.findByUsername(username);
         return u;

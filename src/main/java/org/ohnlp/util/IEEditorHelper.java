@@ -70,13 +70,22 @@ public class IEEditorHelper {
         }
         Files.write(file_resources_rules_matchrules_txt.toPath(), lines_matchrules.getBytes());
 
-        // create rules/resources_rules_matchrules.txt
-        File file_contextRule_txt = new File(
-            dir_context.getAbsolutePath(),
-            "contextRule.txt"
-        );
-        Files.createFile(file_contextRule_txt.toPath());
-        lines_used_resources_txt += "./context/contextRule.txt\n";
+        // create context files
+        JSONArray contexts = (JSONArray) jRulePack.get("contexts");
+        for (int i = 0; i < contexts.size(); i++) {
+            JSONObject context = (JSONObject) contexts.get(i);
+            String name = (String) context.get("name");
+            String text = (String) context.get("text");
+            
+            // create file for this context
+            File file_rs_context_txt = new File(
+                dir_context.getAbsolutePath(),
+                name + ".txt"
+            );
+            Files.createFile(file_rs_context_txt.toPath());
+            Files.write(file_rs_context_txt.toPath(), text.getBytes());
+            lines_used_resources_txt += "./context/" + file_rs_context_txt.getName() + "\n";
+        }
 
         // create regexp files
         JSONArray rsregexps = (JSONArray) jRulePack.get("rsregexps");
