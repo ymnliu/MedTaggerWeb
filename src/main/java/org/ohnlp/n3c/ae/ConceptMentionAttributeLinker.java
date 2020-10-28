@@ -1,5 +1,6 @@
 package org.ohnlp.n3c.ae;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -35,17 +36,16 @@ public class ConceptMentionAttributeLinker extends JCasAnnotator_ImplBase {
 			LinkedList cmq = new LinkedList<ConceptMention>();
 			LinkedList fmq = new LinkedList<ConceptMention>();
 			
-			Queue timeq = new LinkedList<MedTimex3>();
+			LinkedList timeq = new LinkedList<MedTimex3>();
 			timex3Iter.forEachRemaining(timeq::add);
 
 			while(cmIter.hasNext()){
 				ConceptMention cm = (ConceptMention) cmIter.next();
 				if(cm.getNormTarget().contains("degree_relative")) {
 					fmq.add(cm);
-				}else {
+				}else{
 					cmq.add(cm);
 				}
-				
 			}
 			
 			if(cmq.size() + timeq.size() + fmq.size() > 25) {
@@ -53,35 +53,69 @@ public class ConceptMentionAttributeLinker extends JCasAnnotator_ImplBase {
 						sent.getCoveredText(), cmq.size() + timeq.size() + fmq.size()));
 			}
 			
-			matchCMwithAttr(jcas, cmq, fmq);
+			matchCMwithAttr(jcas, cmq, fmq, timeq);
 			
 		}
 	}
 	
-	private void matchCMwithAttr(JCas jcas, LinkedList<ConceptMention> cmq, LinkedList<ConceptMention> fmq) {
+	/**
+	 * 
+	 * Match mentions into conditions with time and family member info
+	 * 
+	 * @param jcas
+	 * @param cmq
+	 * @param fmq
+	 * @param timeq
+	 */
+	private void matchCMwithAttr(JCas jcas, LinkedList<ConceptMention> cmq, 
+			LinkedList<ConceptMention> fmq, LinkedList<MedTimex3> timeq) {
 		
+		// temporarily store uncompleted Condition objects in the list
+		// to be revisited to add into the index
+		ArrayList<Condition> cds = new ArrayList<>();
 		
+		// First, try to match concepts to family members
 		if(cmq.size() == fmq.size()) {
 			for(int i=0; i < cmq.size(); i++) {
 				Condition cd = new Condition(jcas);
 				cd.setSignSymptom(cmq.get(i));
 				cd.setSubject(fmq.get(i));
-				cd.addToIndexes();
+				cds.add(cd);
 			}
 		}else if(cmq.size() == 1) {
 			for(ConceptMention fh: fmq) {
 				Condition cd = new Condition(jcas);
 				cd.setSignSymptom(cmq.getFirst());
 				cd.setSubject(fh);
-				cd.addToIndexes(jcas);
+				cds.add(cd);
 			}
 		}else if(fmq.size() == 1) {
 			for(ConceptMention cm: cmq) {
 				Condition cd = new Condition(jcas);
 				cd.setSignSymptom(cm);
 				cd.setSubject(fmq.getFirst());
-				cd.addToIndexes();
+				cds.add(cd);
 			}
 		}
+		
+		// second pass to add time to conditions
+		if(timeq.size() == 1) {
+			if(cds.size() == 0) {
+				for(ConceptMention cm : cmq) {
+					Condition cd = new Condition(jcas);
+					cd.setSignSymptom(cm);
+					cd.setTime(timeq.getFirst());
+					cd.addToIndexes();
+				}
+			}else {
+				// if all concepts has been added as Conditions, 
+				// directly add time to each condition. 
+				for(Condition cd: cds) {
+					cd.setTime(timeq.getFirst());
+					cd.addToIndexes();
+				}
+			}
+		}
+		
 	}
 }
