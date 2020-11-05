@@ -4,6 +4,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import java.sql.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +31,9 @@ public class Project {
         optional=false)
     @JoinColumn(name = "user_id")
     private User user;
+    
+    @Column(name = "date_created")
+    private Date date_created;
 
     public Project() { 
     }
@@ -58,6 +64,14 @@ public class Project {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Date getDateCreated() {
+        return this.date_created;
+    }
+
+    public void setDateCreated(Date date_created) {
+        this.date_created = date_created;
     }
 
     @Override

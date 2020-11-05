@@ -8,15 +8,13 @@ import com.onelogin.saml2.servlet.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.ohnlp.n3c.N3CNLPEngine;
 import org.ohnlp.util.BioPortalAPI;
 import org.ohnlp.util.IEEditorHelper;
 import org.ohnlp.web.db.entity.Project;
 import org.ohnlp.web.db.entity.Rulepack;
 import org.ohnlp.web.db.entity.User;
-import org.ohnlp.web.db.repo.ProjectRepository;
-import org.ohnlp.web.db.repo.UserRepository;
+import org.ohnlp.web.db.service.MTService;
 import org.ohnlp.web.db.service.ProjectService;
 import org.ohnlp.web.db.service.RulepackService;
 import org.ohnlp.web.db.service.UserService;
@@ -54,6 +52,8 @@ public class WebServiceController {
     private ProjectService projectService;
     @Autowired
     private RulepackService rulepackService;
+    @Autowired
+    private MTService mtService;
 
     /**
      * To initialize UIMA resources and type systesms
@@ -62,12 +62,21 @@ public class WebServiceController {
     public WebServiceController(
         UserService userService, 
         ProjectService projectService,
-        RulepackService rulepackService) {
+        RulepackService rulepackService,
+        MTService mtService) {
 
         n3CNLPEngine = new N3CNLPEngine();
         this.userService = userService;
         this.projectService = projectService;
         this.rulepackService = rulepackService;
+        this.mtService = mtService;
+
+        // create a guest user and user project in db
+        // User user = this.userService.getOrCreateUser("guest");
+        // this.projectService.getOrCreateProject(user, "guest");
+        this.mtService.createUserAndRelated("guest");
+        this.logger.info("Created user guest and project if not exist.");
+
     }
 
     /**
@@ -76,10 +85,13 @@ public class WebServiceController {
      * @return the initial view out of index-template
      */
     @GetMapping("/")
-    public ModelAndView index() {
-        ModelAndView indexView = new ModelAndView();
-        indexView.setViewName("demo");
-        return indexView;
+    public ModelAndView index(HttpSession session) {
+        String username = this.getCurrentUsername(session);
+
+        ModelAndView view = new ModelAndView();
+        view.setViewName("demo");
+        view.addObject("username", username);
+        return view;
     }
 
     @GetMapping("/index_v0")
@@ -98,7 +110,8 @@ public class WebServiceController {
     }
 
     @PostMapping("/acs")
-    public String dummy(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+    public String dummy(HttpServletRequest request, 
+        HttpServletResponse response, HttpSession session) throws Exception {
         Auth auth = new Auth(request, response);
         StringBuilder sb = new StringBuilder();
         auth.processResponse(request.getRequestedSessionId());
@@ -131,8 +144,11 @@ public class WebServiceController {
             session.setAttribute("nameidSPNameQualifier", nameidSPNameQualifier);
 
             String relayState = request.getParameter("RelayState");
-            if (relayState != null && !relayState.isEmpty() && !relayState.equals(ServletUtils.getSelfRoutedURLNoQuery(request)) &&
-                    !relayState.contains("/dologin.jsp")) { // We don't want to be redirected to login.jsp neither
+            if (relayState != null && 
+                !relayState.isEmpty() && 
+                !relayState.equals(ServletUtils.getSelfRoutedURLNoQuery(request)) &&
+                !relayState.contains("/dologin.jsp")) { 
+                // We don't want to be redirected to login.jsp neither
                 response.sendRedirect(request.getParameter("RelayState"));
             } else {
 
@@ -178,7 +194,7 @@ public class WebServiceController {
     }
 
     @GetMapping("/attrs")
-    public String showAttrs(HttpServletRequest request, HttpServletResponse response, HttpSession session){
+    public ModelAndView showAttrs(HttpServletRequest request, HttpServletResponse response, HttpSession session){
         Boolean found = false;
         @SuppressWarnings("unchecked")
         Enumeration<String> elems = (Enumeration<String>) session.getAttributeNames();
@@ -218,7 +234,16 @@ public class WebServiceController {
             sb.append("<div class=\"alert alert-danger\" role=\"alert\">Not authenticated</div>");
         }
 
-        return sb.toString();
+        session.setAttribute("username", (String) session.getAttribute("nameId"));
+
+        String username = this.getCurrentUsername(session);
+        // return sb.toString();
+
+        final ModelAndView view = new ModelAndView();
+        view.setViewName("login_result");
+        view.addObject("username", username);
+        view.addObject("sb", sb);
+        return view;
     }
 
 
@@ -272,10 +297,13 @@ public class WebServiceController {
      * @return the demo view
      */
     @GetMapping("/demo")
-    public ModelAndView demo() {
-        final ModelAndView indexView = new ModelAndView();
-        indexView.setViewName("demo");
-        return indexView;
+    public ModelAndView demo(HttpSession session) {
+        String username = this.getCurrentUsername(session);
+        
+        ModelAndView view = new ModelAndView();
+        view.setViewName("demo");
+        view.addObject("username", username);
+        return view;
     }
 
     /**
@@ -284,10 +312,13 @@ public class WebServiceController {
      * @return the dictionary builder view
      */
     @GetMapping("/dict_builder")
-    public ModelAndView dict_builder() {
-        final ModelAndView indexView = new ModelAndView();
-        indexView.setViewName("dict_builder");
-        return indexView;
+    public ModelAndView dict_builder(HttpSession session) {
+        String username = this.getCurrentUsername(session);
+
+        final ModelAndView view = new ModelAndView();
+        view.setViewName("dict_builder");
+        view.addObject("username", username);
+        return view;
     }
 
     /**
@@ -344,30 +375,11 @@ public class WebServiceController {
         String username = this.getCurrentUsername(session);
 
         System.out.println("* username: " + username);
-        final ModelAndView indexView = new ModelAndView();
-        indexView.setViewName("ie_editor");
-        indexView.addObject("username", username);
+        final ModelAndView view = new ModelAndView();
+        view.setViewName("ie_editor");
+        view.addObject("username", username);
 
-        return indexView;
-    }
-
-    private String getCurrentUsername(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-
-        if (username == null) {
-            username = "guest";
-            // check database
-            User user = this.userService.getUserByUsername(username);
-            if (user == null) {
-                user = this.userService.createUser(username);
-                this.projectService.createProject(user, username);
-            }
-
-            // set session as current guest
-            session.setAttribute("username", username);
-        }
-
-        return username;
+        return view;
     }
 
     /**
@@ -399,18 +411,6 @@ public class WebServiceController {
         }
     }
 
-    /**
-     * Login (fake)
-     * @return the dictionary builder view
-     */
-    @GetMapping("/login")
-    public String fake_login(@RequestParam(name = "username") String username, HttpSession session) {
-        // set user name
-        session.setAttribute("username", username);
-        System.out.println("* set username: " + username);
-        return "Set username: " + username;
-    }
-
 
     // Login form
     @RequestMapping("/dologin")
@@ -424,48 +424,38 @@ public class WebServiceController {
 
     // test
     @RequestMapping("/test")
-    public ModelAndView page_test(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView page_test(
+        HttpServletRequest request, 
+        HttpServletResponse response,
+        HttpSession session) throws Exception {
+
         User user = userService.getUserByUsername("guest");
-        System.out.print("* user: " + user);
+        System.out.println("* user: " + user);
 
-        // create a user
-        String username = "" + System.currentTimeMillis() + "@gmail.com";
-        userService.createUser(username);
-
-        // create a user by service
-        User u2 = userService.createUser(username);
-        System.out.println("* created a user by userService: " + u2.toString());
-
-        User u3 = userService.getOrCreateUser("guest");
-        System.out.println("* get or create a user [guest] by userService: " + u3);
-
+        String username = this.getCurrentUsername(session);
+        System.out.println("* username in session: " + username);
 
         final ModelAndView testView = new ModelAndView();
         testView.setViewName("test");
-        testView.addObject("username", user.toString());
+        testView.addObject("username", user);
         return testView;
     }
 
+    
+    // test
+    @RequestMapping("/user_portal")
+    public ModelAndView user_portal(HttpSession session) throws Exception {
+        // get current user
+        String username = this.getCurrentUsername(session);
+        User user = this.userService.getUserByUsername(username);
 
-    @GetMapping("/_user")
-    public String fake_login(
-        @RequestParam(name = "username") String username, 
-        @RequestParam(name = "action") String action, 
-        HttpSession session) {
-        // set user name
-        if (action.equalsIgnoreCase("login")) {
-            session.setAttribute("username", username);
-            System.out.println("* session username=" + session.getAttribute("username"));
-        } else if (action.equalsIgnoreCase("logout")) {
-            session.setAttribute("username", null);
-        } else if (action.equalsIgnoreCase("create")) {
-            User user = this.userService.createUser(username);
-            Project project = this.projectService.createProject(user, username);
-            // created, login
-            session.setAttribute("username", username);
-            System.out.println("* session username=" + session.getAttribute("username"));
-        }
-        return action + " - " + username;
+        // get rulepacks
+        List<Rulepack> rulepacks = this.rulepackService.getRulepackListByUser(user);
+
+        final ModelAndView view = new ModelAndView();
+        view.setViewName("user_portal");
+        view.addObject("rulepacks", rulepacks);
+        return view;
     }
 
 
@@ -624,6 +614,48 @@ public class WebServiceController {
 
         return nameId + " has been logged out";
     }
+    
+    
+    /**
+     * Login (fake)
+     * @return the fake login view
+     */
+    @GetMapping("/fake_login")
+    public ModelAndView fake_login(HttpSession session) {
+        final ModelAndView view = new ModelAndView();
+        view.setViewName("fake_login");
+        return view;
+    }
+
+    /**
+     * Login (fake)
+     * @return the dictionary builder view
+     */
+    @PostMapping("/fake_login")
+    public String fake_login(
+        @RequestParam(name = "username") String username, 
+        @RequestParam(name = "password") String password, 
+        @RequestParam(name = "action") String action, 
+        HttpSession session) {
+        // set user name
+        if (action.equalsIgnoreCase("login")) {
+            session.setAttribute("username", username);
+            System.out.println("* session username=" + session.getAttribute("username"));
+            return "Logged in";
+        } else if (action.equalsIgnoreCase("logout")) {
+            session.setAttribute("username", null);
+            return "Logged out";
+        } else if (action.equalsIgnoreCase("create")) {
+            // create this user if not exists
+            this.mtService.createUserAndRelated(username);
+            // created, login
+            session.setAttribute("username", username);
+            return "Created if not exist and logged in";
+        } else {
+            return action + " - " + username;
+        }
+    }
+
 
     /**
      * Logout (fake)
@@ -635,5 +667,32 @@ public class WebServiceController {
         session.setAttribute("username", null);
         System.out.println("* Logged out username.");
         return "Logged out";
+    }
+
+
+    /**
+     * Get current username from session
+     * @param session
+     * @return username
+     */
+    private String getCurrentUsername(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        System.out.print("* get username in session: [" + username + "] ");
+
+        if (username == null) {
+            username = "guest";
+            // check database
+            User user = this.userService.getUserByUsername(username);
+            if (user == null) {
+                user = this.userService.createUser(username);
+                this.projectService.createProject(user, username);
+            }
+
+            // set session as current guest
+            session.setAttribute("username", username);
+        }
+        System.out.println("and now is: [" + username + "]");
+
+        return username;
     }
 }

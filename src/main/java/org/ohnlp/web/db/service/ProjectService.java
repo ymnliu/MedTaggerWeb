@@ -1,5 +1,7 @@
 package org.ohnlp.web.db.service;
 
+import java.sql.Date;
+
 import org.ohnlp.web.db.entity.Project;
 import org.ohnlp.web.db.entity.User;
 import org.ohnlp.web.db.repo.ProjectRepository;
@@ -18,8 +20,19 @@ public class ProjectService {
         
         project.setTitle(title);
         project.setUser(user);
+        project.setDateCreated(new Date(System.currentTimeMillis()));
 
         this.projectRepository.save(project);
+
+        return project;
+    }
+
+    public Project getOrCreateProject(User user, String title) {
+        Project project = this.projectRepository.findByTitle(title);
+
+        if (project == null) {
+            project = this.createProject(user, title);
+        }
 
         return project;
     }

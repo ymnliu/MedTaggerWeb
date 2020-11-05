@@ -94,6 +94,9 @@ public class IEEditorHelper {
             String name = (String) rsregexp.get("name");
             String text = (String) rsregexp.get("text");
 
+            // add the prefix
+            name = "resources_regexp_re" + name;
+
             // create file for this regexp
             File file_rs_regexp_txt = new File(
                 dir_regexp.getAbsolutePath(),
