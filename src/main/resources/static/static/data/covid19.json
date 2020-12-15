@@ -1,75 +1,75 @@
 {
   "rsregexps": [
     {
-      "name": "resources_regexp_reLYMPHOPENIA",
+      "name": "LYMPHOPENIA",
       "text": "lymphopenia\nlymphocytopenia\ndecreased lymphocyte\ndecreased lymphocytes\nlow lymphocyte count\nlow lymphocyte number"
     },
     {
-      "name": "resources_regexp_reSORETHROAT",
+      "name": "SORETHROAT",
       "text": "sore throat\nthroat soreness\nthroat pain\npharyngeal pain\npharyngeal discomfort\npharynx pain\npharynx discomfort\nthroat discomfort\ndifficulty swallowing"
     },
     {
-      "name": "resources_regexp_reGROUNDGLASSINFILTRATES",
+      "name": "GROUNDGLASSINFILTRATES",
       "text": "hazy lung radiopacity\nfairly diffuse\nground glass opacity\nground-glass opacity\nground glass shadows\nground glass shadow"
     },
     {
-      "name": "resources_regexp_reELEVATEDLDH",
+      "name": "ELEVATEDLDH",
       "text": "elevated lactate dehydrogenase\nelevated LDH\nLDH increased\nlactate dehydrogenase increased\nlactate dehydrogenase activity increased"
     },
     {
-      "name": "resources_regexp_reDIARRHEA",
+      "name": "DIARRHEA",
       "text": "diarrhea\nloose bowel movement\nwatery stool\nloose stool\ndiarrhoea\ndiarhea\ndiarhoea\ndiarrhoea"
     },
     {
-      "name": "resources_regexp_reNASALCONGESTION",
+      "name": "NASALCONGESTION",
       "text": "blocked nose\ncongested nose\nnose block\nnasal congestion\nstuffy nose\nrunny nose\nrunning nose\nnasal blockage\nblockage of nose\nobstruction of nose\nnasal obstruction\ncongestion of nose"
     },
     {
-      "name": "resources_regexp_reDRYCOUGH",
+      "name": "DRYCOUGH",
       "text": "dry cough\nunproductive cough\nnon productive cough\nnon-productive cough\nnonproductive cough\ncough unproductive\ncough non-productive\ncough non productive\ncough nonproductive"
     },
     {
-      "name": "resources_regexp_reFATIGUE",
+      "name": "FATIGUE",
       "text": "fatigue\ntired\ntiredness\nfatigued\nenergy loss\nlack of energy\nno energy\nweariness\nexhausted\nmalaise"
     },
     {
-      "name": "resources_regexp_reDYSPNEA",
+      "name": "DYSPNEA",
       "text": "dyspnea\nshortness of breath\nsob\nrespiratory difficulty\nbreathing difficulties\ndifficult breathing\ndifficult to breathe\npanting\nhyperpnea\ngasping\ngasp\nrapid breathing\nbreathing fast\nfast breathing\ntrouble breathing\nbreathing difficulty\nabnormal breathing"
     },
     {
-      "name": "resources_regexp_reFEVER",
+      "name": "FEVER",
       "text": "fever\nhigh temperature\nhigh body temperature\nhyperthermia\nelevated temperature\nelevated body temperature\nfebrile\nfebris\npyrexia\npyrexial"
     },
     {
-      "name": "resources_regexp_reHEADACHE",
+      "name": "HEADACHE",
       "text": "headache\ncephalalgia\nhead pain\npain in head\nhead ache\naching head\nhead aching\nmigrane\nmigraine"
     },
     {
-      "name": "resources_regexp_reMYALGIA",
+      "name": "MYALGIA",
       "text": "myalgia\nmuscle pain\nmuscle pains\nmuscle ache\nmuscle aches\nmuscular aching\nmuscular pain\nmyalgic\nmyodynia\nmuscle discomfort\nmuscular discomfort\npain in muscle"
     },
     {
-      "name": "resources_regexp_reABDOMINALPAIN",
+      "name": "ABDOMINALPAIN",
       "text": "abdominal pain\nstomach pain\ngut pain\npain abdominal\nstomachache\nbelly ache\nbellyache\ngastrointestinal pain\ngastro pain\npain in stomach\nabdominal discomfort\nupset stomach"
     },
     {
-      "name": "resources_regexp_rePATCHYINFILTRATES",
+      "name": "PATCHYINFILTRATES",
       "text": "patchy pulmonary infiltrate\npatchy pulmonary infiltrates\npatchy infiltrate\npatchy infiltrates\npulmonary infiltrate\npulmonary infiltrates"
     },
     {
-      "name": "resources_regexp_rePROLONGEDPROTOTHROMBIN",
+      "name": "PROLONGEDPROTOTHROMBIN",
       "text": "elevated PT\nprothrombin increased\nprolonged pt\nprolonged prothrombin time\nabnormal prothrombin time\nabnormal pt"
     },
     {
-      "name": "resources_regexp_reFLUEXPLICIT",
+      "name": "FLUEXPLICIT",
       "text": "flu\ninfluenza\ngrippe"
     },
     {
-      "name": "resources_regexp_reAPPETITELOSS",
+      "name": "APPETITELOSS",
       "text": "loss of appetite\nappetite loss\nno appetite\nanorexia\nfood aversion"
     },
     {
-      "name": "resources_regexp_reFLUSHOT",
+      "name": "FLUSHOT",
       "text": "influenza vaccine\nflu vaccine\ninfluenza vaccination\nflu vaccination\nflu shot\ninfluenza shot\ninfluenza laiv\nflu swab\ninfluenza results\nflu vaccinations\ninfluenza vaccinations\nflu shots\ninfluenza immunization\ninfluenza immunizations\nregex:influenza\\\\s(?:\\\\S+\\\\s+){0,2}vaccin(?:e\nation)s?\ninfluenza high dose\ninfluenza tiv\nflu tiv\nflu test\ninfluenza (?:IM)\ninfluenza quadrivalent\nInfluenza A\/B and Respiratory Syncytial Virus, PCR\nInfluenza A\/B and RSV, PCR\nInfluenza A, B, RSV, PCR\ninfluenza test\nINFLUENZA A AND B AND RSV"
     }
   ],

@@ -1,6 +1,6 @@
 package org.ohnlp.web.db.service;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import org.ohnlp.web.db.entity.Project;
@@ -33,6 +33,8 @@ public class RulepackService {
         // set those new attrs
         rulepack.setTitle(title);
         rulepack.setData(data);
+        rulepack.setDateUpdated(new Date(System.currentTimeMillis()));
+
         rulepack.setDateUpdated(new Date());
 
         // save into db
@@ -49,6 +51,9 @@ public class RulepackService {
         rulepack.setProject(project);
         rulepack.setTitle(title);
         rulepack.setData(data);
+        rulepack.setDateCreated(new Date(System.currentTimeMillis()));
+        rulepack.setDateUpdated(new Date(System.currentTimeMillis()));
+
         rulepack.setDateCreated(new Date());
         rulepack.setDateUpdated(new Date());
 

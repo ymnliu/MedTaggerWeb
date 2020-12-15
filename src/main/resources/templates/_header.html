@@ -1,0 +1,47 @@
+<nav th:fragment="header" class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container">
+
+        <div class="navbar-header">
+            <a class="navbar-brand" href="https://covid.cd2h.org/">
+                <img src="https://covid.cd2h.org/sites/default/files/n3c_logo_circle_large.png" alt="n3c_logo" style="width:40px;">
+            </a>
+            <a class="navbar-brand" href="#">N3C NLP Engine Demo</a>
+        </div>
+
+        <div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item "><a class="nav-link" href="/">
+                    <i class="fa fa-head-side-mask"></i>
+                    COVID-19 Demo
+                </a></li>
+                <li class="nav-item"><a class="nav-link" href="/dict_builder" >
+                    <i class="fa fa-book-medical"></i>
+                    Dictionary Builder
+                </a></li>
+                <li class="nav-item"><a class="nav-link" href="/ie_editor" >
+                    <i class="fa fa-edit"></i>
+                    Rule Editor <span class="sr-only">(current)</span>
+                </a></li>
+                <li class="nav-item"><a class="nav-link" href="https://github.com/OHNLP/N3C-NLP-Documentation/wiki" target="_blank">
+                    <i class="fa fa-book"></i>
+                    Wiki
+                </a></li>
+            </ul>
+        </div>
+
+        <div>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="fa fa-user"></i> 
+                        [[ ${username} ]]
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/OHNLP/MedTagger" target="_blank"><i class="fa fa-github"></i> GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</nav>

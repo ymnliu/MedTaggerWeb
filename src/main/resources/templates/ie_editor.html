@@ -257,53 +257,7 @@
 
 <body>
 <!-- Fixed navbar -->
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <div class="container">
-
-        <div class="navbar-header">
-            <a class="navbar-brand" href="https://covid.cd2h.org/">
-                <img src="https://covid.cd2h.org/sites/default/files/n3c_logo_circle_large.png" alt="n3c_logo" style="width:40px;">
-            </a>
-            <a class="navbar-brand" href="#">N3C NLP Engine Demo</a>
-        </div>
-
-        <div>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item "><a class="nav-link" href="/">
-                    <i class="fa fa-head-side-mask"></i>
-                    COVID-19 Demo
-                </a></li>
-                <li class="nav-item"><a class="nav-link" href="/dict_builder" >
-                    <i class="fa fa-book-medical"></i>
-                    Dictionary Builder
-                </a></li>
-                <li class="nav-item active"><a class="nav-link" href="#" >
-                    <i class="fa fa-edit"></i>
-                    Rule Editor <span class="sr-only">(current)</span>
-                </a></li>
-                <li class="nav-item"><a class="nav-link" href="https://github.com/OHNLP/N3C-NLP-Documentation/wiki" target="_blank">
-                    <i class="fa fa-book"></i>
-                    Wiki
-                </a></li>
-            </ul>
-        </div>
-
-        <div>
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link">
-                        <i class="fa fa-user"></i> 
-                        [[${username}]]
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://github.com/OHNLP/MedTagger" target="_blank"><i class="fa fa-github"></i> GitHub</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-</nav>
+<div th:insert="~{_header :: header}"></div>
 
 <div id="infobox-upload-and-test" class="info-box" data-role="infobox">
     <span class="button square closer"></span>
@@ -470,6 +424,18 @@
                     <span class="title">Test</span>
                 </div>
 
+                <div class="group">
+
+                    <button class="ribbon-button" v-on:click="show_about">
+                        <span class="icon">
+                            <i class="fa fa-book"></i>
+                        </span>
+                        <span class="caption">About</span>
+                    </button>
+
+                    <span class="title">Help</span>
+                </div>
+
             </div>
 
         </div>
@@ -482,9 +448,9 @@
                 <div id="context-pane">
                     <div class="box">
                         <div class="box-header">
-                            <h4>
+                            <h4 title="The contexts for extracting concepts">
                                 <i class="fa fa-border-all"></i>
-                                Context Files
+                                Contexts
                             </h4>
                             <div>
                                 <button v-on:click="add_context">
@@ -521,7 +487,7 @@
                         <div class="box-header">
                             <h4>
                                 <i class="fa fa-pencil-ruler"></i>
-                                Match Rules
+                                Rules
                             </h4>
                             <div>
                                 <button v-on:click="add_rule">
@@ -581,12 +547,12 @@
                     <div class="box-header">
                         <h4>
                             <i class="far fa-folder"></i>
-                            Regular Expression Files
+                            Regular Expressions
                         </h4>
                         <div>
                             <button v-on:click="add_rsregexp">
                                 <i class="far fa-file-alt"></i>
-                                Add Regexp File
+                                Add Regexp Item
                             </button>
                         </div>
                     </div>
@@ -649,6 +615,9 @@ var fm_chfila = {
             SAVED: 'saved',
             SAVING: 'saving',
             UNSAVED: 'unsaved'
+        },
+        prefix: {
+            rsregexp: 'resources_regexp_re'
         }
     },
 
@@ -687,7 +656,7 @@ var fm_chfila = {
             el: this.vpp_id,
             data: {
                 // the current rule pack
-                rulepack: Object.assign({}, fm_chfila.sample),
+                rulepack: fm_chfila.create_new_pack(),
 
                 // for db
                 rulepack_id: null,
@@ -791,6 +760,10 @@ var fm_chfila = {
 
                 show_upload_and_test: function() {
                     Metro.infobox.open('#infobox-upload-and-test');
+                },
+
+                show_about: function() {
+                    window.open('https://github.com/OHNLP/N3C-NLP-Documentation', '_blank');
                 }
             },
 
@@ -918,9 +891,11 @@ var fm_chfila = {
 
     create_new_context: function() {
         var num = 0;
-        if (typeof(this.vpp.rulepack) != 'undefined') {
-            if (typeof(this.vpp.rulepack.contexts) != 'undefined') {
-                num = this.vpp.rulepack.contexts.length;
+        if (this.vpp != null) {
+            if (typeof(this.vpp.rulepack) != 'undefined') {
+                if (typeof(this.vpp.rulepack.contexts) != 'undefined') {
+                    num = this.vpp.rulepack.contexts.length;
+                }
             }
         }
         return {
@@ -931,7 +906,7 @@ var fm_chfila = {
 
     create_new_rsregexp: function () {
         return {
-            name: 'resources_regexp_reNAME',
+            name: 'NAME',
             text: 'myname\nyourname\nothername'
         };
     },
@@ -993,6 +968,8 @@ var fm_chfila = {
                 console.log('* save rulepack: ', data.r);
                 // update state
                 fm_chfila.vpp.rulepack_state = fm_chfila.rp.state.SAVED;
+                // update the id
+                fm_chfila.vpp.rulepack_id = data.r.id;
                 // show message
                 jarvis.msg('Rule Package is saved.');
             }, 'json'
@@ -1039,7 +1016,7 @@ var fm_chfila = {
         var txt_fns = '';
         for (var i = 0; i < this.vpp.rulepack.rsregexps.length; i++) {
             var rsregexp = this.vpp.rulepack.rsregexps[i];
-            var ffn = 'regexp/' + rsregexp.name + '.txt';
+            var ffn = 'regexp/' + this.rp.prefix.rsregexp + rsregexp.name + '.txt';
             var txt = rsregexp.text;
             txt_fns += './' + ffn + '\n';
             // add to zip
@@ -1125,10 +1102,14 @@ var jarvis = {
             cls = 'info';
         }
         s = '<i class="fa fa-info-circle"></i> ' + s; 
-        Metro.notify.create(s, null, { 
-            cls: cls,
+        var notify = Metro.notify;
+        notify.setup({
+            width: 300,
             timeout: 8000,
-            width: '300px'
+            animation: 'swing'
+        });
+        notify.create(s, null, { 
+            cls: cls
         });
     }
 }

@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./static/lib/brat/css/style.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
-    <script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
-    <title>COVID-19 Term Detector</title>
-    <link href="./static/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
-    <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="./static/lib/brat/css/style.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+<script src="https://kit.fontawesome.com/cb45cc91b0.js" crossorigin="anonymous"></script>
+<title>COVID-19 Term Detector</title>
+<link href="./static/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<style>
 /* global setting */
 html,
 body {
@@ -62,42 +62,6 @@ body {
 }
 </style>
 
-</head>
-
-<body>
-<!-- Fixed navbar -->
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <div class="container">
-
-    <div class="navbar-header">
-        <a class="navbar-brand" href="https://covid.cd2h.org/">
-            <img src="https://covid.cd2h.org/sites/default/files/n3c_logo_circle_large.png" alt="n3c_logo" style="width:40px;">
-        </a>
-
-        <a class="navbar-brand" href="#">N3C NLP Engine Demo</a>
-    </div>
-
-    <div>
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active"><a class="nav-link" href="#">
-                <i class="fa fa-head-side-mask"></i>
-                COVID-19 Demo <span class="sr-only">(current)</span>
-            </a></li>
-            <li class="nav-item"><a class="nav-link" href="/dict_builder">
-                <i class="fa fa-book-medical"></i>
-                Dictionary Builder
-            </a></li>
-            <li class="nav-item"><a class="nav-link" href="/ie_editor">
-                <i class="fa fa-edit"></i>
-                Rule Editor
-            </a></li>
-            <li class="nav-item"><a class="nav-link" href="https://github.com/OHNLP/N3C-NLP-Documentation/wiki" target="_blank">
-                <i class="fa fa-book"></i>
-                Wiki
-            </a></li>
-        </ul>
-    </div>
-
     <div>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
@@ -107,7 +71,9 @@ body {
     </div>
     </div>
 
-</nav>
+<body>
+<!-- Fixed navbar -->
+<div th:insert="~{_header :: header}"></div>
 
 <div class="container">
     <div class="container-fluid" style="margin-top: 70px; height: calc(100% - 70px);">
