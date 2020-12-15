@@ -26,6 +26,5 @@ public class MTService {
     public void createUserAndRelated(String username) {
         User user = this.userService.getOrCreateUser(username);
         Project project = this.projectService.getOrCreateProject(user, user.getUsername());
-    }
-    
+    }    
 }

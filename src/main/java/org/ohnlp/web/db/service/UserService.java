@@ -1,7 +1,6 @@
 package org.ohnlp.web.db.service;
 
 import java.sql.Date;
-
 import org.ohnlp.web.db.entity.User;
 import org.ohnlp.web.db.repo.UserRepository;
 import org.springframework.stereotype.Service;

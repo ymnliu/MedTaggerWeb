@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** A Penn Treebank Node; as a terminal, there is an associated word, and the index of the word is a feature.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class TerminalTreebankNode extends TreebankNode {
   /** @generated
@@ -53,10 +53,13 @@ public class TerminalTreebankNode extends TreebankNode {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -65,14 +68,18 @@ public class TerminalTreebankNode extends TreebankNode {
   //* Feature: index
 
   /** getter for index - gets The index of this node in the top node's list of terminals.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getIndex() {
     if (TerminalTreebankNode_Type.featOkTst && ((TerminalTreebankNode_Type)jcasType).casFeat_index == null)
       jcasType.jcas.throwFeatMissing("index", "org.ohnlp.typesystem.type.syntax.TerminalTreebankNode");
     return jcasType.ll_cas.ll_getIntValue(addr, ((TerminalTreebankNode_Type)jcasType).casFeatCode_index);}
     
   /** setter for index - sets The index of this node in the top node's list of terminals. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setIndex(int v) {
     if (TerminalTreebankNode_Type.featOkTst && ((TerminalTreebankNode_Type)jcasType).casFeat_index == null)
       jcasType.jcas.throwFeatMissing("index", "org.ohnlp.typesystem.type.syntax.TerminalTreebankNode");
@@ -83,14 +90,18 @@ public class TerminalTreebankNode extends TreebankNode {
   //* Feature: tokenIndex
 
   /** getter for tokenIndex - gets The tokenIndex of a terminal is n, where the terminal is the nth token in a sentence.  The value -1 means that this terminal does not correspond to a token (because it is a trace.)  We assume that each token corresponds to a terminal.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getTokenIndex() {
     if (TerminalTreebankNode_Type.featOkTst && ((TerminalTreebankNode_Type)jcasType).casFeat_tokenIndex == null)
       jcasType.jcas.throwFeatMissing("tokenIndex", "org.ohnlp.typesystem.type.syntax.TerminalTreebankNode");
     return jcasType.ll_cas.ll_getIntValue(addr, ((TerminalTreebankNode_Type)jcasType).casFeatCode_tokenIndex);}
     
   /** setter for tokenIndex - sets The tokenIndex of a terminal is n, where the terminal is the nth token in a sentence.  The value -1 means that this terminal does not correspond to a token (because it is a trace.)  We assume that each token corresponds to a terminal. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTokenIndex(int v) {
     if (TerminalTreebankNode_Type.featOkTst && ((TerminalTreebankNode_Type)jcasType).casFeat_tokenIndex == null)
       jcasType.jcas.throwFeatMissing("tokenIndex", "org.ohnlp.typesystem.type.syntax.TerminalTreebankNode");

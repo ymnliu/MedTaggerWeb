@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** How often a medication should be used. e.g., BID or b.i.d. or "twice-a-day" would have a number=2 and unit=day.
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class MedicationFrequency extends Attribute {
   /** @generated
@@ -45,10 +45,13 @@ public class MedicationFrequency extends Attribute {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -57,14 +60,18 @@ public class MedicationFrequency extends Attribute {
   //* Feature: number
 
   /** getter for number - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getNumber() {
     if (MedicationFrequency_Type.featOkTst && ((MedicationFrequency_Type)jcasType).casFeat_number == null)
       jcasType.jcas.throwFeatMissing("number", "org.ohnlp.typesystem.type.refsem.MedicationFrequency");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedicationFrequency_Type)jcasType).casFeatCode_number);}
     
   /** setter for number - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNumber(String v) {
     if (MedicationFrequency_Type.featOkTst && ((MedicationFrequency_Type)jcasType).casFeat_number == null)
       jcasType.jcas.throwFeatMissing("number", "org.ohnlp.typesystem.type.refsem.MedicationFrequency");
@@ -75,14 +82,18 @@ public class MedicationFrequency extends Attribute {
   //* Feature: unit
 
   /** getter for unit - gets The periodic unit used, e.g day, month, hour, etc.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getUnit() {
     if (MedicationFrequency_Type.featOkTst && ((MedicationFrequency_Type)jcasType).casFeat_unit == null)
       jcasType.jcas.throwFeatMissing("unit", "org.ohnlp.typesystem.type.refsem.MedicationFrequency");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedicationFrequency_Type)jcasType).casFeatCode_unit);}
     
   /** setter for unit - sets The periodic unit used, e.g day, month, hour, etc. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setUnit(String v) {
     if (MedicationFrequency_Type.featOkTst && ((MedicationFrequency_Type)jcasType).casFeat_unit == null)
       jcasType.jcas.throwFeatMissing("unit", "org.ohnlp.typesystem.type.refsem.MedicationFrequency");

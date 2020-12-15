@@ -1,7 +1,6 @@
 package org.ohnlp.web.db.service;
 
 import java.sql.Date;
-
 import org.ohnlp.web.db.entity.Project;
 import org.ohnlp.web.db.entity.User;
 import org.ohnlp.web.db.repo.ProjectRepository;
@@ -36,7 +35,6 @@ public class ProjectService {
 
         return project;
     }
-
     public Project getProjectByTitle(User user, String title) {
         Project project = this.projectRepository.findByTitle(title);
 

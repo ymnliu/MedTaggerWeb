@@ -11,8 +11,8 @@ import org.apache.uima.jcas.cas.FSList;
 
 
 /** 
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class CollectionTextRelation extends Relation {
   /** @generated
@@ -46,10 +46,13 @@ public class CollectionTextRelation extends Relation {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -58,14 +61,18 @@ public class CollectionTextRelation extends Relation {
   //* Feature: members
 
   /** getter for members - gets A super-type for relationships between multiple spans of text.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public FSList getMembers() {
     if (CollectionTextRelation_Type.featOkTst && ((CollectionTextRelation_Type)jcasType).casFeat_members == null)
       jcasType.jcas.throwFeatMissing("members", "org.ohnlp.typesystem.type.relation.CollectionTextRelation");
     return (FSList)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((CollectionTextRelation_Type)jcasType).casFeatCode_members)));}
     
   /** setter for members - sets A super-type for relationships between multiple spans of text. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setMembers(FSList v) {
     if (CollectionTextRelation_Type.featOkTst && ((CollectionTextRelation_Type)jcasType).casFeat_members == null)
       jcasType.jcas.throwFeatMissing("members", "org.ohnlp.typesystem.type.relation.CollectionTextRelation");

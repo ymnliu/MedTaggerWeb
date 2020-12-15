@@ -14,8 +14,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.Segment 
    Adapted from the segment defined in SecTag. The definition is consistent with  
   SegTag: see http://knowledgemap.mc.vanderbilt.edu/research/content/sectag-tagging-clinical-note-section-headers
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Segment extends Annotation {
   /** @generated
@@ -57,10 +57,13 @@ public class Segment extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -69,14 +72,18 @@ public class Segment extends Annotation {
   //* Feature: id
 
   /** getter for id - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getId() {
     if (Segment_Type.featOkTst && ((Segment_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.textspan.Segment");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Segment_Type)jcasType).casFeatCode_id);}
     
   /** setter for id - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setId(String v) {
     if (Segment_Type.featOkTst && ((Segment_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.textspan.Segment");
@@ -87,14 +94,18 @@ public class Segment extends Annotation {
   //* Feature: value
 
   /** getter for value - gets Specified the preferred name in SegTag if appliable.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getValue() {
     if (Segment_Type.featOkTst && ((Segment_Type)jcasType).casFeat_value == null)
       jcasType.jcas.throwFeatMissing("value", "org.ohnlp.typesystem.type.textspan.Segment");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Segment_Type)jcasType).casFeatCode_value);}
     
   /** setter for value - sets Specified the preferred name in SegTag if appliable. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setValue(String v) {
     if (Segment_Type.featOkTst && ((Segment_Type)jcasType).casFeat_value == null)
       jcasType.jcas.throwFeatMissing("value", "org.ohnlp.typesystem.type.textspan.Segment");

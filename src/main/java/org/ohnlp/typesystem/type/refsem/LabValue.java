@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** Quantitative results of a laboratory, with number and unit.
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class LabValue extends Attribute {
   /** @generated
@@ -45,10 +45,13 @@ public class LabValue extends Attribute {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -57,14 +60,18 @@ public class LabValue extends Attribute {
   //* Feature: number
 
   /** getter for number - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getNumber() {
     if (LabValue_Type.featOkTst && ((LabValue_Type)jcasType).casFeat_number == null)
       jcasType.jcas.throwFeatMissing("number", "org.ohnlp.typesystem.type.refsem.LabValue");
     return jcasType.ll_cas.ll_getStringValue(addr, ((LabValue_Type)jcasType).casFeatCode_number);}
     
   /** setter for number - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNumber(String v) {
     if (LabValue_Type.featOkTst && ((LabValue_Type)jcasType).casFeat_number == null)
       jcasType.jcas.throwFeatMissing("number", "org.ohnlp.typesystem.type.refsem.LabValue");
@@ -75,14 +82,18 @@ public class LabValue extends Attribute {
   //* Feature: unit
 
   /** getter for unit - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getUnit() {
     if (LabValue_Type.featOkTst && ((LabValue_Type)jcasType).casFeat_unit == null)
       jcasType.jcas.throwFeatMissing("unit", "org.ohnlp.typesystem.type.refsem.LabValue");
     return jcasType.ll_cas.ll_getStringValue(addr, ((LabValue_Type)jcasType).casFeatCode_unit);}
     
   /** setter for unit - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setUnit(String v) {
     if (LabValue_Type.featOkTst && ((LabValue_Type)jcasType).casFeat_unit == null)
       jcasType.jcas.throwFeatMissing("unit", "org.ohnlp.typesystem.type.refsem.LabValue");

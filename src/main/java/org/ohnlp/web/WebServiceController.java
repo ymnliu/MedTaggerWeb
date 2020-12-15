@@ -8,6 +8,7 @@ import com.onelogin.saml2.servlet.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.ohnlp.n3c.N3CNLPEngine;
 import org.ohnlp.util.BioPortalAPI;
 import org.ohnlp.util.IEEditorHelper;
@@ -15,6 +16,8 @@ import org.ohnlp.web.db.entity.Project;
 import org.ohnlp.web.db.entity.Rulepack;
 import org.ohnlp.web.db.entity.User;
 import org.ohnlp.web.db.service.MTService;
+import org.ohnlp.web.db.repo.ProjectRepository;
+import org.ohnlp.web.db.repo.UserRepository;
 import org.ohnlp.web.db.service.ProjectService;
 import org.ohnlp.web.db.service.RulepackService;
 import org.ohnlp.web.db.service.UserService;
@@ -64,7 +67,6 @@ public class WebServiceController {
         ProjectService projectService,
         RulepackService rulepackService,
         MTService mtService) {
-
         n3CNLPEngine = new N3CNLPEngine();
         this.userService = userService;
         this.projectService = projectService;
@@ -181,8 +183,7 @@ public class WebServiceController {
         StringBuilder sb = new StringBuilder();
         if (errors.isEmpty()) {
             sb.append("<p>Sucessfully logged out</p>");
-            sb.append("<a href=\"dologin.jsp\" class=\"btn btn-primary\">Login</a>");
-        } else {
+         } else {
             sb.append("<p>");
             for(String error : errors) {
                 sb.append(" " + error + ".");
@@ -380,6 +381,26 @@ public class WebServiceController {
         view.addObject("username", username);
 
         return view;
+
+    }
+
+    private String getCurrentUsername(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+
+        if (username == null) {
+            username = "guest";
+            // check database
+            User user = this.userService.getUserByUsername(username);
+            if (user == null) {
+                user = this.userService.createUser(username);
+                this.projectService.createProject(user, username);
+            }
+
+            // set session as current guest
+            session.setAttribute("username", username);
+        }
+
+        return username;
     }
 
     /**

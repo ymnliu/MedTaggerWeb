@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** SemanticArguments are used for predicate-argument structures (SemanticRoleRelations).  The "label" features should contain the type of semantic role (e.g., ARG0, ARGM) that this argument has w.r.t. the predicate.
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class SemanticArgument extends Annotation {
   /** @generated
@@ -54,10 +54,13 @@ public class SemanticArgument extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -66,14 +69,18 @@ public class SemanticArgument extends Annotation {
   //* Feature: relation
 
   /** getter for relation - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public SemanticRoleRelation getRelation() {
     if (SemanticArgument_Type.featOkTst && ((SemanticArgument_Type)jcasType).casFeat_relation == null)
       jcasType.jcas.throwFeatMissing("relation", "org.ohnlp.typesystem.type.textsem.SemanticArgument");
     return (SemanticRoleRelation)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((SemanticArgument_Type)jcasType).casFeatCode_relation)));}
     
   /** setter for relation - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setRelation(SemanticRoleRelation v) {
     if (SemanticArgument_Type.featOkTst && ((SemanticArgument_Type)jcasType).casFeat_relation == null)
       jcasType.jcas.throwFeatMissing("relation", "org.ohnlp.typesystem.type.textsem.SemanticArgument");
@@ -84,14 +91,18 @@ public class SemanticArgument extends Annotation {
   //* Feature: label
 
   /** getter for label - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getLabel() {
     if (SemanticArgument_Type.featOkTst && ((SemanticArgument_Type)jcasType).casFeat_label == null)
       jcasType.jcas.throwFeatMissing("label", "org.ohnlp.typesystem.type.textsem.SemanticArgument");
     return jcasType.ll_cas.ll_getStringValue(addr, ((SemanticArgument_Type)jcasType).casFeatCode_label);}
     
   /** setter for label - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setLabel(String v) {
     if (SemanticArgument_Type.featOkTst && ((SemanticArgument_Type)jcasType).casFeat_label == null)
       jcasType.jcas.throwFeatMissing("label", "org.ohnlp.typesystem.type.textsem.SemanticArgument");

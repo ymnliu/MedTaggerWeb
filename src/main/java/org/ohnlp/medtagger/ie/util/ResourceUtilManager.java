@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,8 +104,16 @@ public class ResourceUtilManager {
 		
 		try{
 			String resourcefile =  RESOURCEDIR + "/used_resources.txt";
-
-			InputStream inputStream = Files.newInputStream(Paths.get(resourcefile));
+			
+			// Load resource based on path patterns
+			InputStream inputStream = null;
+			if(RESOURCEDIR.startsWith("/") || RESOURCEDIR.startsWith("\\")) {
+				// load from class path
+				inputStream = getClass().getResourceAsStream(resourcefile);
+			}else{
+				// load from file system
+				inputStream = Files.newInputStream(Paths.get(resourcefile));
+			}
 
 			if(inputStream == null){
 				throw new IOException(resourcefile);
@@ -139,11 +148,21 @@ public class ResourceUtilManager {
 			for (String resource : hmResources.keySet()) {
 				iv_logger.info("Adding "+resourceType+" from resource: "+resource);
 
-				InputStream inputStream = Files.newInputStream(Paths.get(hmResources.get(resource)));
+				InputStream inputStream = null;
+				String hmResourceStr = hmResources.get(resource);
+				// Load resource based on path patterns
+				if(RESOURCEDIR.startsWith("/") || RESOURCEDIR.startsWith("\\")) {
+					// load from class path
+					inputStream = getClass().getResourceAsStream(hmResourceStr);
+				}else{
+					// load from file system
+					inputStream = Files.newInputStream(Paths.get(hmResourceStr));
+				}
 
 				if(inputStream == null){
-					throw new IOException(hmResources.get(resource));
+					throw new IOException(hmResourceStr);
 				}
+
 
 				Scanner sc = new Scanner(inputStream);
 				while (sc.hasNextLine()) {

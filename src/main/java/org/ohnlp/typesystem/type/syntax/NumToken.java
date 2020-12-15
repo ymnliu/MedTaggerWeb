@@ -11,8 +11,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 /** Differentiates a token as being a number rather than a punctuation, symbol, newline, word, or contraction. 
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.NumToken
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class NumToken extends BaseToken {
   /** @generated
@@ -54,10 +54,13 @@ public class NumToken extends BaseToken {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -66,14 +69,18 @@ public class NumToken extends BaseToken {
   //* Feature: numType
 
   /** getter for numType - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getNumType() {
     if (NumToken_Type.featOkTst && ((NumToken_Type)jcasType).casFeat_numType == null)
       jcasType.jcas.throwFeatMissing("numType", "org.ohnlp.typesystem.type.syntax.NumToken");
     return jcasType.ll_cas.ll_getIntValue(addr, ((NumToken_Type)jcasType).casFeatCode_numType);}
     
   /** setter for numType - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNumType(int v) {
     if (NumToken_Type.featOkTst && ((NumToken_Type)jcasType).casFeat_numType == null)
       jcasType.jcas.throwFeatMissing("numType", "org.ohnlp.typesystem.type.syntax.NumToken");

@@ -35,6 +35,8 @@ public class RulepackService {
         rulepack.setData(data);
         rulepack.setDateUpdated(new Date(System.currentTimeMillis()));
 
+        rulepack.setDateUpdated(new Date());
+
         // save into db
         this.rulepackRepository.save(rulepack);
 
@@ -51,6 +53,9 @@ public class RulepackService {
         rulepack.setData(data);
         rulepack.setDateCreated(new Date(System.currentTimeMillis()));
         rulepack.setDateUpdated(new Date(System.currentTimeMillis()));
+
+        rulepack.setDateCreated(new Date());
+        rulepack.setDateUpdated(new Date());
 
         // save into db
         this.rulepackRepository.save(rulepack);

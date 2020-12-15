@@ -11,28 +11,9 @@ import org.apache.uima.cas.impl.TypeImpl;
 import org.apache.uima.cas.Type;
 
 /** Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.cdt.type.RomanNumeralAnnotation
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
  * @generated */
 public class RomanNumeralAnnotation_Type extends IdentifiedAnnotation_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (RomanNumeralAnnotation_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = RomanNumeralAnnotation_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new RomanNumeralAnnotation(addr, RomanNumeralAnnotation_Type.this);
-  			   RomanNumeralAnnotation_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new RomanNumeralAnnotation(addr, RomanNumeralAnnotation_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = RomanNumeralAnnotation.typeIndexID;

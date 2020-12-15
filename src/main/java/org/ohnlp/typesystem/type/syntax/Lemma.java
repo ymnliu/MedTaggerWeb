@@ -12,8 +12,8 @@ import org.apache.uima.jcas.cas.TOP;
 
 /** Stores a lemma (canonical form of a token).  Inherits from uima.cas.TOP, allowing for reuse of standardized forms across the CAS. 
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.Lemma
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Lemma extends TOP {
   /** @generated
@@ -47,10 +47,13 @@ public class Lemma extends TOP {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -59,14 +62,18 @@ public class Lemma extends TOP {
   //* Feature: key
 
   /** getter for key - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getKey() {
     if (Lemma_Type.featOkTst && ((Lemma_Type)jcasType).casFeat_key == null)
       jcasType.jcas.throwFeatMissing("key", "org.ohnlp.typesystem.type.syntax.Lemma");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Lemma_Type)jcasType).casFeatCode_key);}
     
   /** setter for key - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setKey(String v) {
     if (Lemma_Type.featOkTst && ((Lemma_Type)jcasType).casFeat_key == null)
       jcasType.jcas.throwFeatMissing("key", "org.ohnlp.typesystem.type.syntax.Lemma");
@@ -77,14 +84,18 @@ public class Lemma extends TOP {
   //* Feature: posTag
 
   /** getter for posTag - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getPosTag() {
     if (Lemma_Type.featOkTst && ((Lemma_Type)jcasType).casFeat_posTag == null)
       jcasType.jcas.throwFeatMissing("posTag", "org.ohnlp.typesystem.type.syntax.Lemma");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Lemma_Type)jcasType).casFeatCode_posTag);}
     
   /** setter for posTag - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPosTag(String v) {
     if (Lemma_Type.featOkTst && ((Lemma_Type)jcasType).casFeat_posTag == null)
       jcasType.jcas.throwFeatMissing("posTag", "org.ohnlp.typesystem.type.syntax.Lemma");

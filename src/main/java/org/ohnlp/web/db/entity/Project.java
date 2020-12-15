@@ -4,9 +4,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import java.sql.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +32,7 @@ public class Project {
     
     @Column(name = "date_created")
     private Date date_created;
+
 
     public Project() { 
     }

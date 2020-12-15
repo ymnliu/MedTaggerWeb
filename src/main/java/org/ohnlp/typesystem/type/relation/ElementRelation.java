@@ -11,8 +11,8 @@ import org.ohnlp.typesystem.type.refsem.Element;
 
 
 /** A super-type referring to real-world semantic relationships, e.g., TemporalRelations between two Events.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class ElementRelation extends Relation {
   /** @generated
@@ -46,10 +46,13 @@ public class ElementRelation extends Relation {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -58,14 +61,18 @@ public class ElementRelation extends Relation {
   //* Feature: arg1
 
   /** getter for arg1 - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Element getArg1() {
     if (ElementRelation_Type.featOkTst && ((ElementRelation_Type)jcasType).casFeat_arg1 == null)
       jcasType.jcas.throwFeatMissing("arg1", "org.ohnlp.typesystem.type.relation.ElementRelation");
     return (Element)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((ElementRelation_Type)jcasType).casFeatCode_arg1)));}
     
   /** setter for arg1 - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setArg1(Element v) {
     if (ElementRelation_Type.featOkTst && ((ElementRelation_Type)jcasType).casFeat_arg1 == null)
       jcasType.jcas.throwFeatMissing("arg1", "org.ohnlp.typesystem.type.relation.ElementRelation");
@@ -76,14 +83,18 @@ public class ElementRelation extends Relation {
   //* Feature: arg2
 
   /** getter for arg2 - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Element getArg2() {
     if (ElementRelation_Type.featOkTst && ((ElementRelation_Type)jcasType).casFeat_arg2 == null)
       jcasType.jcas.throwFeatMissing("arg2", "org.ohnlp.typesystem.type.relation.ElementRelation");
     return (Element)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((ElementRelation_Type)jcasType).casFeatCode_arg2)));}
     
   /** setter for arg2 - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setArg2(Element v) {
     if (ElementRelation_Type.featOkTst && ((ElementRelation_Type)jcasType).casFeat_arg2 == null)
       jcasType.jcas.throwFeatMissing("arg2", "org.ohnlp.typesystem.type.relation.ElementRelation");

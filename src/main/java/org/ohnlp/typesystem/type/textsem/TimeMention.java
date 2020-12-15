@@ -11,8 +11,8 @@ import org.ohnlp.typesystem.type.refsem.Time;
 
 
 /** A text string (IdentifiedAnnotation) that refers to a Time (i.e., TIMEX3).
- * Updated by JCasGen Wed Oct 30 16:30:50 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class TimeMention extends IdentifiedAnnotation {
   /** @generated
@@ -54,10 +54,13 @@ public class TimeMention extends IdentifiedAnnotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -66,14 +69,18 @@ public class TimeMention extends IdentifiedAnnotation {
   //* Feature: time
 
   /** getter for time - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Time getTime() {
     if (TimeMention_Type.featOkTst && ((TimeMention_Type)jcasType).casFeat_time == null)
       jcasType.jcas.throwFeatMissing("time", "org.ohnlp.typesystem.type.textsem.TimeMention");
     return (Time)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((TimeMention_Type)jcasType).casFeatCode_time)));}
     
   /** setter for time - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTime(Time v) {
     if (TimeMention_Type.featOkTst && ((TimeMention_Type)jcasType).casFeat_time == null)
       jcasType.jcas.throwFeatMissing("time", "org.ohnlp.typesystem.type.textsem.TimeMention");
@@ -84,14 +91,18 @@ public class TimeMention extends IdentifiedAnnotation {
   //* Feature: timeClass
 
   /** getter for timeClass - gets DATE, DURATION, QUANTIFIER, PREPOSTEXP, etc.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimeClass() {
     if (TimeMention_Type.featOkTst && ((TimeMention_Type)jcasType).casFeat_timeClass == null)
       jcasType.jcas.throwFeatMissing("timeClass", "org.ohnlp.typesystem.type.textsem.TimeMention");
     return jcasType.ll_cas.ll_getStringValue(addr, ((TimeMention_Type)jcasType).casFeatCode_timeClass);}
     
   /** setter for timeClass - sets DATE, DURATION, QUANTIFIER, PREPOSTEXP, etc. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimeClass(String v) {
     if (TimeMention_Type.featOkTst && ((TimeMention_Type)jcasType).casFeat_timeClass == null)
       jcasType.jcas.throwFeatMissing("timeClass", "org.ohnlp.typesystem.type.textsem.TimeMention");

@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** An explicitly-mentioned indication of the seriousness of a condition.  Value Set: unmarked (default), severe, moderate, slight
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Severity extends Attribute {
   /** @generated
@@ -45,10 +45,13 @@ public class Severity extends Attribute {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -57,14 +60,18 @@ public class Severity extends Attribute {
   //* Feature: value
 
   /** getter for value - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getValue() {
     if (Severity_Type.featOkTst && ((Severity_Type)jcasType).casFeat_value == null)
       jcasType.jcas.throwFeatMissing("value", "org.ohnlp.typesystem.type.refsem.Severity");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Severity_Type)jcasType).casFeatCode_value);}
     
   /** setter for value - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setValue(String v) {
     if (Severity_Type.featOkTst && ((Severity_Type)jcasType).casFeat_value == null)
       jcasType.jcas.throwFeatMissing("value", "org.ohnlp.typesystem.type.refsem.Severity");

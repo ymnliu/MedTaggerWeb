@@ -11,8 +11,8 @@ import org.ohnlp.typesystem.type.refsem.Entity;
 
 
 /** A text string (IdentifiedAnnotation) that refers to an Entity.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class EntityMention extends IdentifiedAnnotation {
   /** @generated
@@ -54,10 +54,13 @@ public class EntityMention extends IdentifiedAnnotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -66,14 +69,18 @@ public class EntityMention extends IdentifiedAnnotation {
   //* Feature: entity
 
   /** getter for entity - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Entity getEntity() {
     if (EntityMention_Type.featOkTst && ((EntityMention_Type)jcasType).casFeat_entity == null)
       jcasType.jcas.throwFeatMissing("entity", "org.ohnlp.typesystem.type.textsem.EntityMention");
     return (Entity)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((EntityMention_Type)jcasType).casFeatCode_entity)));}
     
   /** setter for entity - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setEntity(Entity v) {
     if (EntityMention_Type.featOkTst && ((EntityMention_Type)jcasType).casFeat_entity == null)
       jcasType.jcas.throwFeatMissing("entity", "org.ohnlp.typesystem.type.textsem.EntityMention");

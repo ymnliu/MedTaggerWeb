@@ -12,8 +12,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Tue Sep 24 19:28:21 CDT 2013
- * XML source: /MedTagger/descsrc/org/ohnlp/medtagger/ie/types/MedTaggerIETypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:16 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Match extends Annotation {
   /** @generated
@@ -55,10 +55,13 @@ public class Match extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -67,14 +70,18 @@ public class Match extends Annotation {
   //* Feature: value
 
   /** getter for value - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getValue() {
     if (Match_Type.featOkTst && ((Match_Type)jcasType).casFeat_value == null)
       jcasType.jcas.throwFeatMissing("value", "org.ohnlp.medtagger.ie.type.Match");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Match_Type)jcasType).casFeatCode_value);}
     
   /** setter for value - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setValue(String v) {
     if (Match_Type.featOkTst && ((Match_Type)jcasType).casFeat_value == null)
       jcasType.jcas.throwFeatMissing("value", "org.ohnlp.medtagger.ie.type.Match");
@@ -85,14 +92,18 @@ public class Match extends Annotation {
   //* Feature: foundByRule
 
   /** getter for foundByRule - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getFoundByRule() {
     if (Match_Type.featOkTst && ((Match_Type)jcasType).casFeat_foundByRule == null)
       jcasType.jcas.throwFeatMissing("foundByRule", "org.ohnlp.medtagger.ie.type.Match");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Match_Type)jcasType).casFeatCode_foundByRule);}
     
   /** setter for foundByRule - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setFoundByRule(String v) {
     if (Match_Type.featOkTst && ((Match_Type)jcasType).casFeat_foundByRule == null)
       jcasType.jcas.throwFeatMissing("foundByRule", "org.ohnlp.medtagger.ie.type.Match");
@@ -103,14 +114,18 @@ public class Match extends Annotation {
   //* Feature: sentence
 
   /** getter for sentence - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Sentence getSentence() {
     if (Match_Type.featOkTst && ((Match_Type)jcasType).casFeat_sentence == null)
       jcasType.jcas.throwFeatMissing("sentence", "org.ohnlp.medtagger.ie.type.Match");
     return (Sentence)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Match_Type)jcasType).casFeatCode_sentence)));}
     
   /** setter for sentence - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setSentence(Sentence v) {
     if (Match_Type.featOkTst && ((Match_Type)jcasType).casFeat_sentence == null)
       jcasType.jcas.throwFeatMissing("sentence", "org.ohnlp.medtagger.ie.type.Match");
