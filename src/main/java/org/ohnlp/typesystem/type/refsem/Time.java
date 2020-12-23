@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** A normalized form for Time annotations.  Inherits from Element, but some fields may be unused.
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Time extends Element {
   /** @generated
@@ -45,10 +45,13 @@ public class Time extends Element {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -57,14 +60,18 @@ public class Time extends Element {
   //* Feature: normalizedForm
 
   /** getter for normalizedForm - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getNormalizedForm() {
     if (Time_Type.featOkTst && ((Time_Type)jcasType).casFeat_normalizedForm == null)
       jcasType.jcas.throwFeatMissing("normalizedForm", "org.ohnlp.typesystem.type.refsem.Time");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Time_Type)jcasType).casFeatCode_normalizedForm);}
     
   /** setter for normalizedForm - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setNormalizedForm(String v) {
     if (Time_Type.featOkTst && ((Time_Type)jcasType).casFeat_normalizedForm == null)
       jcasType.jcas.throwFeatMissing("normalizedForm", "org.ohnlp.typesystem.type.refsem.Time");

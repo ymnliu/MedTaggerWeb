@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** A dependency parser node in the CONLL-X format, namely, where each node is a token with 10 fields.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class ConllDependencyNode extends Annotation {
   /** @generated
@@ -54,10 +54,13 @@ public class ConllDependencyNode extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -66,14 +69,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: id
 
   /** getter for id - gets The token's position in the sentence.  The ROOT node, present in every dependency parse, has id=0.
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getId() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return jcasType.ll_cas.ll_getIntValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_id);}
     
   /** setter for id - sets The token's position in the sentence.  The ROOT node, present in every dependency parse, has id=0. 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setId(int v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -84,14 +91,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: form
 
   /** getter for form - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getForm() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_form == null)
       jcasType.jcas.throwFeatMissing("form", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_form);}
     
   /** setter for form - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setForm(String v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_form == null)
       jcasType.jcas.throwFeatMissing("form", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -102,14 +113,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: lemma
 
   /** getter for lemma - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getLemma() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_lemma == null)
       jcasType.jcas.throwFeatMissing("lemma", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_lemma);}
     
   /** setter for lemma - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setLemma(String v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_lemma == null)
       jcasType.jcas.throwFeatMissing("lemma", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -120,14 +135,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: cpostag
 
   /** getter for cpostag - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getCpostag() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_cpostag == null)
       jcasType.jcas.throwFeatMissing("cpostag", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_cpostag);}
     
   /** setter for cpostag - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setCpostag(String v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_cpostag == null)
       jcasType.jcas.throwFeatMissing("cpostag", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -138,14 +157,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: postag
 
   /** getter for postag - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getPostag() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_postag == null)
       jcasType.jcas.throwFeatMissing("postag", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_postag);}
     
   /** setter for postag - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPostag(String v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_postag == null)
       jcasType.jcas.throwFeatMissing("postag", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -156,14 +179,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: feats
 
   /** getter for feats - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getFeats() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_feats == null)
       jcasType.jcas.throwFeatMissing("feats", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_feats);}
     
   /** setter for feats - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setFeats(String v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_feats == null)
       jcasType.jcas.throwFeatMissing("feats", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -174,14 +201,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: head
 
   /** getter for head - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public ConllDependencyNode getHead() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_head == null)
       jcasType.jcas.throwFeatMissing("head", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return (ConllDependencyNode)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_head)));}
     
   /** setter for head - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setHead(ConllDependencyNode v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_head == null)
       jcasType.jcas.throwFeatMissing("head", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -192,14 +223,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: deprel
 
   /** getter for deprel - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getDeprel() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_deprel == null)
       jcasType.jcas.throwFeatMissing("deprel", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_deprel);}
     
   /** setter for deprel - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setDeprel(String v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_deprel == null)
       jcasType.jcas.throwFeatMissing("deprel", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -210,14 +245,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: phead
 
   /** getter for phead - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public ConllDependencyNode getPhead() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_phead == null)
       jcasType.jcas.throwFeatMissing("phead", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return (ConllDependencyNode)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_phead)));}
     
   /** setter for phead - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPhead(ConllDependencyNode v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_phead == null)
       jcasType.jcas.throwFeatMissing("phead", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
@@ -228,14 +267,18 @@ public class ConllDependencyNode extends Annotation {
   //* Feature: pdeprel
 
   /** getter for pdeprel - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getPdeprel() {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_pdeprel == null)
       jcasType.jcas.throwFeatMissing("pdeprel", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");
     return jcasType.ll_cas.ll_getStringValue(addr, ((ConllDependencyNode_Type)jcasType).casFeatCode_pdeprel);}
     
   /** setter for pdeprel - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPdeprel(String v) {
     if (ConllDependencyNode_Type.featOkTst && ((ConllDependencyNode_Type)jcasType).casFeat_pdeprel == null)
       jcasType.jcas.throwFeatMissing("pdeprel", "org.ohnlp.typesystem.type.syntax.ConllDependencyNode");

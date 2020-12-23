@@ -11,8 +11,8 @@ import org.apache.uima.jcas.cas.TOP;
 
 
 /** A superclass for semantic relationships between Elements.  For example, one might consider TemporalRelations or UMLSRelations between a Medication and a Disorder.  The "category" feature indicates what kind of relation it is.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Relation extends TOP {
   /** @generated
@@ -46,10 +46,13 @@ public class Relation extends TOP {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -58,14 +61,18 @@ public class Relation extends TOP {
   //* Feature: id
 
   /** getter for id - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getId() {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.relation.Relation");
     return jcasType.ll_cas.ll_getIntValue(addr, ((Relation_Type)jcasType).casFeatCode_id);}
     
   /** setter for id - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setId(int v) {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_id == null)
       jcasType.jcas.throwFeatMissing("id", "org.ohnlp.typesystem.type.relation.Relation");
@@ -76,14 +83,18 @@ public class Relation extends TOP {
   //* Feature: category
 
   /** getter for category - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getCategory() {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_category == null)
       jcasType.jcas.throwFeatMissing("category", "org.ohnlp.typesystem.type.relation.Relation");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Relation_Type)jcasType).casFeatCode_category);}
     
   /** setter for category - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setCategory(String v) {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_category == null)
       jcasType.jcas.throwFeatMissing("category", "org.ohnlp.typesystem.type.relation.Relation");
@@ -94,14 +105,18 @@ public class Relation extends TOP {
   //* Feature: discoveryTechnique
 
   /** getter for discoveryTechnique - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getDiscoveryTechnique() {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_discoveryTechnique == null)
       jcasType.jcas.throwFeatMissing("discoveryTechnique", "org.ohnlp.typesystem.type.relation.Relation");
     return jcasType.ll_cas.ll_getIntValue(addr, ((Relation_Type)jcasType).casFeatCode_discoveryTechnique);}
     
   /** setter for discoveryTechnique - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setDiscoveryTechnique(int v) {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_discoveryTechnique == null)
       jcasType.jcas.throwFeatMissing("discoveryTechnique", "org.ohnlp.typesystem.type.relation.Relation");
@@ -112,14 +127,18 @@ public class Relation extends TOP {
   //* Feature: confidence
 
   /** getter for confidence - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public double getConfidence() {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_confidence == null)
       jcasType.jcas.throwFeatMissing("confidence", "org.ohnlp.typesystem.type.relation.Relation");
     return jcasType.ll_cas.ll_getDoubleValue(addr, ((Relation_Type)jcasType).casFeatCode_confidence);}
     
   /** setter for confidence - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setConfidence(double v) {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_confidence == null)
       jcasType.jcas.throwFeatMissing("confidence", "org.ohnlp.typesystem.type.relation.Relation");
@@ -130,14 +149,18 @@ public class Relation extends TOP {
   //* Feature: polarity
 
   /** getter for polarity - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getPolarity() {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_polarity == null)
       jcasType.jcas.throwFeatMissing("polarity", "org.ohnlp.typesystem.type.relation.Relation");
     return jcasType.ll_cas.ll_getIntValue(addr, ((Relation_Type)jcasType).casFeatCode_polarity);}
     
   /** setter for polarity - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPolarity(int v) {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_polarity == null)
       jcasType.jcas.throwFeatMissing("polarity", "org.ohnlp.typesystem.type.relation.Relation");
@@ -148,14 +171,18 @@ public class Relation extends TOP {
   //* Feature: uncertainty
 
   /** getter for uncertainty - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public int getUncertainty() {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_uncertainty == null)
       jcasType.jcas.throwFeatMissing("uncertainty", "org.ohnlp.typesystem.type.relation.Relation");
     return jcasType.ll_cas.ll_getIntValue(addr, ((Relation_Type)jcasType).casFeatCode_uncertainty);}
     
   /** setter for uncertainty - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setUncertainty(int v) {
     if (Relation_Type.featOkTst && ((Relation_Type)jcasType).casFeat_uncertainty == null)
       jcasType.jcas.throwFeatMissing("uncertainty", "org.ohnlp.typesystem.type.relation.Relation");

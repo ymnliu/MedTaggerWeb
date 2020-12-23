@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** A real-world event; similar to Entity, but may bear some temporal properties and relationships.  In the constrained clinical context, many concepts are discussed as instances with some temporal component, e.g., Medications, Labs.
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Event extends Element {
   /** @generated
@@ -45,10 +45,13 @@ public class Event extends Element {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -57,14 +60,18 @@ public class Event extends Element {
   //* Feature: properties
 
   /** getter for properties - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public EventProperties getProperties() {
     if (Event_Type.featOkTst && ((Event_Type)jcasType).casFeat_properties == null)
       jcasType.jcas.throwFeatMissing("properties", "org.ohnlp.typesystem.type.refsem.Event");
     return (EventProperties)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Event_Type)jcasType).casFeatCode_properties)));}
     
   /** setter for properties - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setProperties(EventProperties v) {
     if (Event_Type.featOkTst && ((Event_Type)jcasType).casFeat_properties == null)
       jcasType.jcas.throwFeatMissing("properties", "org.ohnlp.typesystem.type.refsem.Event");

@@ -18,8 +18,8 @@ import org.ohnlp.typesystem.type.refsem.MedicationStatusChange;
 
 
 /** A text string (EventMention and therefore IdentifiedAnnotation) that refers to a (Medication) Event.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class MedicationEventMention extends EventMention {
   /** @generated
@@ -61,10 +61,13 @@ public class MedicationEventMention extends EventMention {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -73,14 +76,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: medicationFrequency
 
   /** getter for medicationFrequency - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public MedicationFrequency getMedicationFrequency() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationFrequency == null)
       jcasType.jcas.throwFeatMissing("medicationFrequency", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (MedicationFrequency)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_medicationFrequency)));}
     
   /** setter for medicationFrequency - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setMedicationFrequency(MedicationFrequency v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationFrequency == null)
       jcasType.jcas.throwFeatMissing("medicationFrequency", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
@@ -91,14 +98,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: medicationDuration
 
   /** getter for medicationDuration - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public MedicationDuration getMedicationDuration() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationDuration == null)
       jcasType.jcas.throwFeatMissing("medicationDuration", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (MedicationDuration)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_medicationDuration)));}
     
   /** setter for medicationDuration - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setMedicationDuration(MedicationDuration v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationDuration == null)
       jcasType.jcas.throwFeatMissing("medicationDuration", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
@@ -109,14 +120,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: medicationRoute
 
   /** getter for medicationRoute - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public MedicationRoute getMedicationRoute() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationRoute == null)
       jcasType.jcas.throwFeatMissing("medicationRoute", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (MedicationRoute)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_medicationRoute)));}
     
   /** setter for medicationRoute - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setMedicationRoute(MedicationRoute v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationRoute == null)
       jcasType.jcas.throwFeatMissing("medicationRoute", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
@@ -127,14 +142,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: medicationStatusChange
 
   /** getter for medicationStatusChange - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public MedicationStatusChange getMedicationStatusChange() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationStatusChange == null)
       jcasType.jcas.throwFeatMissing("medicationStatusChange", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (MedicationStatusChange)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_medicationStatusChange)));}
     
   /** setter for medicationStatusChange - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setMedicationStatusChange(MedicationStatusChange v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationStatusChange == null)
       jcasType.jcas.throwFeatMissing("medicationStatusChange", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
@@ -145,14 +164,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: medicationDosage
 
   /** getter for medicationDosage - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public MedicationDosage getMedicationDosage() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationDosage == null)
       jcasType.jcas.throwFeatMissing("medicationDosage", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (MedicationDosage)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_medicationDosage)));}
     
   /** setter for medicationDosage - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setMedicationDosage(MedicationDosage v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationDosage == null)
       jcasType.jcas.throwFeatMissing("medicationDosage", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
@@ -163,14 +186,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: medicationStrength
 
   /** getter for medicationStrength - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public MedicationStrength getMedicationStrength() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationStrength == null)
       jcasType.jcas.throwFeatMissing("medicationStrength", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (MedicationStrength)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_medicationStrength)));}
     
   /** setter for medicationStrength - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setMedicationStrength(MedicationStrength v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationStrength == null)
       jcasType.jcas.throwFeatMissing("medicationStrength", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
@@ -181,14 +208,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: medicationForm
 
   /** getter for medicationForm - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public MedicationForm getMedicationForm() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationForm == null)
       jcasType.jcas.throwFeatMissing("medicationForm", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (MedicationForm)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_medicationForm)));}
     
   /** setter for medicationForm - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setMedicationForm(MedicationForm v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_medicationForm == null)
       jcasType.jcas.throwFeatMissing("medicationForm", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
@@ -199,14 +230,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: startDate
 
   /** getter for startDate - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Date getStartDate() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_startDate == null)
       jcasType.jcas.throwFeatMissing("startDate", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (Date)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_startDate)));}
     
   /** setter for startDate - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setStartDate(Date v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_startDate == null)
       jcasType.jcas.throwFeatMissing("startDate", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
@@ -217,14 +252,18 @@ public class MedicationEventMention extends EventMention {
   //* Feature: endDate
 
   /** getter for endDate - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Date getEndDate() {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_endDate == null)
       jcasType.jcas.throwFeatMissing("endDate", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");
     return (Date)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((MedicationEventMention_Type)jcasType).casFeatCode_endDate)));}
     
   /** setter for endDate - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setEndDate(Date v) {
     if (MedicationEventMention_Type.featOkTst && ((MedicationEventMention_Type)jcasType).casFeat_endDate == null)
       jcasType.jcas.throwFeatMissing("endDate", "org.ohnlp.typesystem.type.textsem.MedicationEventMention");

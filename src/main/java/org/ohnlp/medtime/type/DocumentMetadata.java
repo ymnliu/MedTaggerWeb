@@ -34,8 +34,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** Structured data that captures information about the document, patient, or context of the clinical text.
- * Updated by JCasGen Sun Sep 29 06:07:11 CDT 2013
- * XML source: /MedTime-1.0/descsrc/org/ohnlp/medtime/types/MedTimeTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:16 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class DocumentMetadata extends Annotation {
   /** @generated
@@ -77,10 +77,13 @@ public class DocumentMetadata extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -89,14 +92,18 @@ public class DocumentMetadata extends Annotation {
   //* Feature: fileName
 
   /** getter for fileName - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getFileName() {
     if (DocumentMetadata_Type.featOkTst && ((DocumentMetadata_Type)jcasType).casFeat_fileName == null)
       jcasType.jcas.throwFeatMissing("fileName", "org.ohnlp.medtime.type.DocumentMetadata");
     return jcasType.ll_cas.ll_getStringValue(addr, ((DocumentMetadata_Type)jcasType).casFeatCode_fileName);}
     
   /** setter for fileName - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setFileName(String v) {
     if (DocumentMetadata_Type.featOkTst && ((DocumentMetadata_Type)jcasType).casFeat_fileName == null)
       jcasType.jcas.throwFeatMissing("fileName", "org.ohnlp.medtime.type.DocumentMetadata");
@@ -107,14 +114,18 @@ public class DocumentMetadata extends Annotation {
   //* Feature: timexId
 
   /** getter for timexId - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimexId() {
     if (DocumentMetadata_Type.featOkTst && ((DocumentMetadata_Type)jcasType).casFeat_timexId == null)
       jcasType.jcas.throwFeatMissing("timexId", "org.ohnlp.medtime.type.DocumentMetadata");
     return jcasType.ll_cas.ll_getStringValue(addr, ((DocumentMetadata_Type)jcasType).casFeatCode_timexId);}
     
   /** setter for timexId - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexId(String v) {
     if (DocumentMetadata_Type.featOkTst && ((DocumentMetadata_Type)jcasType).casFeat_timexId == null)
       jcasType.jcas.throwFeatMissing("timexId", "org.ohnlp.medtime.type.DocumentMetadata");
@@ -125,14 +136,18 @@ public class DocumentMetadata extends Annotation {
   //* Feature: timexValue
 
   /** getter for timexValue - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTimexValue() {
     if (DocumentMetadata_Type.featOkTst && ((DocumentMetadata_Type)jcasType).casFeat_timexValue == null)
       jcasType.jcas.throwFeatMissing("timexValue", "org.ohnlp.medtime.type.DocumentMetadata");
     return jcasType.ll_cas.ll_getStringValue(addr, ((DocumentMetadata_Type)jcasType).casFeatCode_timexValue);}
     
   /** setter for timexValue - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTimexValue(String v) {
     if (DocumentMetadata_Type.featOkTst && ((DocumentMetadata_Type)jcasType).casFeat_timexValue == null)
       jcasType.jcas.throwFeatMissing("timexValue", "org.ohnlp.medtime.type.DocumentMetadata");

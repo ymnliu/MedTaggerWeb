@@ -12,8 +12,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** Predicates are typically verbs and may participate in SemanticRoleRelations.  Follows PropBank standards with a few clinical additions.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Predicate extends Annotation {
   /** @generated
@@ -55,10 +55,13 @@ public class Predicate extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -67,14 +70,18 @@ public class Predicate extends Annotation {
   //* Feature: relations
 
   /** getter for relations - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public FSList getRelations() {
     if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_relations == null)
       jcasType.jcas.throwFeatMissing("relations", "org.ohnlp.typesystem.type.textsem.Predicate");
     return (FSList)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Predicate_Type)jcasType).casFeatCode_relations)));}
     
   /** setter for relations - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setRelations(FSList v) {
     if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_relations == null)
       jcasType.jcas.throwFeatMissing("relations", "org.ohnlp.typesystem.type.textsem.Predicate");
@@ -85,14 +92,18 @@ public class Predicate extends Annotation {
   //* Feature: frameSet
 
   /** getter for frameSet - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getFrameSet() {
     if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_frameSet == null)
       jcasType.jcas.throwFeatMissing("frameSet", "org.ohnlp.typesystem.type.textsem.Predicate");
     return jcasType.ll_cas.ll_getStringValue(addr, ((Predicate_Type)jcasType).casFeatCode_frameSet);}
     
   /** setter for frameSet - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setFrameSet(String v) {
     if (Predicate_Type.featOkTst && ((Predicate_Type)jcasType).casFeat_frameSet == null)
       jcasType.jcas.throwFeatMissing("frameSet", "org.ohnlp.typesystem.type.textsem.Predicate");

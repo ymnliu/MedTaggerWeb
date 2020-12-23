@@ -12,28 +12,9 @@ import org.apache.uima.cas.Type;
 
 /** Differentiates a token as being punctuation rather than a contraction, symbol, newline, word, or number. 
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.PunctuationToken
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
+ * Updated by JCasGen Fri Oct 23 17:11:18 CDT 2020
  * @generated */
 public class PunctuationToken_Type extends BaseToken_Type {
-  /** @generated */
-  @Override
-  protected FSGenerator getFSGenerator() {return fsGenerator;}
-  /** @generated */
-  private final FSGenerator fsGenerator = 
-    new FSGenerator() {
-      public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (PunctuationToken_Type.this.useExistingInstance) {
-  			   // Return eq fs instance if already created
-  		     FeatureStructure fs = PunctuationToken_Type.this.jcas.getJfsFromCaddr(addr);
-  		     if (null == fs) {
-  		       fs = new PunctuationToken(addr, PunctuationToken_Type.this);
-  			   PunctuationToken_Type.this.jcas.putJfsFromCaddr(addr, fs);
-  			   return fs;
-  		     }
-  		     return fs;
-        } else return new PunctuationToken(addr, PunctuationToken_Type.this);
-  	  }
-    };
   /** @generated */
   @SuppressWarnings ("hiding")
   public final static int typeIndexID = PunctuationToken.typeIndexID;

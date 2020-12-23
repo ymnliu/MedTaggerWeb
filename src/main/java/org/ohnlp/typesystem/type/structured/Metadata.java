@@ -12,8 +12,8 @@ import org.apache.uima.jcas.cas.TOP;
 
 
 /** Structured data that captures information about the document, patient, or context of the clinical text.
- * Updated by JCasGen Wed Oct 30 16:30:49 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class Metadata extends TOP {
   /** @generated
@@ -47,10 +47,13 @@ public class Metadata extends TOP {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -59,14 +62,18 @@ public class Metadata extends TOP {
   //* Feature: patientID
 
   /** getter for patientID - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public long getPatientID() {
     if (Metadata_Type.featOkTst && ((Metadata_Type)jcasType).casFeat_patientID == null)
       jcasType.jcas.throwFeatMissing("patientID", "org.ohnlp.typesystem.type.structured.Metadata");
     return jcasType.ll_cas.ll_getLongValue(addr, ((Metadata_Type)jcasType).casFeatCode_patientID);}
     
   /** setter for patientID - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setPatientID(long v) {
     if (Metadata_Type.featOkTst && ((Metadata_Type)jcasType).casFeat_patientID == null)
       jcasType.jcas.throwFeatMissing("patientID", "org.ohnlp.typesystem.type.structured.Metadata");
@@ -77,14 +84,18 @@ public class Metadata extends TOP {
   //* Feature: providerID
 
   /** getter for providerID - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public LongArray getProviderID() {
     if (Metadata_Type.featOkTst && ((Metadata_Type)jcasType).casFeat_providerID == null)
       jcasType.jcas.throwFeatMissing("providerID", "org.ohnlp.typesystem.type.structured.Metadata");
     return (LongArray)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Metadata_Type)jcasType).casFeatCode_providerID)));}
     
   /** setter for providerID - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setProviderID(LongArray v) {
     if (Metadata_Type.featOkTst && ((Metadata_Type)jcasType).casFeat_providerID == null)
       jcasType.jcas.throwFeatMissing("providerID", "org.ohnlp.typesystem.type.structured.Metadata");
@@ -111,14 +122,18 @@ public class Metadata extends TOP {
   //* Feature: sourceData
 
   /** getter for sourceData - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public SourceData getSourceData() {
     if (Metadata_Type.featOkTst && ((Metadata_Type)jcasType).casFeat_sourceData == null)
       jcasType.jcas.throwFeatMissing("sourceData", "org.ohnlp.typesystem.type.structured.Metadata");
     return (SourceData)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Metadata_Type)jcasType).casFeatCode_sourceData)));}
     
   /** setter for sourceData - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setSourceData(SourceData v) {
     if (Metadata_Type.featOkTst && ((Metadata_Type)jcasType).casFeat_sourceData == null)
       jcasType.jcas.throwFeatMissing("sourceData", "org.ohnlp.typesystem.type.structured.Metadata");
@@ -129,14 +144,18 @@ public class Metadata extends TOP {
   //* Feature: demographics
 
   /** getter for demographics - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public Demographics getDemographics() {
     if (Metadata_Type.featOkTst && ((Metadata_Type)jcasType).casFeat_demographics == null)
       jcasType.jcas.throwFeatMissing("demographics", "org.ohnlp.typesystem.type.structured.Metadata");
     return (Demographics)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((Metadata_Type)jcasType).casFeatCode_demographics)));}
     
   /** setter for demographics - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setDemographics(Demographics v) {
     if (Metadata_Type.featOkTst && ((Metadata_Type)jcasType).casFeat_demographics == null)
       jcasType.jcas.throwFeatMissing("demographics", "org.ohnlp.typesystem.type.structured.Metadata");

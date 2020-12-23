@@ -10,8 +10,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** A body part or area, corresponding to the UMLS semantic group of Anatomy.  An Entity based on generic Clinical Element Models (CEMs)
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:16 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class AnatomicalSite extends Entity {
   /** @generated
@@ -45,10 +45,13 @@ public class AnatomicalSite extends Entity {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -57,14 +60,18 @@ public class AnatomicalSite extends Entity {
   //* Feature: bodyLaterality
 
   /** getter for bodyLaterality - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public BodyLaterality getBodyLaterality() {
     if (AnatomicalSite_Type.featOkTst && ((AnatomicalSite_Type)jcasType).casFeat_bodyLaterality == null)
       jcasType.jcas.throwFeatMissing("bodyLaterality", "org.ohnlp.typesystem.type.refsem.AnatomicalSite");
     return (BodyLaterality)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((AnatomicalSite_Type)jcasType).casFeatCode_bodyLaterality)));}
     
   /** setter for bodyLaterality - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setBodyLaterality(BodyLaterality v) {
     if (AnatomicalSite_Type.featOkTst && ((AnatomicalSite_Type)jcasType).casFeat_bodyLaterality == null)
       jcasType.jcas.throwFeatMissing("bodyLaterality", "org.ohnlp.typesystem.type.refsem.AnatomicalSite");
@@ -75,14 +82,18 @@ public class AnatomicalSite extends Entity {
   //* Feature: bodySide
 
   /** getter for bodySide - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public BodySide getBodySide() {
     if (AnatomicalSite_Type.featOkTst && ((AnatomicalSite_Type)jcasType).casFeat_bodySide == null)
       jcasType.jcas.throwFeatMissing("bodySide", "org.ohnlp.typesystem.type.refsem.AnatomicalSite");
     return (BodySide)(jcasType.ll_cas.ll_getFSForRef(jcasType.ll_cas.ll_getRefValue(addr, ((AnatomicalSite_Type)jcasType).casFeatCode_bodySide)));}
     
   /** setter for bodySide - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setBodySide(BodySide v) {
     if (AnatomicalSite_Type.featOkTst && ((AnatomicalSite_Type)jcasType).casFeat_bodySide == null)
       jcasType.jcas.throwFeatMissing("bodySide", "org.ohnlp.typesystem.type.refsem.AnatomicalSite");

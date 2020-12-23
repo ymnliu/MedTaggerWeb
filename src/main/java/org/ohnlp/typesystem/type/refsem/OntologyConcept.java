@@ -13,8 +13,8 @@ import org.apache.uima.jcas.cas.TOP;
 /** Ontologies (e.g., SNOMED-CT) provide an expert semantic representation for concepts. They typically assign a code to a concept and normalize across various textual representations of that concept.  
 IdentifiedAnnotation and Elements may point to these normalized concept representations to indicate clinical concepts.
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.OntologyConcept
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class OntologyConcept extends TOP {
   /** @generated
@@ -48,10 +48,13 @@ public class OntologyConcept extends TOP {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -60,14 +63,18 @@ public class OntologyConcept extends TOP {
   //* Feature: codingScheme
 
   /** getter for codingScheme - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getCodingScheme() {
     if (OntologyConcept_Type.featOkTst && ((OntologyConcept_Type)jcasType).casFeat_codingScheme == null)
       jcasType.jcas.throwFeatMissing("codingScheme", "org.ohnlp.typesystem.type.refsem.OntologyConcept");
     return jcasType.ll_cas.ll_getStringValue(addr, ((OntologyConcept_Type)jcasType).casFeatCode_codingScheme);}
     
   /** setter for codingScheme - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setCodingScheme(String v) {
     if (OntologyConcept_Type.featOkTst && ((OntologyConcept_Type)jcasType).casFeat_codingScheme == null)
       jcasType.jcas.throwFeatMissing("codingScheme", "org.ohnlp.typesystem.type.refsem.OntologyConcept");
@@ -78,14 +85,18 @@ public class OntologyConcept extends TOP {
   //* Feature: code
 
   /** getter for code - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getCode() {
     if (OntologyConcept_Type.featOkTst && ((OntologyConcept_Type)jcasType).casFeat_code == null)
       jcasType.jcas.throwFeatMissing("code", "org.ohnlp.typesystem.type.refsem.OntologyConcept");
     return jcasType.ll_cas.ll_getStringValue(addr, ((OntologyConcept_Type)jcasType).casFeatCode_code);}
     
   /** setter for code - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setCode(String v) {
     if (OntologyConcept_Type.featOkTst && ((OntologyConcept_Type)jcasType).casFeat_code == null)
       jcasType.jcas.throwFeatMissing("code", "org.ohnlp.typesystem.type.refsem.OntologyConcept");
@@ -96,14 +107,18 @@ public class OntologyConcept extends TOP {
   //* Feature: oid
 
   /** getter for oid - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getOid() {
     if (OntologyConcept_Type.featOkTst && ((OntologyConcept_Type)jcasType).casFeat_oid == null)
       jcasType.jcas.throwFeatMissing("oid", "org.ohnlp.typesystem.type.refsem.OntologyConcept");
     return jcasType.ll_cas.ll_getStringValue(addr, ((OntologyConcept_Type)jcasType).casFeatCode_oid);}
     
   /** setter for oid - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setOid(String v) {
     if (OntologyConcept_Type.featOkTst && ((OntologyConcept_Type)jcasType).casFeat_oid == null)
       jcasType.jcas.throwFeatMissing("oid", "org.ohnlp.typesystem.type.refsem.OntologyConcept");
@@ -116,7 +131,9 @@ public class OntologyConcept extends TOP {
   /** getter for oui - gets holds the rxnorm unique identifier for a given drug
               mention.
               TODO: change this attribute because of name clash (UMLS/SNOMED)
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getOui() {
     if (OntologyConcept_Type.featOkTst && ((OntologyConcept_Type)jcasType).casFeat_oui == null)
       jcasType.jcas.throwFeatMissing("oui", "org.ohnlp.typesystem.type.refsem.OntologyConcept");
@@ -125,7 +142,9 @@ public class OntologyConcept extends TOP {
   /** setter for oui - sets holds the rxnorm unique identifier for a given drug
               mention.
               TODO: change this attribute because of name clash (UMLS/SNOMED) 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setOui(String v) {
     if (OntologyConcept_Type.featOkTst && ((OntologyConcept_Type)jcasType).casFeat_oui == null)
       jcasType.jcas.throwFeatMissing("oui", "org.ohnlp.typesystem.type.refsem.OntologyConcept");

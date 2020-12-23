@@ -11,8 +11,8 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 /** Concepts in the Unified Medical Language System (UMLS) Metathesaurus have a concept unique identifier (CUI) and a type unique identifier (TUI, i.e., semantic type) which are curated, normalized codes. For example, "pain" would have a cui=C0030193 and tui=T184.
 Equivalent to Mayo cTAKES version 2.5: edu.mayo.bmi.uima.core.type.UmlsConcept
- * Updated by JCasGen Wed Oct 30 16:30:48 CDT 2013
- * XML source: /home/liu/edtnlp/MedTagger-1.0/descsrc/org/ohnlp/medtagger/types/MedTaggerTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:17 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class UmlsConcept extends OntologyConcept {
   /** @generated
@@ -46,10 +46,13 @@ public class UmlsConcept extends OntologyConcept {
     readObject();   
   } 
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -58,14 +61,18 @@ public class UmlsConcept extends OntologyConcept {
   //* Feature: cui
 
   /** getter for cui - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getCui() {
     if (UmlsConcept_Type.featOkTst && ((UmlsConcept_Type)jcasType).casFeat_cui == null)
       jcasType.jcas.throwFeatMissing("cui", "org.ohnlp.typesystem.type.refsem.UmlsConcept");
     return jcasType.ll_cas.ll_getStringValue(addr, ((UmlsConcept_Type)jcasType).casFeatCode_cui);}
     
   /** setter for cui - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setCui(String v) {
     if (UmlsConcept_Type.featOkTst && ((UmlsConcept_Type)jcasType).casFeat_cui == null)
       jcasType.jcas.throwFeatMissing("cui", "org.ohnlp.typesystem.type.refsem.UmlsConcept");
@@ -76,14 +83,18 @@ public class UmlsConcept extends OntologyConcept {
   //* Feature: tui
 
   /** getter for tui - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTui() {
     if (UmlsConcept_Type.featOkTst && ((UmlsConcept_Type)jcasType).casFeat_tui == null)
       jcasType.jcas.throwFeatMissing("tui", "org.ohnlp.typesystem.type.refsem.UmlsConcept");
     return jcasType.ll_cas.ll_getStringValue(addr, ((UmlsConcept_Type)jcasType).casFeatCode_tui);}
     
   /** setter for tui - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTui(String v) {
     if (UmlsConcept_Type.featOkTst && ((UmlsConcept_Type)jcasType).casFeat_tui == null)
       jcasType.jcas.throwFeatMissing("tui", "org.ohnlp.typesystem.type.refsem.UmlsConcept");

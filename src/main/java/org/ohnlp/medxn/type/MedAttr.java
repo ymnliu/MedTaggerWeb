@@ -34,8 +34,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** Medication name and attributes that simply hold string and offset
- * Updated by JCasGen Mon Sep 30 15:04:17 CDT 2013
- * XML source: /MedXN_1.0/descsrc/org/ohnlp/medxn/types/MedXNTypes.xml
+ * Updated by JCasGen Fri Oct 23 17:11:16 CDT 2020
+ * XML source: C:/Users/Sijia Liu/git/MedTaggerWeb/src/main/resources/org/ohnlp/n3c/types/N3cTypes.xml
  * @generated */
 public class MedAttr extends Annotation {
   /** @generated
@@ -77,10 +77,13 @@ public class MedAttr extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -89,14 +92,18 @@ public class MedAttr extends Annotation {
   //* Feature: tag
 
   /** getter for tag - gets semantic tag - eg, med, freq,...
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getTag() {
     if (MedAttr_Type.featOkTst && ((MedAttr_Type)jcasType).casFeat_tag == null)
       jcasType.jcas.throwFeatMissing("tag", "org.ohnlp.medxn.type.MedAttr");
     return jcasType.ll_cas.ll_getStringValue(addr, ((MedAttr_Type)jcasType).casFeatCode_tag);}
     
   /** setter for tag - sets semantic tag - eg, med, freq,... 
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setTag(String v) {
     if (MedAttr_Type.featOkTst && ((MedAttr_Type)jcasType).casFeat_tag == null)
       jcasType.jcas.throwFeatMissing("tag", "org.ohnlp.medxn.type.MedAttr");
