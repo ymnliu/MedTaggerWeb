@@ -696,24 +696,24 @@ public class WebServiceController {
      * @param session
      * @return username
      */
-    private String getCurrentUsername(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        System.out.print("* get username in session: [" + username + "] ");
+    // private String getCurrentUsername(HttpSession session) {
+    //     String username = (String) session.getAttribute("username");
+    //     System.out.print("* get username in session: [" + username + "] ");
 
-        if (username == null) {
-            username = "guest";
-            // check database
-            User user = this.userService.getUserByUsername(username);
-            if (user == null) {
-                user = this.userService.createUser(username);
-                this.projectService.createProject(user, username);
-            }
+    //     if (username == null) {
+    //         username = "guest";
+    //         // check database
+    //         User user = this.userService.getUserByUsername(username);
+    //         if (user == null) {
+    //             user = this.userService.createUser(username);
+    //             this.projectService.createProject(user, username);
+    //         }
 
-            // set session as current guest
-            session.setAttribute("username", username);
-        }
-        System.out.println("and now is: [" + username + "]");
+    //         // set session as current guest
+    //         session.setAttribute("username", username);
+    //     }
+    //     System.out.println("and now is: [" + username + "]");
 
-        return username;
-    }
+    //     return username;
+    // }
 }
