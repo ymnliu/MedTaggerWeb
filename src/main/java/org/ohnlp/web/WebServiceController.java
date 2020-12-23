@@ -662,11 +662,7 @@ public class WebServiceController {
         if (action.equalsIgnoreCase("login")) {
             session.setAttribute("username", username);
             System.out.println("* session username=" + session.getAttribute("username"));
-<<<<<<< HEAD
-            return "Logged in";
-=======
             return "Logged in! Redirecting to demo page ... <script>setTimeout('location.href=\"/\"', 4000);</script>";
->>>>>>> f3e5786a50fdc1e8172d1e497469af0dedb24b05
         } else if (action.equalsIgnoreCase("logout")) {
             session.setAttribute("username", null);
             return "Logged out";
@@ -675,11 +671,7 @@ public class WebServiceController {
             this.mtService.createUserAndRelated(username);
             // created, login
             session.setAttribute("username", username);
-<<<<<<< HEAD
-            return "Created if not exist and logged in";
-=======
             return "Logged in! Redirecting to demo page ... <script>setTimeout('location.href=\"/\"', 4000);</script>";
->>>>>>> f3e5786a50fdc1e8172d1e497469af0dedb24b05
         } else {
             return action + " - " + username;
         }
@@ -704,7 +696,6 @@ public class WebServiceController {
      * @param session
      * @return username
      */
-<<<<<<< HEAD
     // private String getCurrentUsername(HttpSession session) {
     //     String username = (String) session.getAttribute("username");
     //     System.out.print("* get username in session: [" + username + "] ");
@@ -725,26 +716,4 @@ public class WebServiceController {
 
     //     return username;
     // }
-=======
-    private String getCurrentUsername(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        System.out.print("* get username in session: [" + username + "] ");
-
-        if (username == null) {
-            username = "guest";
-            // check database
-            User user = this.userService.getUserByUsername(username);
-            if (user == null) {
-                user = this.userService.createUser(username);
-                this.projectService.createProject(user, username);
-            }
-
-            // set session as current guest
-            session.setAttribute("username", username);
-        }
-        System.out.println("and now is: [" + username + "]");
-
-        return username;
-    }
->>>>>>> f3e5786a50fdc1e8172d1e497469af0dedb24b05
 }
