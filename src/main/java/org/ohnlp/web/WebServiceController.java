@@ -641,7 +641,7 @@ public class WebServiceController {
         if (action.equalsIgnoreCase("login")) {
             session.setAttribute("username", username);
             System.out.println("* session username=" + session.getAttribute("username"));
-            return "Logged in";
+            return "Logged in! Redirecting to demo page ... <script>setTimeout('location.href=\"/\"', 4000);</script>";
         } else if (action.equalsIgnoreCase("logout")) {
             session.setAttribute("username", null);
             return "Logged out";
@@ -650,7 +650,7 @@ public class WebServiceController {
             this.mtService.createUserAndRelated(username);
             // created, login
             session.setAttribute("username", username);
-            return "Created if not exist and logged in";
+            return "Logged in! Redirecting to demo page ... <script>setTimeout('location.href=\"/\"', 4000);</script>";
         } else {
             return action + " - " + username;
         }
