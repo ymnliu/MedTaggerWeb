@@ -393,11 +393,11 @@ public class WebServiceController {
         if (username == null) {
             username = "guest";
             // check database
-            User user = this.userService.getUserByUsername(username);
-            if (user == null) {
-                user = this.userService.createUser(username);
-                this.projectService.createProject(user, username);
-            }
+            // User user = this.userService.getUserByUsername(username);
+            // if (user == null) {
+            //     user = this.userService.createUser(username);
+            //     this.projectService.createProject(user, username);
+            // }
 
             // set session as current guest
             session.setAttribute("username", username);
@@ -641,22 +641,22 @@ public class WebServiceController {
     
     
     /**
-     * Login (fake)
-     * @return the fake login view
+     * Login locally
+     * @return the local login view
      */
-    @GetMapping("/fake_login")
-    public ModelAndView fake_login(HttpSession session) {
+    @GetMapping("/_login")
+    public ModelAndView local_login(HttpSession session) {
         final ModelAndView view = new ModelAndView();
-        view.setViewName("fake_login");
+        view.setViewName("local_login");
         return view;
     }
 
     /**
-     * Login (fake)
-     * @return the dictionary builder view
+     * Login locally
+     * @return login view
      */
-    @PostMapping("/fake_login")
-    public String fake_login(
+    @PostMapping("/_login")
+    public String local_login(
         @RequestParam(name = "username") String username, 
         @RequestParam(name = "password") String password, 
         @RequestParam(name = "action") String action, 
@@ -680,17 +680,16 @@ public class WebServiceController {
         }
     }
 
-
     /**
-     * Logout (fake)
-     * @return the dictionary builder view
+     * Logout
+     * @return the view
      */
-    @GetMapping("/fake_logout")
-    public String fake_logout(HttpSession session) {
+    @GetMapping("/_logout")
+    public String local_logout(HttpSession session) {
         // set user name
-        session.setAttribute("username", null);
+        session.setAttribute("username", "guest");
         System.out.println("* Logged out username.");
-        return "Logged out";
+        return "Logged out. Redirecting to demo page ... <script>setTimeout('location.href=\"/\"', 4000);</script>";
     }
 
 }

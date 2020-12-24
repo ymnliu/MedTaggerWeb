@@ -107,10 +107,13 @@ public class ResourceUtilManager {
 			
 			// Load resource based on path patterns
 			InputStream inputStream = null;
-			if(RESOURCEDIR.startsWith("/") || RESOURCEDIR.startsWith("\\")) {
+			if (RESOURCEDIR.startsWith("/tmp/")) {
+				// just load for system
+				inputStream = Files.newInputStream(Paths.get(resourcefile));
+			} else if (RESOURCEDIR.startsWith("/") || RESOURCEDIR.startsWith("\\")) {
 				// load from class path
 				inputStream = getClass().getResourceAsStream(resourcefile);
-			}else{
+			} else {
 				// load from file system
 				inputStream = Files.newInputStream(Paths.get(resourcefile));
 			}
@@ -151,7 +154,10 @@ public class ResourceUtilManager {
 				InputStream inputStream = null;
 				String hmResourceStr = hmResources.get(resource);
 				// Load resource based on path patterns
-				if(RESOURCEDIR.startsWith("/") || RESOURCEDIR.startsWith("\\")) {
+				if (RESOURCEDIR.startsWith("/tmp/")) {
+					// just load for system
+					inputStream = Files.newInputStream(Paths.get(hmResourceStr));
+				} else if(RESOURCEDIR.startsWith("/") || RESOURCEDIR.startsWith("\\")) {
 					// load from class path
 					inputStream = getClass().getResourceAsStream(hmResourceStr);
 				}else{

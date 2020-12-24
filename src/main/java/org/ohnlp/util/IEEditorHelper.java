@@ -34,7 +34,7 @@ public class IEEditorHelper {
         Files.createFile(file_used_resources_txt.toPath());
 
         // create the content for the used_resources.txt
-        String lines_used_resources_txt = "./used_resources.txt\n";
+        String lines_used_resources_txt = "";
 
         // create 3 folders
         File dir_rules = new File(user_temp_path.toAbsolutePath().toString(), "rules");
@@ -106,6 +106,9 @@ public class IEEditorHelper {
             Files.write(file_rs_regexp_txt.toPath(), text.getBytes());
             lines_used_resources_txt += "./regexp/" + file_rs_regexp_txt.getName() + "\n";
         }
+
+        // add itself
+        lines_used_resources_txt += "./used_resources.txt\n";
         Files.write(file_used_resources_txt.toPath(), lines_used_resources_txt.getBytes());
 
         // return the user_temp_path
