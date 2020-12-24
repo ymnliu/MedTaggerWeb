@@ -63,7 +63,8 @@ public class N3CNLPEngine {
         try {
             ResourceManager resMgr = ResourceManagerFactory.newResourceManager();
             AnalysisEngineDescription descN3cTAE = createEngineDescription(
-                    "desc.medtaggerdesc.aggregate_analysis_engine.N3CAggregateTAE");
+                    "desc.n3cdesc.aggregate_analysis_engine.N3CAggregateTAE");
+                    // "desc.medtaggerdesc.aggregate_analysis_engine.N3CAggregateTAE");
             AnalysisEngineMetaData metadata = descN3cTAE.getAnalysisEngineMetaData();
 
             ConfigurationParameterSettings settings = metadata.getConfigurationParameterSettings();
