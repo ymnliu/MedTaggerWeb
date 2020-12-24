@@ -36,6 +36,12 @@
         <delegateAnalysisEngine key="MedTimeAE">
             <import name="org.ohnlp.medtime.aes.MedTimeAE"/>
         </delegateAnalysisEngine>
+        <delegateAnalysisEngine key="ConceptMentionAttributeLinkerAE">
+          <import name="org.ohnlp.n3c.aes.ConceptMentionAttributeLinkerAE"/>
+        </delegateAnalysisEngine>
+            <delegateAnalysisEngine key="FamilyMemberIEAE">
+          <import name="org.ohnlp.n3c.aes.FamilyMemberIEAnnotator"/>
+        </delegateAnalysisEngine>
     </delegateAnalysisEngineSpecifiers>
 
     <analysisEngineMetaData>
@@ -161,6 +167,8 @@
                 <node>MedTaggerIEAnnotatorAE</node>
                 <node>RuleContextAE</node>
                 <node>MedTimeAE</node>
+                <node>FamilyMemberIEAE</node>
+                <node>ConceptMentionAttributeLinkerAE</node>
             </fixedFlow>
         </flowConstraints>
         <typePriorities>
@@ -186,7 +194,17 @@
     </analysisEngineMetaData>
 
     <resourceManagerConfiguration>
+
         <externalResources>
+          <externalResource>
+            <name>fh_rules</name>
+            <description/>
+            <fileResourceSpecifier>
+              <fileUrl>file:medtaggerieresources/fh</fileUrl>
+            </fileResourceSpecifier>
+                        
+          </externalResource>
+
             <externalResource>
                 <name>section_map</name>
                 <description/>
