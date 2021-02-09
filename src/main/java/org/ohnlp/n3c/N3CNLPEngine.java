@@ -2,32 +2,21 @@ package org.ohnlp.n3c;
 
 import org.apache.uima.UIMAException;
 import org.apache.uima.UIMAFramework;
-import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.analysis_engine.AnalysisEngineDescription;
-import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
-import org.apache.uima.collection.CollectionReaderDescription;
-import org.apache.uima.fit.factory.AggregateBuilder;
-import org.apache.uima.fit.factory.AnalysisEngineFactory;
-import org.apache.uima.fit.factory.CollectionReaderFactory;
 import org.apache.uima.fit.factory.TypeSystemDescriptionFactory;
 import org.apache.uima.fit.internal.ResourceManagerFactory;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
-import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceManager;
 import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
 import org.apache.uima.resource.metadata.TypeSystemDescription;
 import org.apache.uima.util.InvalidXMLException;
 import org.json.simple.JSONObject;
-import org.ohnlp.medtagger.cr.FileSystemReader;
-import org.ohnlp.medtagger.ie.cc.IETabDelimitedWriter;
 import org.ohnlp.medtagger.type.ConceptMention;
 import org.ohnlp.medtime.type.MedTimex3;
-import org.ohnlp.medxn.cc.MedXNCC;
-import org.ohnlp.util.SimpleCliPipeline;
 import org.ohnlp.web.JSONAnnotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +38,7 @@ public class N3CNLPEngine {
     private AnalysisEngine cmAae;
 
     public N3CNLPEngine(){
-        initUIMAModel("covid19");
+        initUIMAModel("fh");
     }
 
     public N3CNLPEngine(String ruleDir) {

@@ -159,16 +159,16 @@
     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-maxent:3.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-tools:1.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-uima:1.9.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-adapter-vinci:2.10.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.uima:jVinci:2.10.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-core:2.10.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-adapter-vinci:2.10.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.uima:jVinci:2.10.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-core:2.10.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.uima:uimafit-core:2.4.0" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging-api:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:5.0.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.0.4.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-cpe:2.10.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-document-annotation:2.10.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-tools:2.10.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-cpe:2.10.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-document-annotation:2.10.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.uima:uimaj-tools:2.10.2" level="project" />
     <orderEntry type="library" name="Maven: org.ahocorasick:ahocorasick:0.4.0" level="project" />
     <orderEntry type="library" name="Maven: me.tongfei:progressbar:0.7.4" level="project" />
     <orderEntry type="library" name="Maven: org.jline:jline:3.11.0" level="project" />
