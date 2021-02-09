@@ -23,7 +23,6 @@ public class UserService {
 
     public User createUser(String username) {
         User u = new User(username);
-        u.setDateCreated(new Date(System.currentTimeMillis()));
         this.userRepository.save(u);
         return u;
     }

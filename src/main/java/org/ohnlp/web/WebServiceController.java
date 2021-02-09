@@ -8,7 +8,6 @@ import com.onelogin.saml2.servlet.ServletUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.ohnlp.n3c.N3CNLPEngine;
 import org.ohnlp.util.BioPortalAPI;
 import org.ohnlp.util.IEEditorHelper;
@@ -16,8 +15,6 @@ import org.ohnlp.web.db.entity.Project;
 import org.ohnlp.web.db.entity.Rulepack;
 import org.ohnlp.web.db.entity.User;
 import org.ohnlp.web.db.service.MTService;
-import org.ohnlp.web.db.repo.ProjectRepository;
-import org.ohnlp.web.db.repo.UserRepository;
 import org.ohnlp.web.db.service.ProjectService;
 import org.ohnlp.web.db.service.RulepackService;
 import org.ohnlp.web.db.service.UserService;
@@ -384,17 +381,23 @@ public class WebServiceController {
 
     }
 
+
+    /**
+     * Get current username from session
+     * @param session
+     * @return username
+     */
     private String getCurrentUsername(HttpSession session) {
         String username = (String) session.getAttribute("username");
 
         if (username == null) {
             username = "guest";
             // check database
-            User user = this.userService.getUserByUsername(username);
-            if (user == null) {
-                user = this.userService.createUser(username);
-                this.projectService.createProject(user, username);
-            }
+            // User user = this.userService.getUserByUsername(username);
+            // if (user == null) {
+            //     user = this.userService.createUser(username);
+            //     this.projectService.createProject(user, username);
+            // }
 
             // set session as current guest
             session.setAttribute("username", username);
@@ -638,22 +641,22 @@ public class WebServiceController {
     
     
     /**
-     * Login (fake)
-     * @return the fake login view
+     * Login locally
+     * @return the local login view
      */
-    @GetMapping("/fake_login")
-    public ModelAndView fake_login(HttpSession session) {
+    @GetMapping("/_login")
+    public ModelAndView local_login(HttpSession session) {
         final ModelAndView view = new ModelAndView();
-        view.setViewName("fake_login");
+        view.setViewName("local_login");
         return view;
     }
 
     /**
-     * Login (fake)
-     * @return the dictionary builder view
+     * Login locally
+     * @return login view
      */
-    @PostMapping("/fake_login")
-    public String fake_login(
+    @PostMapping("/_login")
+    public String local_login(
         @RequestParam(name = "username") String username, 
         @RequestParam(name = "password") String password, 
         @RequestParam(name = "action") String action, 
@@ -662,7 +665,7 @@ public class WebServiceController {
         if (action.equalsIgnoreCase("login")) {
             session.setAttribute("username", username);
             System.out.println("* session username=" + session.getAttribute("username"));
-            return "Logged in";
+            return "Logged in! Redirecting to demo page ... <script>setTimeout('location.href=\"/\"', 4000);</script>";
         } else if (action.equalsIgnoreCase("logout")) {
             session.setAttribute("username", null);
             return "Logged out";
@@ -671,49 +674,22 @@ public class WebServiceController {
             this.mtService.createUserAndRelated(username);
             // created, login
             session.setAttribute("username", username);
-            return "Created if not exist and logged in";
+            return "Logged in! Redirecting to demo page ... <script>setTimeout('location.href=\"/\"', 4000);</script>";
         } else {
             return action + " - " + username;
         }
     }
 
-
     /**
-     * Logout (fake)
-     * @return the dictionary builder view
+     * Logout
+     * @return the view
      */
-    @GetMapping("/fake_logout")
-    public String fake_logout(HttpSession session) {
+    @GetMapping("/_logout")
+    public String local_logout(HttpSession session) {
         // set user name
-        session.setAttribute("username", null);
+        session.setAttribute("username", "guest");
         System.out.println("* Logged out username.");
-        return "Logged out";
+        return "Logged out. Redirecting to demo page ... <script>setTimeout('location.href=\"/\"', 4000);</script>";
     }
 
-
-    /**
-     * Get current username from session
-     * @param session
-     * @return username
-     */
-    private String getCurrentUsername(HttpSession session) {
-        String username = (String) session.getAttribute("username");
-        System.out.print("* get username in session: [" + username + "] ");
-
-        if (username == null) {
-            username = "guest";
-            // check database
-            User user = this.userService.getUserByUsername(username);
-            if (user == null) {
-                user = this.userService.createUser(username);
-                this.projectService.createProject(user, username);
-            }
-
-            // set session as current guest
-            session.setAttribute("username", username);
-        }
-        System.out.println("and now is: [" + username + "]");
-
-        return username;
-    }
 }

@@ -35,6 +35,7 @@ public class ProjectService {
 
         return project;
     }
+    
     public Project getProjectByTitle(User user, String title) {
         Project project = this.projectRepository.findByTitle(title);
 
