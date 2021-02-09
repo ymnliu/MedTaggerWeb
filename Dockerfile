@@ -4,6 +4,6 @@ WORKDIR /app
 
 RUN mvn clean install -DskipTests
 
-EXPOSE 80
+EXPOSE 80:8080
 CMD ["mvn", "spring-boot:run"]
 
