@@ -284,6 +284,7 @@ public class WebServiceController {
      * @param doc_text
      * @return attributes and concepts
      */
+    @CrossOrigin
     @PostMapping("/parse")
     public JSONObject parse(@RequestParam(name = "doc_text") String doc_text) {
         return n3CNLPEngine.getResultJSON(doc_text);
@@ -411,6 +412,7 @@ public class WebServiceController {
      * 
      * @throws IOException
      */
+    @CrossOrigin
     @PostMapping("/ie_editor_test")
     public JSONObject ie_editor_test(
         @RequestParam(name = "rulepack") String rulepack,
