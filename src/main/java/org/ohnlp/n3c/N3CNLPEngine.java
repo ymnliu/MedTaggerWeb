@@ -1,114 +1,72 @@
 package org.ohnlp.n3c;
 
-import org.apache.uima.UIMAException;
-import org.apache.uima.UIMAFramework;
-import org.apache.uima.analysis_engine.AnalysisEngine;
-import org.apache.uima.analysis_engine.AnalysisEngineDescription;
-import org.apache.uima.analysis_engine.metadata.AnalysisEngineMetaData;
-import org.apache.uima.fit.factory.TypeSystemDescriptionFactory;
-import org.apache.uima.fit.internal.ResourceManagerFactory;
-import org.apache.uima.fit.util.JCasUtil;
-import org.apache.uima.jcas.JCas;
-import org.apache.uima.resource.ResourceInitializationException;
-import org.apache.uima.resource.ResourceManager;
-import org.apache.uima.resource.metadata.ConfigurationParameterSettings;
-import org.apache.uima.resource.metadata.TypeSystemDescription;
-import org.apache.uima.util.InvalidXMLException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.SerializationUtils;
 import org.json.simple.JSONObject;
-import org.ohnlp.medtagger.type.ConceptMention;
-import org.ohnlp.medtime.type.MedTimex3;
+import org.ohnlp.medtagger.ie.util.ResourceUtilManager;
 import org.ohnlp.web.JSONAnnotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.HashMap;
-
-import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
-import static org.apache.uima.fit.factory.JCasFactory.createJCas;
+import java.util.*;
 
 public class N3CNLPEngine {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static TypeSystemDescription tsd;
-    private AnalysisEngine cmAae;
+    private String rulesPackaged;
+    private final RestTemplate restClient = new RestTemplate();
+    private String restEndpoint ;
 
     public N3CNLPEngine(){
-        initUIMAModel("fh");
+        this("fh");
     }
 
     public N3CNLPEngine(String ruleDir) {
+        this(ruleDir, "http://localhost:8080/");
+    }
+
+    public N3CNLPEngine(String ruleDir, String endpoint) {
         initUIMAModel(ruleDir);
+        this.restEndpoint = endpoint;
     }
 
     private void initUIMAModel(String ruleDir){
         Path ruleDirPath = Paths.get(ruleDir);
         logger.info("IE Rules:\t" + ruleDirPath.toAbsolutePath());
-
-        try {
-            ResourceManager resMgr = ResourceManagerFactory.newResourceManager();
-            AnalysisEngineDescription descN3cTAE = createEngineDescription(
-                    "desc.n3cdesc.aggregate_analysis_engine.N3CAggregateTAE");
-                    // "desc.medtaggerdesc.aggregate_analysis_engine.N3CAggregateTAE");
-            AnalysisEngineMetaData metadata = descN3cTAE.getAnalysisEngineMetaData();
-
-            ConfigurationParameterSettings settings = metadata.getConfigurationParameterSettings();
-            settings.setParameterValue("Resource_dir", ruleDirPath.toString());
-            metadata.setConfigurationParameterSettings(settings);
-
-            // modified MedXNTypes now importing MedTaggerIE types
-            tsd = TypeSystemDescriptionFactory.createTypeSystemDescription("org.ohnlp.n3c.types.N3cTypes");
-            tsd.resolveImports(resMgr);
-
-            cmAae = UIMAFramework.produceAnalysisEngine(descN3cTAE, resMgr, null);
-
-            assert(cmAae != null);
-        } catch (InvalidXMLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ResourceInitializationException e) {
-            e.printStackTrace();
-        }
+        ResourceUtilManager rum = new ResourceUtilManager(ruleDirPath.toString());
+        this.rulesPackaged = Base64.getEncoder().encodeToString(SerializationUtils.serialize(rum));
     }
 
-    /**
-     * Trigger UIMA pipeline from the given texts and return only the concept
-     * mentions
-     *
-     * @param docText
-     * @return
-     */
     public HashMap<String, Collection> getResultMap(String docText) {
-
-        HashMap<String, Collection> annotMap = new HashMap();
-        try {
-            JCas cmCas = createJCas(tsd);
-            cmCas.setDocumentText(docText);
-            cmAae.process(cmCas);
-            annotMap.put("cm", JCasUtil.select(cmCas, ConceptMention.class));
-            annotMap.put("timex3", JCasUtil.select(cmCas, MedTimex3.class));
-
-            cmAae.collectionProcessComplete();
-
-        } catch (UIMAException e) {
-            e.printStackTrace();
-        }
-
-        return annotMap;
+        throw new UnsupportedOperationException("Deprecated Functionality");
     }
 
     public JSONObject getResultJSON(String docText) {
-
-        HashMap<String, Collection> resultMap = getResultMap(docText);
-        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(resultMap.get("cm"));
-
-        jsAnnot.add(JSONAnnotation.generateTimex3BratJson(resultMap.get("timex3"), jsAnnot.getAnnotMentionSize() + 1,
-                jsAnnot.getAnnotAttribSize() + 1));
+        ObjectNode req = JsonNodeFactory.instance.objectNode();
+        req.put("streamName", "n3c");
+        req.put("metadata", this.rulesPackaged);
+        req.put("document", docText);
+        req.set("serializers", JsonNodeFactory.instance.arrayNode().add("medtagger"));
+        ServerResponse resp = restClient.postForObject(this.restEndpoint, req, ServerResponse.class);
+        List<MedTaggerRESTPluginResponseAnnotation> anns = null;
+        try {
+            anns = new ObjectMapper().readValue(resp.getContent().get("medtagger").toString()
+                    , new TypeReference<List<MedTaggerRESTPluginResponseAnnotation>>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+            anns = Collections.emptyList();
+        }
+        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(anns);
 
         // build the output data
         JSONObject data = new JSONObject();
@@ -123,5 +81,130 @@ public class N3CNLPEngine {
         ret.put("msg", "text is parsed.");
 
         return ret;
+    }
+
+    /**
+     * A Server Response to a NLP Request     */
+    public static class ServerResponse {
+        private long jobDuration = 0;
+        private String metadata = null;
+        private String message = null;
+        private Map<String, JsonNode> content = null;
+
+        public ServerResponse() {}
+
+        public ServerResponse(long jobDuration, String metadata, String message, Map<String, JsonNode> content) {
+            this.jobDuration = jobDuration;
+            this.metadata = metadata;
+            this.message = message;
+            this.content = content;
+        }
+
+        public long getJobDuration() {
+            return jobDuration;
+        }
+
+        public String getMetadata() {
+            return metadata;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public Map<String, JsonNode> getContent() {
+            return content;
+        }
+
+        public void setJobDuration(long jobDuration) {
+            this.jobDuration = jobDuration;
+        }
+
+        public void setMetadata(String metadata) {
+            this.metadata = metadata;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public void setContent(Map<String, JsonNode> content) {
+            this.content = content;
+        }
+    }
+
+    public static class MedTaggerRESTPluginResponseAnnotation {
+        String concept_code;
+        String status;
+        String certainty;
+        String experiencer;
+        int match_start;
+        int match_end;
+        String matched_text;
+        String sentence_containing_match;
+
+        public String getConcept_code() {
+            return concept_code;
+        }
+
+        public void setConcept_code(String concept_code) {
+            this.concept_code = concept_code;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getCertainty() {
+            return certainty;
+        }
+
+        public void setCertainty(String certainty) {
+            this.certainty = certainty;
+        }
+
+        public String getExperiencer() {
+            return experiencer;
+        }
+
+        public void setExperiencer(String experiencer) {
+            this.experiencer = experiencer;
+        }
+
+        public int getMatch_start() {
+            return match_start;
+        }
+
+        public void setMatch_start(int match_start) {
+            this.match_start = match_start;
+        }
+
+        public int getMatch_end() {
+            return match_end;
+        }
+
+        public void setMatch_end(int match_end) {
+            this.match_end = match_end;
+        }
+
+        public String getMatched_text() {
+            return matched_text;
+        }
+
+        public void setMatched_text(String matched_text) {
+            this.matched_text = matched_text;
+        }
+
+        public String getSentence_containing_match() {
+            return sentence_containing_match;
+        }
+
+        public void setSentence_containing_match(String sentence_containing_match) {
+            this.sentence_containing_match = sentence_containing_match;
+        }
     }
 }
