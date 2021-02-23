@@ -1,6 +1,6 @@
 FROM maven:3.5-jdk-8-alpine
 RUN mkdir -p /app/N3CMedTagger \
-    cp -r . /app/N3CMedTagger
+    cp -r . /app/N3CMedTagger \
     mkdir -p /app/work
 
 WORKDIR /app/work
