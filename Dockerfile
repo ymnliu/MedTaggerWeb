@@ -1,4 +1,5 @@
 FROM maven:3.5-jdk-8-alpine
+RUN apk add --no-cache git
 RUN mkdir -p /app/N3CMedTagger
 COPY . /app/N3CMedTagger
 RUN mkdir -p /app/work
