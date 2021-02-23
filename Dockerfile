@@ -26,7 +26,7 @@ EXPOSE 8080:8080
 
 WORKDIR /app/N3CMedTagger
 
-RUN -d java -jar /app/MedTaggerREST/UIMA-REST-SERVER.jar -Dserver.port=8080
+RUN nohup java -jar /app/MedTaggerREST/UIMA-REST-SERVER.jar -Dserver.port=8080
 RUN rm -r /app/work
 
 RUN mvn clean install -DskipTests
