@@ -10,7 +10,7 @@ RUN git clone https://github.com/OHNLP/UIMA-Stream-Server
 WORKDIR /app/work/UIMA-Stream-Server
 RUN mvn clean install -DskipTests -P EXECUTABLE
 RUN mkdir -p /app/MedTaggerREST
-COPY ./UIMA-Server-REST/target/UIMA-REST-SERVER.jar /app/MedTaggerREST/UIMA-REST-SERVER.jar
+COPY /app/work/UIMA-Stream-Server/UIMA-Server-REST/target/UIMA-REST-SERVER.jar /app/MedTaggerREST/UIMA-REST-SERVER.jar
 RUN mkdir -p /app/MedTaggerREST/libs
 RUN mkdir -p /app/MedTaggerREST/plugins
 WORKDIR /app/work/
@@ -20,7 +20,7 @@ COPY /app/work/MedTagger/MedTagger.jar /app/MedTaggerREST/libs
 RUN git clone https://github.com/OHNLP/MedTaggerRESTPlugin.git
 WORKDIR /app/work/MedTaggerRESTPlugin
 RUN mvn clean install -DskipTests
-COPY ./target/MedTaggerRESTPlugin.jar /app/MedTaggerREST/plugins/MedTaggerRESTPlugin.jar
+COPY /app/work/MedTaggerRESTPlugin/target/MedTaggerRESTPlugin.jar /app/MedTaggerREST/plugins/MedTaggerRESTPlugin.jar
 COPY /app/N3CMedTagger/src/main/resources/uima-stream-server-conf.json /app/MedTaggerREST/medtagger_rest_config.json
 
 EXPOSE 8080:8080
