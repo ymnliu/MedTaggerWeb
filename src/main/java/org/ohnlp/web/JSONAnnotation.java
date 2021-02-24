@@ -4,7 +4,10 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.json.simple.JSONArray;
 import org.ohnlp.medtagger.type.ConceptMention;
 import org.ohnlp.medtime.type.MedTimex3;
+import org.ohnlp.n3c.N3CNLPEngine;
+
 import java.util.Collection;
+import java.util.List;
 
 public class JSONAnnotation {
     public JSONArray getCmList() {
@@ -44,7 +47,7 @@ public class JSONAnnotation {
      * @param cms List of Annotation from UIMA
      * @return list of JSON array for Brat to display in the html template
      */
-    public static JSONAnnotation generateConceptMentionBratJson(final Collection<Annotation> cms) {
+    public static JSONAnnotation generateConceptMentionBratJson(final List<N3CNLPEngine.MedTaggerRESTPluginResponseAnnotation> cms) {
         JSONArray cmList = new JSONArray();
         JSONArray attribList = new JSONArray();
 
@@ -56,8 +59,7 @@ public class JSONAnnotation {
             return new JSONAnnotation(cmList, attribList);
         }
 
-        for (Annotation annot: cms) {
-            ConceptMention cm = (ConceptMention) annot;
+        for (N3CNLPEngine.MedTaggerRESTPluginResponseAnnotation cm : cms) {
             // Format: [${ID}, ${TYPE}, [[${START}, ${END}]]]
             // note that range of the offsets are [${START},${END})
             // ref:
@@ -70,17 +72,18 @@ public class JSONAnnotation {
 
             // detectionMethod: "DictionaryLookup"
             // detectionMethod: "Matched"
-            if (cm.getDetectionMethod().equals("Matched")) {
-                entityProperties.add("Regex");
-            } else if (cm.getDetectionMethod().equals("DictionaryLookup")) {
-                entityProperties.add("Dict");
-            } else {
-                entityProperties.add("Other");
-            }
+//            if (cm.getDetectionMethod().equals("Matched")) {
+//                entityProperties.add("Regex");
+//            } else if (cm.getDetectionMethod().equals("DictionaryLookup")) {
+//                entityProperties.add("Dict");
+//            } else {
+//                entityProperties.add("Other");
+//            }
+            entityProperties.add("Regex");
             JSONArray spans = new JSONArray();
             JSONArray tokenBeginEnd = new JSONArray();
-            tokenBeginEnd.add(cm.getBegin());
-            tokenBeginEnd.add(cm.getEnd());
+            tokenBeginEnd.add(cm.getMatch_start());
+            tokenBeginEnd.add(cm.getMatch_end());
             spans.add(tokenBeginEnd);
             entityProperties.add(spans);
             cmList.add(entityProperties);
@@ -95,7 +98,7 @@ public class JSONAnnotation {
             attribProperties.add(String.format("A%d", attribIdInt++));
             attribProperties.add("norm");
             attribProperties.add(bratEntityId);
-            attribProperties.add(cm.getNormTarget());
+            attribProperties.add(cm.getConcept_code());
             attribList.add(attribProperties);
 
             JSONArray certaintyProperties = new JSONArray();

@@ -258,18 +258,17 @@ public class WebServiceController {
             webInputText = new WebInputText("test post login");
         }
 
-        HashMap<String, Collection> annotMap = n3CNLPEngine.getResultMap(webInputText.getDocText());
 
         // render template for the fields in index-template
         ModelAndView indexView = new ModelAndView();
         indexView.setViewName("index-template");
         indexView.addObject("input_text", webInputText.getDocText());
         logger.info(String.format("Input for submit \"%s\"", webInputText.getDocText()));
-        logger.info(String.format("Output map \"%s\"", annotMap));
+//        logger.info(String.format("Output map \"%s\"", annotMap));
 
         // get a list of concepts as JSON list to feed into the template
 
-        JSONAnnotation jsAnnot = JSONAnnotation.generateConceptMentionBratJson(annotMap.get("cm"));
+        JSONAnnotation jsAnnot = n3CNLPEngine.getJSONAnnotation(webInputText.getDocText());
 
         indexView.addObject("cmList", jsAnnot.getCmList());
         indexView.addObject("attribList", jsAnnot.getAttribList());
@@ -284,6 +283,7 @@ public class WebServiceController {
      * @param doc_text
      * @return attributes and concepts
      */
+    @CrossOrigin
     @PostMapping("/parse")
     public JSONObject parse(@RequestParam(name = "doc_text") String doc_text) {
         return n3CNLPEngine.getResultJSON(doc_text);
@@ -411,6 +411,7 @@ public class WebServiceController {
      * 
      * @throws IOException
      */
+    @CrossOrigin
     @PostMapping("/ie_editor_test")
     public JSONObject ie_editor_test(
         @RequestParam(name = "rulepack") String rulepack,
