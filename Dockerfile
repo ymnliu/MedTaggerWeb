@@ -18,11 +18,11 @@ WORKDIR /app/work/MedTagger
 RUN wget -O MedTagger.zip https://github.com/OHNLP/MedTagger/releases/download/v1.0.9/MedTagger.zip
 RUN unzip MedTagger.zip
 RUN cp MedTagger.jar /app/MedTaggerREST/libs
-WORKDIR /app/work
-RUN git clone https://github.com/OHNLP/MedTaggerRESTPlugin.git
+RUN mkdir -p /app/work/MedTaggerRESTPlugin
 WORKDIR /app/work/MedTaggerRESTPlugin
-RUN mvn clean install -DskipTests
-RUN cp /app/work/MedTaggerRESTPlugin/target/MedTaggerRESTPlugin.jar /app/MedTaggerREST/plugins/MedTaggerRESTPlugin.jar
+RUN wget -O MedTaggerRESTPlugin.zip https://github.com/OHNLP/MedTaggerRESTPlugin/releases/download/v1.0.1/MedTaggerRESTPlugin.zip
+RUN unzip MedTaggerRESTPlugin.zip
+RUN cp /app/work/MedTaggerRESTPlugin/plugins/MedTaggerRESTPlugin.jar /app/MedTaggerREST/plugins/MedTaggerRESTPlugin.jar
 RUN cp /app/N3CMedTagger/src/main/resources/uima-stream-server-conf.json /app/MedTaggerREST/medtagger_rest_config.json
 
 EXPOSE 8080:8080
