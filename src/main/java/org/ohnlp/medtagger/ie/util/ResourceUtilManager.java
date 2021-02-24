@@ -23,10 +23,7 @@
  *******************************************************************************/
 package org.ohnlp.medtagger.ie.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -50,12 +47,12 @@ import org.apache.log4j.Logger;
  * functionality such as file system access and some private members.
  *
  */
-public class ResourceUtilManager {
+public class ResourceUtilManager implements Serializable {
 
-	public static String RESOURCEDIR;
-	private static ResourceUtilManager INSTANCE = null;
+	public transient static String RESOURCEDIR;
+	private transient static ResourceUtilManager INSTANCE = null;
 	
-	private Logger iv_logger = Logger.getLogger(getClass().getName());
+	private transient Logger iv_logger = Logger.getLogger(getClass().getName());
 	
 	private Pattern regexpPattern = Pattern.compile("(.*)");
 	private Pattern normPattern = Pattern.compile("^(.*?)\t(.*?)$");
@@ -74,18 +71,7 @@ public class ResourceUtilManager {
 		return ResourceUtilManager.INSTANCE;
 	}
 
-	ClassLoader classLoader = null;
-	
 	public ResourceUtilManager(String resourcedir) {
-		try {
-			Class cls = Class.forName("org.ohnlp.medtagger.ie.util.ResourceUtilManager");
-			classLoader = cls.getClassLoader();
-		}catch (ClassNotFoundException e){
-			e.printStackTrace();
-		}
-
-		// returns the ClassLoader object associated with this Class
-
 		RESOURCEDIR = resourcedir;
 		readResources(readResourcesFiles("norm"), normPattern, "norm");
 		readResources(readResourcesFiles("regexp"), regexpPattern, "regexp");

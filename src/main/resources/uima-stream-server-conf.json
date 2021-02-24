@@ -1,0 +1,8 @@
+{
+  "pipelines": [
+    {
+      "id": "n3c",
+      "path": "dynamic"
+    }
+  ]
+}
