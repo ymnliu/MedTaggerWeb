@@ -50,6 +50,26 @@ public class N3CNLPEngine {
         throw new UnsupportedOperationException("Deprecated Functionality");
     }
 
+    public JSONAnnotation getJSONAnnotation(String docText) {
+        ObjectNode req = JsonNodeFactory.instance.objectNode();
+        req.put("streamName", "n3c");
+        req.put("metadata", this.rulesPackaged);
+        req.put("document", docText);
+        req.set("serializers", JsonNodeFactory.instance.arrayNode().add("medtagger"));
+        ServerResponse resp = restClient.postForObject(this.restEndpoint, req, ServerResponse.class);
+        List<MedTaggerRESTPluginResponseAnnotation> anns = null;
+        try {
+            anns = new ObjectMapper().readValue(resp.getContent().get("medtagger").toString()
+                    , new TypeReference<List<MedTaggerRESTPluginResponseAnnotation>>() {
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+            anns = Collections.emptyList();
+        }
+        return JSONAnnotation.generateConceptMentionBratJson(anns);
+
+    }
+
     public JSONObject getResultJSON(String docText) {
         ObjectNode req = JsonNodeFactory.instance.objectNode();
         req.put("streamName", "n3c");
