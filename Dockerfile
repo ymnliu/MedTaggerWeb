@@ -29,6 +29,7 @@ RUN cp /app/N3CMedTagger/src/main/resources/uima-stream-server-conf.json /app/Me
 EXPOSE 8080:8080
 
 WORKDIR /app/N3CMedTagger
+RUN chmod +X docker_run.sh
 
 RUN rm -r /app/work
 
