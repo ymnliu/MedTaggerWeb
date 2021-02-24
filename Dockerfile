@@ -13,10 +13,12 @@ RUN mkdir -p /app/MedTaggerREST
 RUN cp /app/work/UIMA-Stream-Server/UIMA-Server-REST/target/UIMA-REST-SERVER.jar /app/MedTaggerREST/UIMA-REST-SERVER.jar
 RUN mkdir -p /app/MedTaggerREST/libs
 RUN mkdir -p /app/MedTaggerREST/plugins
-WORKDIR /app/work/
+RUN mkdir -p /app/work/MedTagger
+WORKDIR /app/work/MedTagger
 RUN wget -O MedTagger.zip https://github.com/OHNLP/MedTagger/releases/download/v1.0.9/MedTagger.zip
 RUN unzip MedTagger.zip
-RUN cp /app/work/MedTagger/MedTagger.jar /app/MedTaggerREST/libs
+RUN cp MedTagger.jar /app/MedTaggerREST/libs
+WORKDIR /app/work
 RUN git clone https://github.com/OHNLP/MedTaggerRESTPlugin.git
 WORKDIR /app/work/MedTaggerRESTPlugin
 RUN mvn clean install -DskipTests
