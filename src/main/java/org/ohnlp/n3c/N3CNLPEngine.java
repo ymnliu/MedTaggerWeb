@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.apache.commons.lang3.SerializationUtils;
 import org.json.simple.JSONObject;
-import org.ohnlp.medtagger.ie.util.ResourceUtilManager;
 import org.ohnlp.util.ZipUtil;
 import org.ohnlp.web.JSONAnnotation;
 import org.slf4j.Logger;
@@ -28,7 +26,7 @@ public class N3CNLPEngine {
     private String restEndpoint ;
 
     public N3CNLPEngine(){
-        this("fh");
+        this("covid19");
     }
 
     public N3CNLPEngine(String ruleDir) {

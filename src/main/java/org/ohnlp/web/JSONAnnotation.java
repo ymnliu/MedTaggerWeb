@@ -2,7 +2,6 @@ package org.ohnlp.web;
 
 import org.apache.uima.jcas.tcas.Annotation;
 import org.json.simple.JSONArray;
-import org.ohnlp.medtagger.type.ConceptMention;
 import org.ohnlp.medtime.type.MedTimex3;
 import org.ohnlp.n3c.N3CNLPEngine;
 
