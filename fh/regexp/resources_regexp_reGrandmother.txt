@@ -1,4 +1,0 @@
-grand(\s*|\-)mother
-grand(\s*|\-)ma
-PGM
-MGM

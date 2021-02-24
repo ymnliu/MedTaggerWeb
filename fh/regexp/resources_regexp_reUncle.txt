@@ -1,5 +1,0 @@
-uncle\w{0,2}
-father's brother
-mother's brother
-dad's brother
-mom's brother

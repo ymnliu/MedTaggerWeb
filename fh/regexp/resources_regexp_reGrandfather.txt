@@ -1,4 +1,0 @@
-grand(\s*|\-)father
-grand(\s*|\-)pa
-PGF
-MGF

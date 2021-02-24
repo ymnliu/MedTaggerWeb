@@ -1,1 +1,0 @@
-great(\s*|\-)grand(\s*|\-)child\w{0,5}

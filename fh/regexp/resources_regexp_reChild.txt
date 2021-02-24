@@ -1,2 +1,0 @@
-child\w{0,5}
-offspring\w{0,2}

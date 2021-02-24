@@ -1,3 +1,0 @@
-cousin\w{0,2}
-uncle's (son|daughter)\w{0,2}
-aunt's (son|daughter)\w{0,2}

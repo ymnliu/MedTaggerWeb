@@ -1,2 +1,0 @@
-great(\s*|\-)grand(\s*|\-)father
-great(\s*|\-)grand(\s*|\-)pa

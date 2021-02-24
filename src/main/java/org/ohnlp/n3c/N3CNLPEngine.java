@@ -38,7 +38,7 @@ public class N3CNLPEngine {
     private AnalysisEngine cmAae;
 
     public N3CNLPEngine(){
-        initUIMAModel("fh");
+        initUIMAModel("covid19");
     }
 
     public N3CNLPEngine(String ruleDir) {
@@ -53,7 +53,6 @@ public class N3CNLPEngine {
             ResourceManager resMgr = ResourceManagerFactory.newResourceManager();
             AnalysisEngineDescription descN3cTAE = createEngineDescription(
                     "desc.n3cdesc.aggregate_analysis_engine.N3CAggregateTAE");
-                    // "desc.medtaggerdesc.aggregate_analysis_engine.N3CAggregateTAE");
             AnalysisEngineMetaData metadata = descN3cTAE.getAnalysisEngineMetaData();
 
             ConfigurationParameterSettings settings = metadata.getConfigurationParameterSettings();
