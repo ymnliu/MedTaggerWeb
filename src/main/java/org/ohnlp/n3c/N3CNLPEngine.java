@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.SerializationUtils;
 import org.json.simple.JSONObject;
 import org.ohnlp.medtagger.ie.util.ResourceUtilManager;
+import org.ohnlp.util.ZipUtil;
 import org.ohnlp.web.JSONAnnotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +43,7 @@ public class N3CNLPEngine {
     private void initUIMAModel(String ruleDir){
         Path ruleDirPath = Paths.get(ruleDir);
         logger.info("IE Rules:\t" + ruleDirPath.toAbsolutePath());
-        ResourceUtilManager rum = new ResourceUtilManager(ruleDirPath.toString());
-        this.rulesPackaged = Base64.getEncoder().encodeToString(SerializationUtils.serialize(rum));
+        this.rulesPackaged = Base64.getEncoder().encodeToString(ZipUtil.getZippedResourcesFromPath(ruleDirPath));
     }
 
     public HashMap<String, Collection> getResultMap(String docText) {
