@@ -1,5 +1,6 @@
 FROM maven:3.5-jdk-8-alpine
 RUN apk add --no-cache git
+RUN apk add --no-cache screen
 RUN mkdir -p /app/N3CMedTagger
 COPY . /app/N3CMedTagger
 RUN mkdir -p /app/work
@@ -29,11 +30,10 @@ EXPOSE 8080:8080
 
 WORKDIR /app/N3CMedTagger
 
-RUN nohup bash -c "java -jar /app/MedTaggerREST/UIMA-REST-SERVER.jar -Dserver.port=8080 &"
 RUN rm -r /app/work
 
 RUN mvn clean install -DskipTests
 
 EXPOSE 80:80
-CMD ["mvn", "spring-boot:run"]
+CMD ["./docker_run.sh"]
 
